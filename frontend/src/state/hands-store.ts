@@ -43,18 +43,22 @@ export const useHandsStore = create<HandsState>((set, get) => ({
     set({ importing: true, report: null });
     try {
       const result = registry.parseFile(text, get().siteId, fileName);
+
+      // One file at a time: an import REPLACES the library rather than merging
+      // into it. Hands from different files are different sessions — and often
+      // different rooms and stakes — so combining them silently would make
+      // every filtered statistic an average over sets the player never meant
+      // to pool. Clearing first also keeps the store and IndexedDB in step.
+      await repository.clear();
       const added = await repository.saveHands(result.hands, fileName);
 
-      // Merge with what is already loaded, deduping on hand id.
-      const merged = new Map(get().hands.map((h) => [h.id, h]));
-      for (const h of result.hands) merged.set(h.id, h);
-      const hands = [...merged.values()].sort((a, b) =>
+      const hands = [...result.hands].sort((a, b) =>
         b.meta.playedAt.localeCompare(a.meta.playedAt),
       );
 
       set({
         hands,
-        selectedId: get().selectedId ?? result.hands[0]?.id ?? null,
+        selectedId: hands[0]?.id ?? null,
         importing: false,
         report: {
           fileName,

@@ -20,11 +20,15 @@ export function AnalysisPanel({ hand, actionIndex, analysis }: Props) {
   const seat = action ? hand.seats.find((s) => s.seat === action.seat) : undefined;
 
   return (
-    <div className="rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden shrink-0">
-      <div className="px-3 py-2 border-b border-slate-800 t-panel-title">
+    <div className="h-full rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden flex flex-col">
+      <div className="px-3 py-2 border-b border-slate-800 t-panel-title shrink-0">
         Analysis
       </div>
-      <div className="p-3">
+      {/* flex-1 fills whatever height the panel is given (matching ActionLog);
+          min-h keeps the floor at the tallest realistic content (hero row +
+          GTO row + a wrapped explanation) so switching between verdicts of
+          different lengths during replay never shrinks the panel below that. */}
+      <div className="p-3 flex-1 min-h-[6.5rem]">
         {verdict ? (
           <VerdictDetail verdict={verdict} hand={hand} />
         ) : skipped ? (

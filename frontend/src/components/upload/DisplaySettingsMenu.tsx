@@ -73,7 +73,7 @@ export function DisplaySettingsMenu() {
         <DropdownMenu.Content
           align="end"
           sideOffset={6}
-          className="min-w-[13rem] p-1 rounded-sm border border-slate-700 bg-slate-800 text-slate-200 shadow-lg"
+          className="z-50 min-w-[13rem] p-1 rounded-sm border border-slate-700 bg-slate-800 text-slate-200 shadow-lg"
         >
           <DropdownMenu.Label className="px-3 py-1.5 t-label text-slate-500">
             Amounts

@@ -29,7 +29,7 @@ export function FileDropzone({ onFile, busy }: Props) {
         if (file) read(file);
       }}
       onClick={() => inputRef.current?.click()}
-      className={`rounded-sm border-2 border-dashed p-8 text-center cursor-pointer transition ${
+      className={`rounded-sm border-2 border-dashed px-3 py-3 text-center cursor-pointer transition ${
         dragging
           ? 'border-emerald-400 bg-emerald-400/10'
           : 'border-slate-700 bg-slate-900/40 hover:border-slate-500'
@@ -46,13 +46,15 @@ export function FileDropzone({ onFile, busy }: Props) {
           e.target.value = '';
         }}
       />
-      <IconUpload size={24} stroke={1.5} className="mx-auto mb-2 text-slate-500" aria-hidden />
-      <p className="text-slate-200 font-medium">
-        {busy ? 'Parsing…' : 'Drop a hand history .txt file'}
-      </p>
-      <p className="text-slate-500 text-sm mt-1">
-        or click to choose
-      </p>
+      {/* Icon inline with the label rather than stacked above it — the tall
+          stacked form cost vertical space the filters below now want. */}
+      <div className="flex items-center justify-center gap-2">
+        <IconUpload size={16} stroke={1.5} className="text-slate-500 shrink-0" aria-hidden />
+        <span className="text-sm text-slate-200 font-medium">
+          {busy ? 'Parsing…' : 'Drop a hand history .txt'}
+        </span>
+      </div>
+      <p className="t-micro text-slate-500 mt-0.5">or click to choose</p>
     </div>
   );
 }

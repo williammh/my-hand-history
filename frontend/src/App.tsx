@@ -11,10 +11,14 @@ import { Table } from '@/components/replay/Table.js';
 import { ReplayControls } from '@/components/replay/ReplayControls.js';
 import { ActionLog } from '@/components/replay/ActionLog.js';
 import { AnalysisPanel } from '@/components/analysis/AnalysisPanel.js';
+import { FiltersPanel } from '@/components/filters/FiltersPanel.js';
 import { ScrollArea } from '@/components/ui/ScrollArea.js';
 import { replayTimeline } from '@/domain/stacks.js';
 import { formatDateTime, formatGameMode } from '@/lib/format.js';
 import { useDisplayStore } from '@/state/display-store.js';
+import { useFiltersStore } from '@/state/filters-store.js';
+import { deriveFacts } from '@/filters/facts.js';
+import { matches } from '@/filters/match.js';
 
 export function App() {
   const { hands, selectedId, siteId, importing, report, setSite, importFile, select, hydrate, clearAll } =
@@ -22,6 +26,22 @@ export function App() {
   const { stepIndex, playing, setIndex, reset, setPlaying } = useReplayStore();
   const { byHandId, pending, engineError, analyze } = useAnalysisStore();
   const timezone = useDisplayStore((s) => s.timezone);
+
+  const criteria = useFiltersStore((s) => s.criteria);
+
+  // Facts are derived per hand and memoised on the library, not on the
+  // criteria: changing a filter must not re-walk every hand's action list.
+  // Analysis is folded in per hand so a severity filter sees verdicts as they
+  // arrive, without invalidating the facts of hands whose analysis is unchanged.
+  const facts = useMemo(
+    () => hands.map((h) => deriveFacts(h, byHandId[h.id])),
+    [hands, byHandId],
+  );
+
+  const visibleHands = useMemo(
+    () => hands.filter((_, i) => matches(facts[i]!, criteria)),
+    [hands, facts, criteria],
+  );
 
   const hand = useMemo(() => hands.find((h) => h.id === selectedId) ?? null, [hands, selectedId]);
 
@@ -120,13 +140,25 @@ export function App() {
                 />
               </div>
             </div>
+
+            {/* Filters only mean anything once there is a library to filter,
+                and the panel is tall — it scrolls within the column rather
+                than pushing Source off the top. */}
+            {/* The panel scrolls internally under its own pinned header, so
+                it takes the column's leftover height rather than being wrapped
+                in a scroller here. */}
+            {hands.length > 0 && (
+              <div className="lg:min-h-0 lg:flex-1 h-[28rem] lg:h-auto">
+                <FiltersPanel />
+              </div>
+            )}
           </aside>
 
           {/* Hands gets its own column at 2xl; below that it stacks under
               Source in the first column, where it needs an explicit height
               because the page is not a fixed-height grid there. */}
           <div className="lg:min-h-0 h-[22rem] lg:h-auto lg:col-start-1 lg:row-start-2 2xl:col-start-2 2xl:row-start-1">
-            <HandList hands={hands} selectedId={selectedId} onSelect={select} />
+            <HandList hands={visibleHands} selectedId={selectedId} onSelect={select} />
           </div>
 
           {!hand && (
@@ -146,12 +178,12 @@ export function App() {
                   onSelect={selectAction}
                 />
               </div>
-              {/* w-fit sizes this column to its widest child — the replay
-                  panel, which is itself sized to the felt — so the analysis
-                  panel below stretches to exactly the replay's width instead of
-                  filling the whole track. */}
+              {/* w-fit sizes this column to its widest child. Only the replay
+                  panel (itself sized to the felt) is allowed to be that child:
+                  the analysis panel is neutralised below so its prose cannot
+                  widen the column past the felt. */}
               <div className="w-fit max-w-full min-h-0 flex flex-col gap-4 md:gap-5 lg:col-start-2 lg:row-start-2 xl:col-start-3 xl:row-start-1 xl:row-span-2 2xl:col-start-4 2xl:row-span-1">
-                <ScrollArea className="flex lg:min-h-0" viewportClassName="[&>div]:!flex">
+                <ScrollArea className="flex shrink-0 lg:min-h-0" viewportClassName="[&>div]:!flex">
                   <Table hand={hand} actionIndex={actionIndex} board={current?.board ?? []}>
                     <ReplayControls
                       timeline={timeline}
@@ -162,7 +194,15 @@ export function App() {
                     />
                   </Table>
                 </ScrollArea>
-                <AnalysisPanel hand={hand} actionIndex={actionIndex} analysis={analysis} />
+                {/* w-0 min-w-full: w-0 drops this out of the w-fit column's
+                    max-content sizing so a long explanation cannot stretch the
+                    column wider than the felt; min-w-full then pulls it back
+                    out to the column width the replay panel established.
+                    flex-1 lets it claim the vertical space the felt doesn't
+                    use, matching ActionLog's height in the column beside it. */}
+                <div className="w-0 min-w-full flex-1 min-h-0">
+                  <AnalysisPanel hand={hand} actionIndex={actionIndex} analysis={analysis} />
+                </div>
               </div>
             </>
           )}

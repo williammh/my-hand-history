@@ -38,9 +38,13 @@ export function SiteRadioGroup({ value, onChange }: Props) {
                   value={p.siteId}
                   className="flex items-center gap-2 px-3 py-2 rounded-sm cursor-pointer outline-none data-[highlighted]:bg-emerald-400/10 data-[highlighted]:text-emerald-200 data-[state=checked]:text-emerald-200"
                 >
-                  <Select.ItemIndicator>
-                    <IconCheck size={14} />
-                  </Select.ItemIndicator>
+                  {/* Fixed-width column so the checkmark doesn't push this
+                      item's label out of line with the unchecked ones below. */}
+                  <span className="w-3.5 shrink-0 flex justify-center">
+                    <Select.ItemIndicator>
+                      <IconCheck size={14} />
+                    </Select.ItemIndicator>
+                  </span>
                   <Select.ItemText>{p.displayName}</Select.ItemText>
                 </Select.Item>
               ))}
@@ -51,6 +55,7 @@ export function SiteRadioGroup({ value, onChange }: Props) {
                   disabled
                   className="flex items-center gap-2 px-3 py-2 rounded-sm text-slate-600 cursor-not-allowed"
                 >
+                  <span className="w-3.5 shrink-0" />
                   <Select.ItemText>{p.displayName}</Select.ItemText>
                 </Select.Item>
               ))}
