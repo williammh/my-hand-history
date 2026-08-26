@@ -14,13 +14,17 @@ interface Props {
 export function HandList({ hands, selectedId, onSelect }: Props) {
   const unit = useDisplayStore((s) => s.unit);
   const timezone = useDisplayStore((s) => s.timezone);
-  if (hands.length === 0) return null;
 
   return (
     <div className="rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden h-full flex flex-col">
       <div className="px-3 py-2 border-b border-slate-800 t-panel-title shrink-0">
         Hands ({hands.length})
       </div>
+      {hands.length === 0 ? (
+        <div className="flex-1 min-h-0 flex items-center justify-center p-6">
+          <p className="text-sm text-slate-500 text-center">No hands loaded yet.</p>
+        </div>
+      ) : (
       <ScrollArea className="flex-1 min-h-0">
         <ul className="divide-y divide-slate-800/70">
         {hands.map((h) => {
@@ -68,6 +72,7 @@ export function HandList({ hands, selectedId, onSelect }: Props) {
         })}
         </ul>
       </ScrollArea>
+      )}
     </div>
   );
 }

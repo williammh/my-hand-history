@@ -8,11 +8,19 @@ import { asAmount } from '@/domain/money.js';
 import { formatUnit } from '@/lib/format.js';
 import { useDisplayStore } from '@/state/display-store.js';
 import { CommunityCards } from './CommunityCards.js';
-import { Seat } from './Seat.js';
+import { Seat, EmptySeat } from './Seat.js';
 import { ScrollArea } from '@/components/ui/ScrollArea.js';
 
+/** Ring shape to show when no hand is loaded — a plain 6-max layout of blanks. */
+const EMPTY_RING = {
+  bottom: 'bottom' as const,
+  top: 'top' as const,
+  left: ['left-0', 'left-1'] as const,
+  right: ['right-0', 'right-1'] as const,
+};
+
 interface Props {
-  hand: Hand;
+  hand: Hand | null;
   actionIndex: number;
   /**
    * Board for the CURRENT replay step, passed down from replayTimeline via
@@ -87,14 +95,18 @@ function ringColumns(seats: readonly PlayerSeat[]): {
 
 export function Table({ hand, actionIndex, board, children }: Props) {
   const unit = useDisplayStore((s) => s.unit);
-  const snapshot = useMemo(() => stacksAtAction(hand, actionIndex), [hand, actionIndex]);
-  const pot = useMemo(() => potAtAction(hand.actions, actionIndex), [hand, actionIndex]);
+  const snapshot = useMemo(
+    () => (hand ? stacksAtAction(hand, actionIndex) : { stacks: new Map(), folded: new Set<number>() }),
+    [hand, actionIndex],
+  );
+  const pot = useMemo(() => (hand ? potAtAction(hand.actions, actionIndex) : asAmount(0)), [hand, actionIndex]);
 
   // Per-seat chip badge: the amount of the player's most recent bet/call/raise
   // on the current street, matching what the action log shows for that action
   // — not a running total of everything they've put in this street.
   const committed = useMemo(() => {
     const map = new Map<number, number>();
+    if (!hand) return map;
     const currentStreet =
       actionIndex < 0 ? 'preflop' : hand.actions[Math.min(actionIndex, hand.actions.length - 1)]!.street;
     for (let i = 0; i <= actionIndex && i < hand.actions.length; i++) {
@@ -107,6 +119,7 @@ export function Table({ hand, actionIndex, board, children }: Props) {
 
   const lastActionBySeat = useMemo(() => {
     const map = new Map<number, string>();
+    if (!hand) return map;
     const currentStreet =
       actionIndex < 0 ? 'preflop' : hand.actions[Math.min(actionIndex, hand.actions.length - 1)]!.street;
     for (let i = 0; i <= actionIndex && i < hand.actions.length; i++) {
@@ -117,11 +130,11 @@ export function Table({ hand, actionIndex, board, children }: Props) {
     return map;
   }, [hand, actionIndex]);
 
-  const actingSeat = actionIndex >= 0 && actionIndex < hand.actions.length
+  const actingSeat = hand && actionIndex >= 0 && actionIndex < hand.actions.length
     ? hand.actions[actionIndex]!.seat
     : null;
 
-  const ring = useMemo(() => ringColumns(hand.seats), [hand.seats]);
+  const ring = useMemo(() => ringColumns(hand?.seats ?? []), [hand]);
 
   // The felt ellipse must pass through the centre of the top/bottom seat cards,
   // so its vertical inset is half a card's height. Card height depends on
@@ -143,10 +156,12 @@ export function Table({ hand, actionIndex, board, children }: Props) {
     return () => ro.disconnect();
   }, [ring.bottom, ring.top]);
 
+  // Only ever invoked with seats drawn from `ring`, which is empty when there
+  // is no hand — so `hand` is always present here despite the nullable prop.
   const renderSeat = (seat: PlayerSeat) => (
     <Seat
       seat={seat}
-      money={hand.money}
+      money={hand!.money}
       stack={snapshot.stacks.get(seat.seat) ?? seat.startingStack}
       committed={asAmount(committed.get(seat.seat) ?? 0)}
       folded={snapshot.folded.has(seat.seat)}
@@ -209,15 +224,17 @@ export function Table({ hand, actionIndex, board, children }: Props) {
               auto-sized center column, so without it the seat would shrink to
               its content instead of matching the others. */}
           <div className="relative z-10 col-start-2 row-start-1 flex justify-center">
-            {ring.top && <div className="w-[var(--seat-w)]">{renderSeat(ring.top)}</div>}
+            {hand
+              ? ring.top && <div className="w-[var(--seat-w)]">{renderSeat(ring.top)}</div>
+              : <div className="w-[var(--seat-w)]"><EmptySeat /></div>}
           </div>
 
           {/* Row 2: the side columns flank the board. Each side column spans the
               felt row so its seats distribute across the ring's full height. */}
           <div className="relative z-10 col-start-1 row-start-1 row-span-3 flex flex-col justify-around gap-1.5">
-            {ring.left.map((seat) => (
-              <div key={seat.seat}>{renderSeat(seat)}</div>
-            ))}
+            {hand
+              ? ring.left.map((seat) => <div key={seat.seat}>{renderSeat(seat)}</div>)
+              : EMPTY_RING.left.map((k) => <EmptySeat key={k} />)}
           </div>
 
           <div className="relative z-10 col-start-2 row-start-2 flex items-center justify-center py-1">
@@ -225,25 +242,32 @@ export function Table({ hand, actionIndex, board, children }: Props) {
               <div className="mb-1 flex items-baseline justify-center gap-1.5 text-center">
                 <span className="t-label text-slate-400">Pot</span>
                 <span className="text-sm font-bold tabular-nums text-amber-300">
-                  {formatUnit(pot, hand.money, unit)}
+                  {hand ? formatUnit(pot, hand.money, unit) : '—'}
                 </span>
               </div>
               <CommunityCards board={board} />
+              {!hand && <p className="mt-1 text-sm text-slate-500 text-center">No hand selected.</p>}
             </div>
           </div>
 
           <div className="relative z-10 col-start-3 row-start-1 row-span-3 flex flex-col justify-around gap-1.5">
-            {ring.right.map((seat) => (
-              <div key={seat.seat}>{renderSeat(seat)}</div>
-            ))}
+            {hand
+              ? ring.right.map((seat) => <div key={seat.seat}>{renderSeat(seat)}</div>)
+              : EMPTY_RING.right.map((k) => <EmptySeat key={k} />)}
           </div>
 
           {/* Row 3: bottom seat (hero), centered below the felt. Same explicit
               width as the top seat, for the same reason. */}
           <div className="relative z-10 col-start-2 row-start-3 flex justify-center">
-            {ring.bottom && (
+            {hand ? (
+              ring.bottom && (
+                <div ref={measureSeat} className="w-[var(--seat-w)]">
+                  {renderSeat(ring.bottom)}
+                </div>
+              )
+            ) : (
               <div ref={measureSeat} className="w-[var(--seat-w)]">
-                {renderSeat(ring.bottom)}
+                <EmptySeat />
               </div>
             )}
           </div>

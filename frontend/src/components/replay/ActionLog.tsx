@@ -8,7 +8,7 @@ import { ScrollArea } from '@/components/ui/ScrollArea.js';
 import { CardView } from '@/components/replay/CardView.js';
 
 interface Props {
-  hand: Hand;
+  hand: Hand | null;
   actionIndex: number;
   analysis: HandAnalysis | undefined;
   pending: boolean;
@@ -66,6 +66,20 @@ function antePosters(actions: readonly Action[], hand: Hand): AntePoster[] {
 
 export function ActionLog({ hand, actionIndex, analysis, pending, onSelect }: Props) {
   const unit = useDisplayStore((s) => s.unit);
+
+  if (!hand) {
+    return (
+      <div className="rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden h-full flex flex-col">
+        <div className="px-3 py-2 border-b border-slate-800 flex items-center justify-between gap-2">
+          <span className="t-panel-title">Action</span>
+        </div>
+        <div className="flex-1 min-h-0 flex items-center justify-center p-6">
+          <p className="text-sm text-slate-500 text-center">No hand selected.</p>
+        </div>
+      </div>
+    );
+  }
+
   const verdicts = analysis?.verdicts ?? [];
   const verdictByIndex = new Map(verdicts.map((v) => [v.actionIndex, v]));
 

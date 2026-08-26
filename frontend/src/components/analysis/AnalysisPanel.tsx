@@ -3,7 +3,7 @@ import type { HandAnalysis } from '@/analysis/types.js';
 import { VerdictDetail } from '@/components/analysis/VerdictDetail.js';
 
 interface Props {
-  hand: Hand;
+  hand: Hand | null;
   actionIndex: number;
   analysis: HandAnalysis | undefined;
 }
@@ -16,8 +16,8 @@ interface Props {
 export function AnalysisPanel({ hand, actionIndex, analysis }: Props) {
   const verdict = analysis?.verdicts.find((v) => v.actionIndex === actionIndex);
   const skipped = analysis?.skipped.find((s) => s.actionIndex === actionIndex);
-  const action = hand.actions[actionIndex];
-  const seat = action ? hand.seats.find((s) => s.seat === action.seat) : undefined;
+  const action = hand?.actions[actionIndex];
+  const seat = action ? hand?.seats.find((s) => s.seat === action.seat) : undefined;
 
   return (
     <div className="h-full rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden flex flex-col">
@@ -29,7 +29,9 @@ export function AnalysisPanel({ hand, actionIndex, analysis }: Props) {
           GTO row + a wrapped explanation) so switching between verdicts of
           different lengths during replay never shrinks the panel below that. */}
       <div className="p-3 flex-1 min-h-[6.5rem]">
-        {verdict ? (
+        {!hand ? (
+          <p className="text-sm text-slate-500">No hand selected.</p>
+        ) : verdict ? (
           <VerdictDetail verdict={verdict} hand={hand} />
         ) : skipped ? (
           <p className="text-sm text-slate-500">

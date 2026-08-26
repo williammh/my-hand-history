@@ -141,17 +141,16 @@ export function App() {
               </div>
             </div>
 
-            {/* Filters only mean anything once there is a library to filter,
-                and the panel is tall — it scrolls within the column rather
-                than pushing Source off the top. */}
+            {/* Filters panel is always visible, even with an empty library —
+                its controls just have nothing to act on yet. The panel is
+                tall — it scrolls within the column rather than pushing
+                Source off the top. */}
             {/* The panel scrolls internally under its own pinned header, so
                 it takes the column's leftover height rather than being wrapped
                 in a scroller here. */}
-            {hands.length > 0 && (
-              <div className="lg:min-h-0 lg:flex-1 h-[28rem] lg:h-auto">
-                <FiltersPanel />
-              </div>
-            )}
+            <div className="lg:min-h-0 lg:flex-1 h-[28rem] lg:h-auto">
+              <FiltersPanel />
+            </div>
           </aside>
 
           {/* Hands gets its own column at 2xl; below that it stacks under
@@ -161,51 +160,41 @@ export function App() {
             <HandList hands={visibleHands} selectedId={selectedId} onSelect={select} />
           </div>
 
-          {!hand && (
-            <div className="lg:col-start-2 lg:row-start-1 lg:row-span-2 xl:col-start-2 xl:col-span-2 2xl:col-start-3 rounded-sm border border-slate-800 bg-slate-900/40 p-6 sm:p-10 text-center text-sm text-slate-500 self-start">
-              Upload a hand history to get started.
-            </div>
-          )}
-
-          {hand && (
-            <>
-              <div className="min-h-0 max-h-[24rem] lg:max-h-72 xl:max-h-none flex flex-col lg:col-start-2 lg:row-start-1 xl:col-start-2 xl:row-start-1 xl:row-span-2 2xl:col-start-3 2xl:row-span-1">
-                <ActionLog
-                  hand={hand}
-                  actionIndex={actionIndex}
-                  analysis={analysis}
-                  pending={Boolean(pending[hand.id])}
-                  onSelect={selectAction}
+          <div className="min-h-0 max-h-[24rem] lg:max-h-72 xl:max-h-none flex flex-col lg:col-start-2 lg:row-start-1 xl:col-start-2 xl:row-start-1 xl:row-span-2 2xl:col-start-3 2xl:row-span-1">
+            <ActionLog
+              hand={hand}
+              actionIndex={actionIndex}
+              analysis={analysis}
+              pending={Boolean(hand && pending[hand.id])}
+              onSelect={selectAction}
+            />
+          </div>
+          {/* w-fit sizes this column to its widest child. Only the replay
+              panel (itself sized to the felt) is allowed to be that child:
+              the analysis panel is neutralised below so its prose cannot
+              widen the column past the felt. */}
+          <div className="w-fit max-w-full min-h-0 flex flex-col gap-4 md:gap-5 lg:col-start-2 lg:row-start-2 xl:col-start-3 xl:row-start-1 xl:row-span-2 2xl:col-start-4 2xl:row-span-1">
+            <ScrollArea className="flex shrink-0 lg:min-h-0" viewportClassName="[&>div]:!flex">
+              <Table hand={hand} actionIndex={actionIndex} board={current?.board ?? []}>
+                <ReplayControls
+                  timeline={timeline}
+                  stepIndex={stepIndex}
+                  playing={playing}
+                  onIndex={setIndex}
+                  onPlaying={setPlaying}
                 />
-              </div>
-              {/* w-fit sizes this column to its widest child. Only the replay
-                  panel (itself sized to the felt) is allowed to be that child:
-                  the analysis panel is neutralised below so its prose cannot
-                  widen the column past the felt. */}
-              <div className="w-fit max-w-full min-h-0 flex flex-col gap-4 md:gap-5 lg:col-start-2 lg:row-start-2 xl:col-start-3 xl:row-start-1 xl:row-span-2 2xl:col-start-4 2xl:row-span-1">
-                <ScrollArea className="flex shrink-0 lg:min-h-0" viewportClassName="[&>div]:!flex">
-                  <Table hand={hand} actionIndex={actionIndex} board={current?.board ?? []}>
-                    <ReplayControls
-                      timeline={timeline}
-                      stepIndex={stepIndex}
-                      playing={playing}
-                      onIndex={setIndex}
-                      onPlaying={setPlaying}
-                    />
-                  </Table>
-                </ScrollArea>
-                {/* w-0 min-w-full: w-0 drops this out of the w-fit column's
-                    max-content sizing so a long explanation cannot stretch the
-                    column wider than the felt; min-w-full then pulls it back
-                    out to the column width the replay panel established.
-                    flex-1 lets it claim the vertical space the felt doesn't
-                    use, matching ActionLog's height in the column beside it. */}
-                <div className="w-0 min-w-full flex-1 min-h-0">
-                  <AnalysisPanel hand={hand} actionIndex={actionIndex} analysis={analysis} />
-                </div>
-              </div>
-            </>
-          )}
+              </Table>
+            </ScrollArea>
+            {/* w-0 min-w-full: w-0 drops this out of the w-fit column's
+                max-content sizing so a long explanation cannot stretch the
+                column wider than the felt; min-w-full then pulls it back
+                out to the column width the replay panel established.
+                flex-1 lets it claim the vertical space the felt doesn't
+                use, matching ActionLog's height in the column beside it. */}
+            <div className="w-0 min-w-full flex-1 min-h-0">
+              <AnalysisPanel hand={hand} actionIndex={actionIndex} analysis={analysis} />
+            </div>
+          </div>
         </div>
       </main>
     </div>

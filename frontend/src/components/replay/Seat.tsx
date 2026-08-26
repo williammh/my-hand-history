@@ -14,6 +14,41 @@ interface Props {
   lastAction: string | null;
 }
 
+/**
+ * Same footprint as a real Seat card — same rows, same padding — but with
+ * every value blanked out. Used to hold the ring's shape (and thus the felt's
+ * measured size) when no hand is loaded, so the table doesn't resize once one
+ * is.
+ */
+export function EmptySeat() {
+  return (
+    <div className="relative min-w-0">
+      <div className="flex w-full min-w-0 flex-col gap-1.5 overflow-hidden rounded-lg border-2 border-transparent px-2 py-2 text-sm">
+        <div className="flex min-w-0 items-center justify-center gap-1">
+          <span className="w-9 shrink-0 text-center t-chip border border-slate-800 rounded-sm bg-slate-800/60 px-1 py-0.5 text-slate-700">
+            —
+          </span>
+        </div>
+        <div className="flex min-w-0 items-center justify-center">
+          <span className="truncate text-sm font-bold tabular-nums text-slate-700">—</span>
+        </div>
+        <div className="flex items-center justify-center">
+          <div className="flex gap-1">
+            <CardView card={null} size="sm" hidden dim />
+            <CardView card={null} size="sm" hidden dim />
+          </div>
+        </div>
+        <div className="flex min-w-0 items-center justify-center">
+          <span className="truncate text-sm font-medium text-slate-700">—</span>
+        </div>
+        <div className="flex min-h-[1.15rem] flex-wrap items-center justify-center gap-x-1 text-center text-sm font-semibold">
+          <span className="tabular-nums text-slate-700" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function Seat({ seat, money, stack, committed, folded, isActing, lastAction }: Props) {
   const unit = useDisplayStore((s) => s.unit);
 
