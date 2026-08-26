@@ -1,0 +1,52 @@
+Winamax Poker - Tournament "Kill The Fish"(5€ + 0.50€) - HandId: #1-1-1 - Holdem no limit (level1, 10/20) - 2024/10/08 17:34:46 UTC
+Table: 'Kill The Fish(123456)#1' 6-max Seat #1 is the button
+Seat 1: Alice (2000)
+Seat 2: Bob (1500)
+Seat 3: Carol (500)
+*** ANTE/BLINDS ***
+Bob posts small blind 10
+Carol posts big blind 20
+Dealt to Alice [Ah Kh]
+*** PRE-FLOP ***
+Alice raises 480 to 500 and is all-in
+Bob folds
+Carol calls 480 and is all-in
+*** FLOP *** [2c 7d 9h]
+*** TURN *** [2c 7d 9h][Jd]
+*** RIVER *** [2c 7d 9h Jd][3s]
+*** SHOW DOWN ***
+Alice shows [Ah Kh] (High Card : Ace)
+Carol shows [Ks Qs] (High Card : King)
+Alice collected 1010 from pot
+*** SUMMARY ***
+Total pot 1010 | Rake 0
+Board: [2c 7d 9h Jd 3s]
+Seat 1: Alice (button) showed [Ah Kh] and won 1010 with High Card : Ace
+Seat 3: Carol (big blind) showed [Ks Qs] and lost with High Card : King
+
+
+Winamax Poker - Tournament "Kill The Fish"(5€ + 0.50€) - HandId: #1-2-2 - Holdem no limit (level1, 10/20) - 2024/10/08 17:36:00 UTC
+Table: 'Kill The Fish(123456)#1' 6-max Seat #2 is the button
+Seat 1: Alice (2020)
+Seat 2: Bob (1490)
+*** ANTE/BLINDS ***
+Alice posts small blind 10
+Bob posts big blind 20
+Dealt to Alice [2c 2d]
+*** PRE-FLOP ***
+Alice raises 480 to 500
+Bob raises 990 to 1490 and is all-in
+Alice calls 990 and is all-in
+Alice returned uncalled bet of 20
+*** FLOP *** [Ks Qs 3c]
+*** TURN *** [Ks Qs 3c][4d]
+*** RIVER *** [Ks Qs 3c 4d][5h]
+*** SHOW DOWN ***
+Bob shows [As Ac] (One Pair : Aces)
+Alice shows [2c 2d] (One Pair : Deuces)
+Bob collected 2960 from pot
+*** SUMMARY ***
+Total pot 2960 | Rake 0
+Board: [Ks Qs 3c 4d 5h]
+Seat 1: Alice showed [2c 2d] and lost with One Pair : Deuces
+Seat 2: Bob (big blind) showed [As Ac] and won 2960 with One Pair : Aces

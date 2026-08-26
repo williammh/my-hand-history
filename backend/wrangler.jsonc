@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "my-hand-history-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-25",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true
+  }
+
+  // Bindings go here as the backend grows, e.g.:
+  // "d1_databases":  [{ "binding": "DB", "database_name": "my-hand-history", "database_id": "..." }]
+  // "r2_buckets":    [{ "binding": "HAND_FILES", "bucket_name": "my-hand-history-uploads" }]
+  // "kv_namespaces": [{ "binding": "CACHE", "id": "..." }]
+}

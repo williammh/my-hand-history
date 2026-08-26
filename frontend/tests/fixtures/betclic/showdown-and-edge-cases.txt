@@ -1,0 +1,169 @@
+*** HEADER ***
+Site: Betclic.fr
+Game Mode: Tournament
+Game Type: NL Texas Hold'em
+Game Name: MARATHON
+Game ID: 01JZP0KHC6GRW9YCFBY9ZKJ9QH
+Buy In: 5.00€
+Hand ID: 01SHOWDOWN0000000000000001
+Date & Time: 2025-07-16 14:08:56 (UTC)
+Table ID: 01K09CSPN04Y8JEN6MB704V4C5
+Ante: 800
+Blinds: 4000/8000
+Total Pot: 111188
+Rake: 0
+*** PLAYERS ***
+Seat 1: DrFullHouse (96771)
+Seat 2: LaCigale (448166)
+Seat 3: mehdiiii (142770) [BTN]
+Seat 4: Kamaz (205059) [SB]
+Seat 5: SIMBAROI (53994) [BB Hero]
+Seat 6: YouReOkKris (326027)
+*** HOLE CARDS ***
+Kamaz: [Ah Th]
+SIMBAROI: [4d 9s]
+*** PRE-FLOP ***
+14:08:56 - DrFullHouse: Posts Ante 800
+14:08:56 - LaCigale: Posts Ante 800
+14:08:56 - mehdiiii: Posts Ante 800
+14:08:56 - Kamaz: Posts Ante 800
+14:08:56 - SIMBAROI: Posts Ante 800
+14:08:56 - YouReOkKris: Posts Ante 800
+14:08:56 - Kamaz: Posts SB 4000
+14:08:56 - SIMBAROI: Posts BB 8000
+14:09:13 - YouReOkKris: Folds
+14:09:20 - DrFullHouse: Sits out
+14:09:30 - DrFullHouse: Folds
+14:09:30 - LaCigale: Folds
+14:09:33 - mehdiiii: Folds
+14:09:36 - Kamaz: Raises to 16000
+14:09:40 - SIMBAROI: Calls 8000
+*** FLOP *** [3d Ts Tc]
+14:09:43 - Kamaz: Checks
+14:09:47 - SIMBAROI: Bets 37194 and is all-in
+14:09:50 - Kamaz: Calls 37194
+*** TURN *** [3d Ts Tc 2c]
+*** RIVER *** [3d Ts Tc 2c 5s]
+*** SHOWDOWN ***
+Kamaz shows [Ah Th] (Three of a Kind) [Ts Th Tc Ah 5s]
+SIMBAROI shows [4d 9s] (Pair) [Ts Tc 9s 5s 4d]
+*** SUMMARY ***
+Kamaz wins main pot of 111188
+SIMBAROI finished 68th
+
+------------
+
+*** HEADER ***
+Site: Betclic.fr
+Game Mode: Tournament
+Game Type: NL Texas Hold'em
+Game Name: KRUSH
+Game ID: 01JZP0KHCBV0YW0D6EJTRMP5B2
+Buy In: 10.00€
+Hand ID: 01HEADSUP00000000000000002
+Date & Time: 2025-07-16 13:17:38 (UTC)
+Table ID: 01K09P3Z63WJD12Z2RHR4D7TAK
+Ante: 140
+Blinds: 700/1400
+Total Pot: 2380
+Rake: 0
+*** PLAYERS ***
+Seat 1: wewe932 (20000) [BB]
+Seat 2: SIMBAROI (20000) [BTN SB Hero]
+*** HOLE CARDS ***
+SIMBAROI: [Td 4h]
+*** PRE-FLOP ***
+13:17:38 - wewe932: Posts Ante 140
+13:17:38 - SIMBAROI: Posts Ante 140
+13:17:38 - SIMBAROI: Posts SB 700
+13:17:38 - wewe932: Posts BB 1400
+13:17:40 - SIMBAROI: Folds
+*** SUMMARY ***
+wewe932 wins main pot of 2380
+
+------------
+
+*** HEADER ***
+Site: Betclic.fr
+Game Mode: Tournament
+Game Type: NL Texas Hold'em
+Game Name: KRUSH
+Game ID: 01JZP0KHCBV0YW0D6EJTRMP5B2
+Buy In: 10.00€
+Hand ID: 01UNCALLED000000000000003
+Date & Time: 2025-07-16 11:32:56 (UTC)
+Table ID: 01K09G0ANYB21KPQ4J6D5Y7M7Y
+Blinds: 20/40
+Total Pot: 1080
+Rake: 0
+*** PLAYERS ***
+Seat 1: nezrouges (530) [BB]
+Seat 2: RaniMieux (470)
+Seat 3: SIMBAROI (540) [BTN Hero]
+Seat 4: carréra63 (460) [SB]
+*** HOLE CARDS ***
+nezrouges: [Td As]
+SIMBAROI: [Ad 7c]
+*** PRE-FLOP ***
+11:32:56 - carréra63: Posts SB 20
+11:32:56 - nezrouges: Posts BB 40
+11:32:57 - RaniMieux: Folds
+11:33:01 - SIMBAROI: Raises to 540 and is all-in
+11:33:11 - carréra63: Folds
+11:33:13 - nezrouges: Calls 490 and is all-in
+*** FLOP *** [Ah 8s Jd]
+*** TURN *** [Ah 8s Jd Jc]
+*** RIVER *** [Ah 8s Jd Jc Ks]
+*** SHOWDOWN ***
+nezrouges shows [Td As] (Two Pair) [As Ah Jd Jc Ks]
+SIMBAROI shows [Ad 7c] (Two Pair) [Ah Ad Jd Jc Ks]
+*** SUMMARY ***
+SIMBAROI wins main pot of 540
+nezrouges wins main pot of 540
+
+------------
+
+*** HEADER ***
+Site: Betclic.fr
+Game Mode: Tournament
+Game Type: NL Texas Hold'em
+Game Name: KRUSH
+Game ID: 01JZP0KHCBV0YW0D6EJTRMP5B2
+Buy In: 10.00€
+Hand ID: 01SIDEPOT00000000000000004
+Date & Time: 2025-07-16 11:34:51 (UTC)
+Table ID: 01K09G0ANYB21KPQ4J6D5Y7M7Y
+Blinds: 20/40
+Total Pot: 1440
+Rake: 0
+*** PLAYERS ***
+Seat 1: nezrouges (380)
+Seat 3: SIMBAROI (510) [BTN Hero]
+Seat 4: carréra63 (1110) [SB]
+Seat 5: sandra09 (500) [BB]
+*** HOLE CARDS ***
+nezrouges: [Jh Ac]
+SIMBAROI: [Tc Ad]
+carréra63: [Qs Ks]
+*** PRE-FLOP ***
+11:34:51 - carréra63: Posts SB 20
+11:34:51 - sandra09: Posts BB 40
+11:34:54 - nezrouges: Calls 40
+11:34:59 - SIMBAROI: Raises to 510 and is all-in
+11:35:03 - carréra63: Raises to 1110 and is all-in
+11:35:05 - sandra09: Folds
+11:35:05 - nezrouges: Calls 340 and is all-in
+*** FLOP *** [Jd Td 4c]
+*** TURN *** [Jd Td 4c 9s]
+*** RIVER *** [Jd Td 4c 9s 4s]
+*** SHOWDOWN ***
+carréra63 shows [Qs Ks] (Straight) [Ks Qs Jd Td 9s]
+SIMBAROI shows [Tc Ad] (Two Pair) [Td Tc 4s 4c Ad]
+nezrouges shows [Jh Ac] (Two Pair) [Jh Jd 4s 4c Ac]
+*** SUMMARY ***
+carréra63 wins main pot of 1180
+carréra63 wins 1st side pot of 260
+nezrouges finished 30th
+SIMBAROI finished 29th
+
+------------

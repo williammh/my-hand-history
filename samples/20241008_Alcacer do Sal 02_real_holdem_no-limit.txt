@@ -1,0 +1,1270 @@
+Winamax Poker - CashGame - HandId: #20183568-872-1728408886 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:34:46 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #5 is the button
+Seat 1: 20BJ (5.19€)
+Seat 3: 6T3MAT1K (5€)
+Seat 4: Abparieur09 (8.09€)
+Seat 5: ghoustryde (5€)
+*** ANTE/BLINDS ***
+20BJ posts small blind 0.02€
+6T3MAT1K posts big blind 0.05€
+Dealt to 6T3MAT1K [Qd 5h]
+*** PRE-FLOP *** 
+Abparieur09 folds
+ghoustryde folds
+20BJ raises 0.05€ to 0.10€
+6T3MAT1K calls 0.05€
+*** FLOP *** [Ks Jd Ad]
+20BJ checks
+6T3MAT1K bets 0.11€
+20BJ calls 0.11€
+*** TURN *** [Ks Jd Ad][2c]
+20BJ bets 0.18€
+6T3MAT1K folds
+20BJ collected 0.58€ from pot
+*** SUMMARY ***
+Total pot 0.58€ | Rake 0.02€
+Board: [Ks Jd Ad 2c]
+Seat 1: 20BJ (small blind) won 0.58€
+
+
+Winamax Poker - CashGame - HandId: #20183568-873-1728408930 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:35:30 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #1 is the button
+Seat 1: 20BJ (5.38€)
+Seat 2: LF-Genie49 (5€)
+Seat 3: 6T3MAT1K (5€)
+Seat 4: Abparieur09 (8.09€)
+Seat 5: ghoustryde (5€)
+*** ANTE/BLINDS ***
+6T3MAT1K posts small blind 0.02€
+Abparieur09 posts big blind 0.05€
+Dealt to 6T3MAT1K [4s Ah]
+*** PRE-FLOP *** 
+ghoustryde folds
+20BJ folds
+6T3MAT1K raises 0.10€ to 0.15€
+Abparieur09 folds
+6T3MAT1K collected 0.20€ from pot
+*** SUMMARY ***
+Total pot 0.20€ | No rake
+Seat 3: 6T3MAT1K (small blind) won 0.20€
+
+
+Winamax Poker - CashGame - HandId: #20183568-874-1728408941 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:35:41 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #3 is the button
+Seat 1: 20BJ (5.38€)
+Seat 2: LF-Genie49 (5€)
+Seat 3: 6T3MAT1K (5.05€)
+Seat 4: Abparieur09 (8.04€)
+Seat 5: ghoustryde (5€)
+*** ANTE/BLINDS ***
+Abparieur09 posts small blind 0.02€
+ghoustryde posts big blind 0.05€
+LF-Genie49 posts big blind 0.05€ out of position
+Dealt to 6T3MAT1K [Js Ad]
+*** PRE-FLOP *** 
+20BJ folds
+LF-Genie49 checks
+6T3MAT1K raises 0.10€ to 0.15€
+Abparieur09 folds
+ghoustryde raises 4.85€ to 5€ and is all-in
+LF-Genie49 folds
+6T3MAT1K folds
+ghoustryde collected 5.22€ from pot
+*** SUMMARY ***
+Total pot 5.22€ | No rake
+Seat 5: ghoustryde (big blind) won 5.22€
+
+
+Winamax Poker - CashGame - HandId: #20183568-875-1728408965 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:36:05 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #4 is the button
+Seat 1: 20BJ (5.38€)
+Seat 2: LF-Genie49 (4.95€)
+Seat 3: 6T3MAT1K (5€)
+Seat 4: Abparieur09 (8.02€)
+Seat 5: ghoustryde (5.22€)
+*** ANTE/BLINDS ***
+ghoustryde posts small blind 0.02€
+20BJ posts big blind 0.05€
+Dealt to 6T3MAT1K [7s Qc]
+*** PRE-FLOP *** 
+LF-Genie49 calls 0.05€
+6T3MAT1K folds
+Abparieur09 folds
+ghoustryde raises 0.15€ to 0.20€
+20BJ folds
+LF-Genie49 folds
+ghoustryde collected 0.30€ from pot
+*** SUMMARY ***
+Total pot 0.30€ | No rake
+Seat 5: ghoustryde (small blind) won 0.30€
+
+
+Winamax Poker - CashGame - HandId: #20183568-876-1728408985 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:36:25 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #5 is the button
+Seat 1: 20BJ (5.33€)
+Seat 2: LF-Genie49 (4.90€)
+Seat 3: 6T3MAT1K (5€)
+Seat 4: Abparieur09 (8.02€)
+Seat 5: ghoustryde (5.32€)
+*** ANTE/BLINDS ***
+20BJ posts small blind 0.02€
+LF-Genie49 posts big blind 0.05€
+Dealt to 6T3MAT1K [9c 3c]
+*** PRE-FLOP *** 
+6T3MAT1K folds
+Abparieur09 raises 0.08€ to 0.13€
+ghoustryde calls 0.13€
+20BJ folds
+LF-Genie49 calls 0.08€
+*** FLOP *** [9h Qc Jh]
+LF-Genie49 checks
+Abparieur09 checks
+ghoustryde bets 0.25€
+LF-Genie49 calls 0.25€
+Abparieur09 calls 0.25€
+*** TURN *** [9h Qc Jh][8d]
+LF-Genie49 bets 1.16€
+Abparieur09 folds
+ghoustryde folds
+LF-Genie49 collected 2.25€ from pot
+*** SUMMARY ***
+Total pot 2.25€ | Rake 0.07€
+Board: [9h Qc Jh 8d]
+Seat 2: LF-Genie49 (big blind) won 2.25€
+
+
+Winamax Poker - CashGame - HandId: #20183568-877-1728409025 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:37:05 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #1 is the button
+Seat 1: 20BJ (5.31€)
+Seat 2: LF-Genie49 (5.61€)
+Seat 3: 6T3MAT1K (5€)
+Seat 4: Abparieur09 (7.64€)
+Seat 5: ghoustryde (5€)
+*** ANTE/BLINDS ***
+LF-Genie49 posts small blind 0.02€
+6T3MAT1K posts big blind 0.05€
+Dealt to 6T3MAT1K [7d 2h]
+*** PRE-FLOP *** 
+Abparieur09 folds
+ghoustryde folds
+20BJ calls 0.05€
+LF-Genie49 calls 0.03€
+6T3MAT1K checks
+*** FLOP *** [As Th 4s]
+LF-Genie49 checks
+6T3MAT1K checks
+20BJ bets 0.08€
+LF-Genie49 folds
+6T3MAT1K folds
+20BJ collected 0.22€ from pot
+*** SUMMARY ***
+Total pot 0.22€ | Rake 0.01€
+Board: [As Th 4s]
+Seat 1: 20BJ (button) won 0.22€
+
+
+Winamax Poker - CashGame - HandId: #20183568-878-1728409056 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:37:36 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #2 is the button
+Seat 1: 20BJ (5.40€)
+Seat 2: LF-Genie49 (5.56€)
+Seat 3: 6T3MAT1K (5€)
+Seat 4: Abparieur09 (7.64€)
+Seat 5: ghoustryde (5€)
+*** ANTE/BLINDS ***
+6T3MAT1K posts small blind 0.02€
+Abparieur09 posts big blind 0.05€
+Dealt to 6T3MAT1K [Js Ks]
+*** PRE-FLOP *** 
+ghoustryde raises 0.10€ to 0.15€
+20BJ calls 0.15€
+LF-Genie49 folds
+6T3MAT1K calls 0.13€
+Abparieur09 folds
+*** FLOP *** [6c 2h Kd]
+6T3MAT1K checks
+ghoustryde bets 0.25€
+20BJ calls 0.25€
+6T3MAT1K calls 0.25€
+*** TURN *** [6c 2h Kd][4s]
+6T3MAT1K checks
+ghoustryde bets 0.45€
+20BJ folds
+6T3MAT1K calls 0.45€
+*** RIVER *** [6c 2h Kd 4s][3s]
+6T3MAT1K checks
+ghoustryde checks
+*** SHOW DOWN ***
+6T3MAT1K shows [Js Ks] (One pair : Kings)
+ghoustryde shows [Kh Qc] (One pair : Kings)
+ghoustryde collected 2.03€ from pot
+*** SUMMARY ***
+Total pot 2.03€ | Rake 0.12€
+Board: [6c 2h Kd 4s 3s]
+Seat 3: 6T3MAT1K (small blind) showed [Js Ks] and lost with One pair : Kings
+Seat 5: ghoustryde showed [Kh Qc] and won 2.03€ with One pair : Kings
+
+
+Winamax Poker - CashGame - HandId: #20183568-879-1728409101 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:38:21 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #3 is the button
+Seat 1: 20BJ (5€)
+Seat 2: LF-Genie49 (5.56€)
+Seat 3: 6T3MAT1K (5€)
+Seat 4: Abparieur09 (7.59€)
+Seat 5: ghoustryde (6.18€)
+*** ANTE/BLINDS ***
+Abparieur09 posts small blind 0.02€
+ghoustryde posts big blind 0.05€
+Dealt to 6T3MAT1K [Ac Qh]
+*** PRE-FLOP *** 
+20BJ calls 0.05€
+LF-Genie49 folds
+6T3MAT1K raises 0.17€ to 0.22€
+Abparieur09 folds
+ghoustryde folds
+20BJ calls 0.17€
+*** FLOP *** [Kc Th 9h]
+20BJ checks
+6T3MAT1K checks
+*** TURN *** [Kc Th 9h][6d]
+20BJ checks
+6T3MAT1K checks
+*** RIVER *** [Kc Th 9h 6d][Jh]
+20BJ checks
+6T3MAT1K bets 0.28€
+20BJ folds
+6T3MAT1K collected 0.76€ from pot
+*** SUMMARY ***
+Total pot 0.76€ | Rake 0.03€
+Board: [Kc Th 9h 6d Jh]
+Seat 3: 6T3MAT1K (button) won 0.76€
+
+
+Winamax Poker - CashGame - HandId: #20183568-880-1728409146 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:39:06 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #4 is the button
+Seat 1: 20BJ (5€)
+Seat 2: LF-Genie49 (5.56€)
+Seat 3: 6T3MAT1K (5.26€)
+Seat 4: Abparieur09 (7.57€)
+Seat 5: ghoustryde (6.13€)
+*** ANTE/BLINDS ***
+ghoustryde posts small blind 0.02€
+20BJ posts big blind 0.05€
+Dealt to 6T3MAT1K [5d 2c]
+*** PRE-FLOP *** 
+LF-Genie49 calls 0.05€
+6T3MAT1K folds
+Abparieur09 folds
+ghoustryde calls 0.03€
+20BJ raises 0.13€ to 0.18€
+LF-Genie49 calls 0.13€
+ghoustryde calls 0.13€
+*** FLOP *** [Jd 3c Qd]
+ghoustryde checks
+20BJ bets 0.44€
+LF-Genie49 folds
+ghoustryde calls 0.44€
+*** TURN *** [Jd 3c Qd][Jc]
+ghoustryde checks
+20BJ bets 0.34€
+ghoustryde calls 0.34€
+*** RIVER *** [Jd 3c Qd Jc][4c]
+ghoustryde checks
+20BJ bets 4.04€ and is all-in
+ghoustryde folds
+20BJ collected 6.02€ from pot
+*** SUMMARY ***
+Total pot 6.02€ | Rake 0.12€
+Board: [Jd 3c Qd Jc 4c]
+Seat 1: 20BJ (big blind) won 6.02€
+
+
+Winamax Poker - CashGame - HandId: #20183568-881-1728409205 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:40:05 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #5 is the button
+Seat 1: 20BJ (6.02€)
+Seat 2: LF-Genie49 (5.38€)
+Seat 3: 6T3MAT1K (5.26€)
+Seat 4: Abparieur09 (7.57€)
+Seat 5: ghoustryde (5.17€)
+*** ANTE/BLINDS ***
+20BJ posts small blind 0.02€
+LF-Genie49 posts big blind 0.05€
+Dealt to 6T3MAT1K [Qh Js]
+*** PRE-FLOP *** 
+6T3MAT1K raises 0.10€ to 0.15€
+Abparieur09 raises 0.35€ to 0.50€
+ghoustryde folds
+20BJ folds
+LF-Genie49 raises 0.35€ to 0.85€
+6T3MAT1K folds
+Abparieur09 calls 0.35€
+*** FLOP *** [6s Td Qc]
+LF-Genie49 bets 1.22€
+Abparieur09 calls 1.22€
+*** TURN *** [6s Td Qc][4h]
+LF-Genie49 bets 3.31€ and is all-in
+Abparieur09 calls 3.31€
+*** RIVER *** [6s Td Qc 4h][9d]
+*** SHOW DOWN ***
+Abparieur09 shows [Ad Jd] (High card : Ace)
+LF-Genie49 shows [5d Qd] (One pair : Queens)
+LF-Genie49 collected 10.30€ from pot
+*** SUMMARY ***
+Total pot 10.30€ | Rake 0.63€
+Board: [6s Td Qc 4h 9d]
+Seat 2: LF-Genie49 (big blind) showed [5d Qd] and won 10.30€ with One pair : Queens
+Seat 4: Abparieur09 showed [Ad Jd] and lost with High card : Ace
+
+
+Winamax Poker - CashGame - HandId: #20183568-882-1728409270 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:41:10 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #1 is the button
+Seat 1: 20BJ (6€)
+Seat 2: LF-Genie49 (10.30€)
+Seat 3: 6T3MAT1K (5.11€)
+Seat 4: Abparieur09 (5€)
+Seat 5: Air 0ne (0€)
+*** ANTE/BLINDS ***
+LF-Genie49 posts small blind 0.02€
+6T3MAT1K posts big blind 0.05€
+Dealt to 6T3MAT1K [Kh 2h]
+*** PRE-FLOP *** 
+Abparieur09 folds
+20BJ calls 0.05€
+LF-Genie49 calls 0.03€
+6T3MAT1K checks
+*** FLOP *** [Jd Td As]
+LF-Genie49 checks
+6T3MAT1K checks
+20BJ bets 0.14€
+LF-Genie49 calls 0.14€
+6T3MAT1K folds
+*** TURN *** [Jd Td As][6d]
+LF-Genie49 checks
+20BJ bets 0.38€
+LF-Genie49 folds
+20BJ collected 0.79€ from pot
+*** SUMMARY ***
+Total pot 0.79€ | Rake 0.02€
+Board: [Jd Td As 6d]
+Seat 1: 20BJ (button) won 0.79€
+
+
+Winamax Poker - CashGame - HandId: #20183568-883-1728409357 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:42:37 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #2 is the button
+Seat 1: 20BJ (6.22€)
+Seat 2: LF-Genie49 (10.11€)
+Seat 3: 6T3MAT1K (5.06€)
+Seat 4: Abparieur09 (5€)
+Seat 5: Air 0ne (5€)
+*** ANTE/BLINDS ***
+6T3MAT1K posts small blind 0.02€
+Abparieur09 posts big blind 0.05€
+Dealt to 6T3MAT1K [Qc 4s]
+*** PRE-FLOP *** 
+20BJ calls 0.05€
+LF-Genie49 raises 0.08€ to 0.13€
+6T3MAT1K folds
+Abparieur09 folds
+20BJ calls 0.08€
+*** FLOP *** [4h 9s 8c]
+20BJ checks
+LF-Genie49 checks
+*** TURN *** [4h 9s 8c][Kc]
+20BJ bets 0.12€
+LF-Genie49 calls 0.12€
+*** RIVER *** [4h 9s 8c Kc][Jd]
+20BJ checks
+LF-Genie49 bets 0.20€
+20BJ folds
+LF-Genie49 collected 0.74€ from pot
+*** SUMMARY ***
+Total pot 0.74€ | Rake 0.03€
+Board: [4h 9s 8c Kc Jd]
+Seat 2: LF-Genie49 (button) won 0.74€
+
+
+Winamax Poker - CashGame - HandId: #20183568-884-1728409409 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:43:29 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #3 is the button
+Seat 1: 20BJ (5.97€)
+Seat 2: LF-Genie49 (10.40€)
+Seat 3: 6T3MAT1K (5.04€)
+Seat 4: Abparieur09 (5€)
+Seat 5: Air 0ne (5€)
+*** ANTE/BLINDS ***
+Abparieur09 posts small blind 0.02€
+Air 0ne posts big blind 0.05€
+Dealt to 6T3MAT1K [3h As]
+*** PRE-FLOP *** 
+20BJ calls 0.05€
+LF-Genie49 folds
+6T3MAT1K folds
+Abparieur09 folds
+Air 0ne checks
+*** FLOP *** [2d 7c 6d]
+Air 0ne bets 0.06€
+20BJ calls 0.06€
+*** TURN *** [2d 7c 6d][9s]
+Air 0ne checks
+20BJ bets 0.16€
+Air 0ne calls 0.16€
+*** RIVER *** [2d 7c 6d 9s][8s]
+Air 0ne checks
+20BJ checks
+*** SHOW DOWN ***
+Air 0ne shows [7d 3s] (One pair : 7)
+20BJ shows [Ac 9c] (One pair : 9)
+20BJ collected 0.53€ from pot
+*** SUMMARY ***
+Total pot 0.53€ | Rake 0.03€
+Board: [2d 7c 6d 9s 8s]
+Seat 1: 20BJ showed [Ac 9c] and won 0.53€ with One pair : 9
+Seat 5: Air 0ne (big blind) showed [7d 3s] and lost with One pair : 7
+
+
+Winamax Poker - CashGame - HandId: #20183568-885-1728409530 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:45:30 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #4 is the button
+Seat 1: 20BJ (6.23€)
+Seat 2: LF-Genie49 (10.40€)
+Seat 3: 6T3MAT1K (5.04€)
+Seat 4: Abparieur09 (5€)
+Seat 5: Air 0ne (5€)
+*** ANTE/BLINDS ***
+Air 0ne posts small blind 0.02€
+20BJ posts big blind 0.05€
+Dealt to 6T3MAT1K [7s Ac]
+*** PRE-FLOP *** 
+LF-Genie49 raises 0.05€ to 0.10€
+6T3MAT1K folds
+Abparieur09 folds
+Air 0ne folds
+20BJ calls 0.05€
+*** FLOP *** [Qc Js 2s]
+20BJ checks
+LF-Genie49 bets 0.05€
+20BJ calls 0.05€
+*** TURN *** [Qc Js 2s][Ks]
+20BJ bets 0.20€
+LF-Genie49 folds
+20BJ collected 0.50€ from pot
+*** SUMMARY ***
+Total pot 0.50€ | Rake 0.02€
+Board: [Qc Js 2s Ks]
+Seat 1: 20BJ (big blind) won 0.50€
+
+
+Winamax Poker - CashGame - HandId: #20183568-886-1728409576 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:46:16 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #5 is the button
+Seat 1: 20BJ (6.38€)
+Seat 2: LF-Genie49 (10.25€)
+Seat 3: 6T3MAT1K (5.04€)
+Seat 4: Abparieur09 (5€)
+Seat 5: Air 0ne (5€)
+*** ANTE/BLINDS ***
+20BJ posts small blind 0.02€
+LF-Genie49 posts big blind 0.05€
+Dealt to 6T3MAT1K [Tc 3s]
+*** PRE-FLOP *** 
+6T3MAT1K folds
+Abparieur09 raises 0.08€ to 0.13€
+Air 0ne folds
+20BJ folds
+LF-Genie49 calls 0.08€
+*** FLOP *** [8s 7c 4h]
+LF-Genie49 checks
+Abparieur09 checks
+*** TURN *** [8s 7c 4h][4d]
+LF-Genie49 checks
+Abparieur09 bets 0.09€
+LF-Genie49 folds
+Abparieur09 collected 0.35€ from pot
+*** SUMMARY ***
+Total pot 0.35€ | Rake 0.02€
+Board: [8s 7c 4h 4d]
+Seat 4: Abparieur09 won 0.35€
+
+
+Winamax Poker - CashGame - HandId: #20183568-887-1728409611 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:46:51 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #1 is the button
+Seat 1: 20BJ (6.36€)
+Seat 2: LF-Genie49 (10.12€)
+Seat 3: 6T3MAT1K (5.04€)
+Seat 4: Abparieur09 (5.13€)
+Seat 5: Air 0ne (5€)
+*** ANTE/BLINDS ***
+LF-Genie49 posts small blind 0.02€
+6T3MAT1K posts big blind 0.05€
+Dealt to 6T3MAT1K [8h 6s]
+*** PRE-FLOP *** 
+Abparieur09 folds
+Air 0ne raises 0.08€ to 0.13€
+20BJ folds
+LF-Genie49 folds
+6T3MAT1K folds
+Air 0ne collected 0.20€ from pot
+*** SUMMARY ***
+Total pot 0.20€ | No rake
+Seat 5: Air 0ne won 0.20€
+
+
+Winamax Poker - CashGame - HandId: #20183568-888-1728409628 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:47:08 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #2 is the button
+Seat 1: 20BJ (6.36€)
+Seat 2: LF-Genie49 (10.10€)
+Seat 3: 6T3MAT1K (5€)
+Seat 4: Abparieur09 (5.13€)
+Seat 5: Air 0ne (5.07€)
+*** ANTE/BLINDS ***
+6T3MAT1K posts small blind 0.02€
+Abparieur09 posts big blind 0.05€
+Dealt to 6T3MAT1K [Jh 8c]
+*** PRE-FLOP *** 
+Air 0ne folds
+20BJ folds
+LF-Genie49 calls 0.05€
+6T3MAT1K folds
+Abparieur09 checks
+*** FLOP *** [2h Ac Ts]
+Abparieur09 checks
+LF-Genie49 checks
+*** TURN *** [2h Ac Ts][8h]
+Abparieur09 checks
+LF-Genie49 checks
+*** RIVER *** [2h Ac Ts 8h][9c]
+Abparieur09 checks
+LF-Genie49 checks
+*** SHOW DOWN ***
+LF-Genie49 shows [Kh 6d] (High card : Ace)
+Abparieur09 shows [8s 7s] (One pair : 8)
+Abparieur09 collected 0.11€ from pot
+*** SUMMARY ***
+Total pot 0.11€ | Rake 0.01€
+Board: [2h Ac Ts 8h 9c]
+Seat 2: LF-Genie49 (button) showed [Kh 6d] and lost with High card : Ace
+Seat 4: Abparieur09 (big blind) showed [8s 7s] and won 0.11€ with One pair : 8
+
+
+Winamax Poker - CashGame - HandId: #20183568-889-1728409665 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:47:45 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #3 is the button
+Seat 1: 20BJ (6.36€)
+Seat 2: LF-Genie49 (10.05€)
+Seat 3: 6T3MAT1K (5€)
+Seat 4: Abparieur09 (5.19€)
+Seat 5: Air 0ne (5.07€)
+*** ANTE/BLINDS ***
+Abparieur09 posts small blind 0.02€
+Air 0ne posts big blind 0.05€
+Dealt to 6T3MAT1K [Jc 3h]
+*** PRE-FLOP *** 
+20BJ calls 0.05€
+LF-Genie49 folds
+6T3MAT1K folds
+Abparieur09 calls 0.03€
+Air 0ne checks
+*** FLOP *** [2s Kh Td]
+Abparieur09 checks
+Air 0ne checks
+20BJ bets 0.12€
+Abparieur09 folds
+Air 0ne folds
+20BJ collected 0.26€ from pot
+*** SUMMARY ***
+Total pot 0.26€ | Rake 0.01€
+Board: [2s Kh Td]
+Seat 1: 20BJ won 0.26€
+
+
+Winamax Poker - CashGame - HandId: #20183568-890-1728409702 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:48:22 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #4 is the button
+Seat 1: 20BJ (6.45€)
+Seat 2: LF-Genie49 (10.05€)
+Seat 3: 6T3MAT1K (5€)
+Seat 4: Abparieur09 (5.14€)
+Seat 5: Air 0ne (5.02€)
+*** ANTE/BLINDS ***
+Air 0ne posts small blind 0.02€
+20BJ posts big blind 0.05€
+Dealt to 6T3MAT1K [6c Kc]
+*** PRE-FLOP *** 
+LF-Genie49 folds
+6T3MAT1K raises 0.10€ to 0.15€
+Abparieur09 folds
+Air 0ne raises 0.45€ to 0.60€
+20BJ folds
+6T3MAT1K folds
+Air 0ne collected 0.80€ from pot
+*** SUMMARY ***
+Total pot 0.80€ | No rake
+Seat 5: Air 0ne (small blind) won 0.80€
+
+
+Winamax Poker - CashGame - HandId: #20183568-891-1728409734 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:48:54 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #5 is the button
+Seat 1: 20BJ (6.40€)
+Seat 2: LF-Genie49 (10.05€)
+Seat 3: 6T3MAT1K (5€)
+Seat 4: Abparieur09 (5.14€)
+Seat 5: Air 0ne (5.22€)
+*** ANTE/BLINDS ***
+20BJ posts small blind 0.02€
+LF-Genie49 posts big blind 0.05€
+Dealt to 6T3MAT1K [8h Jd]
+*** PRE-FLOP *** 
+6T3MAT1K folds
+Abparieur09 raises 0.08€ to 0.13€
+Air 0ne folds
+20BJ calls 0.11€
+LF-Genie49 calls 0.08€
+*** FLOP *** [Ac Kd 9c]
+20BJ checks
+LF-Genie49 checks
+Abparieur09 checks
+*** TURN *** [Ac Kd 9c][Qd]
+20BJ bets 0.30€
+LF-Genie49 folds
+Abparieur09 folds
+20BJ collected 0.67€ from pot
+*** SUMMARY ***
+Total pot 0.67€ | Rake 0.02€
+Board: [Ac Kd 9c Qd]
+Seat 1: 20BJ (small blind) won 0.67€
+
+
+Winamax Poker - CashGame - HandId: #20183568-892-1728409774 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:49:34 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #1 is the button
+Seat 1: 20BJ (6.64€)
+Seat 2: LF-Genie49 (9.92€)
+Seat 3: 6T3MAT1K (5€)
+Seat 4: Abparieur09 (5.01€)
+Seat 5: Air 0ne (5.22€)
+*** ANTE/BLINDS ***
+LF-Genie49 posts small blind 0.02€
+6T3MAT1K posts big blind 0.05€
+Dealt to 6T3MAT1K [Ac 6h]
+*** PRE-FLOP *** 
+Abparieur09 folds
+Air 0ne raises 0.08€ to 0.13€
+20BJ calls 0.13€
+LF-Genie49 folds
+6T3MAT1K folds
+*** FLOP *** [8c Td 8s]
+Air 0ne bets 0.12€
+20BJ calls 0.12€
+*** TURN *** [8c Td 8s][3h]
+Air 0ne bets 0.37€
+20BJ calls 0.37€
+*** RIVER *** [8c Td 8s 3h][6c]
+Air 0ne bets 1.05€
+20BJ calls 1.05€
+*** SHOW DOWN ***
+20BJ shows [8d 4d] (Trips of 8)
+Air 0ne shows [3s 3c] (Full of 3 and 8)
+Air 0ne collected 3.21€ from pot
+*** SUMMARY ***
+Total pot 3.21€ | Rake 0.20€
+Board: [8c Td 8s 3h 6c]
+Seat 1: 20BJ (button) showed [8d 4d] and lost with Trips of 8
+Seat 5: Air 0ne showed [3s 3c] and won 3.21€ with Full of 3 and 8
+
+
+Winamax Poker - CashGame - HandId: #20183568-893-1728409860 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:51:00 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #2 is the button
+Seat 1: 20BJ (5€)
+Seat 2: Ab1sse (0€)
+Seat 3: 6T3MAT1K (5€)
+Seat 4: Abparieur09 (5.01€)
+Seat 5: Air 0ne (6.76€)
+*** ANTE/BLINDS ***
+6T3MAT1K posts small blind 0.02€
+Abparieur09 posts big blind 0.05€
+Dealt to 6T3MAT1K [Ts 5h]
+*** PRE-FLOP *** 
+Air 0ne raises 0.08€ to 0.13€
+20BJ folds
+6T3MAT1K folds
+Abparieur09 folds
+Air 0ne collected 0.20€ from pot
+*** SUMMARY ***
+Total pot 0.20€ | No rake
+Seat 5: Air 0ne won 0.20€
+
+
+Winamax Poker - CashGame - HandId: #20183568-894-1728409877 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:51:17 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #3 is the button
+Seat 1: 20BJ (5€)
+Seat 2: Ab1sse (5€)
+Seat 3: 6T3MAT1K (5€)
+Seat 4: Abparieur09 (5€)
+Seat 5: Air 0ne (6.83€)
+*** ANTE/BLINDS ***
+Abparieur09 posts small blind 0.02€
+Air 0ne posts big blind 0.05€
+Dealt to 6T3MAT1K [4h Ks]
+*** PRE-FLOP *** 
+20BJ calls 0.05€
+6T3MAT1K folds
+Abparieur09 folds
+Air 0ne checks
+*** FLOP *** [8d Jh 9s]
+Air 0ne checks
+20BJ bets 0.12€
+Air 0ne calls 0.12€
+*** TURN *** [8d Jh 9s][3s]
+Air 0ne checks
+20BJ checks
+*** RIVER *** [8d Jh 9s 3s][Qd]
+Air 0ne checks
+20BJ bets 0.92€
+Air 0ne folds
+20BJ collected 1.26€ from pot
+*** SUMMARY ***
+Total pot 1.26€ | Rake 0.02€
+Board: [8d Jh 9s 3s Qd]
+Seat 1: 20BJ won 1.26€
+
+
+Winamax Poker - CashGame - HandId: #20183568-895-1728409958 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:52:38 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #4 is the button
+Seat 1: 20BJ (5.17€)
+Seat 2: Ab1sse (5€)
+Seat 3: 6T3MAT1K (5€)
+Seat 4: Abparieur09 (5€)
+Seat 5: Air 0ne (6.66€)
+*** ANTE/BLINDS ***
+Air 0ne posts small blind 0.02€
+20BJ posts big blind 0.05€
+Dealt to 6T3MAT1K [Jd Ts]
+*** PRE-FLOP *** 
+6T3MAT1K raises 0.10€ to 0.15€
+Abparieur09 folds
+Air 0ne folds
+20BJ calls 0.10€
+*** FLOP *** [Tc 8s 9h]
+20BJ checks
+6T3MAT1K bets 0.11€
+20BJ calls 0.11€
+*** TURN *** [Tc 8s 9h][As]
+20BJ checks
+6T3MAT1K bets 0.45€
+20BJ folds
+6T3MAT1K collected 0.96€ from pot
+*** SUMMARY ***
+Total pot 0.96€ | Rake 0.03€
+Board: [Tc 8s 9h As]
+Seat 3: 6T3MAT1K won 0.96€
+
+
+Winamax Poker - CashGame - HandId: #20183568-896-1728409999 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:53:19 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #5 is the button
+Seat 1: 20BJ (5€)
+Seat 2: Ab1sse (5€)
+Seat 3: 6T3MAT1K (5.25€)
+Seat 4: Abparieur09 (5€)
+Seat 5: Air 0ne (6.64€)
+*** ANTE/BLINDS ***
+20BJ posts small blind 0.02€
+Ab1sse posts big blind 0.05€
+Dealt to 6T3MAT1K [5s 5c]
+*** PRE-FLOP *** 
+6T3MAT1K raises 0.10€ to 0.15€
+Abparieur09 folds
+Air 0ne folds
+20BJ calls 0.13€
+Ab1sse calls 0.10€
+*** FLOP *** [Ac 9s 8s]
+20BJ checks
+Ab1sse checks
+6T3MAT1K checks
+*** TURN *** [Ac 9s 8s][6h]
+20BJ checks
+Ab1sse bets 0.23€
+6T3MAT1K folds
+20BJ folds
+Ab1sse collected 0.65€ from pot
+*** SUMMARY ***
+Total pot 0.65€ | Rake 0.03€
+Board: [Ac 9s 8s 6h]
+Seat 2: Ab1sse (big blind) won 0.65€
+
+
+Winamax Poker - CashGame - HandId: #20183568-897-1728410059 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:54:19 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #1 is the button
+Seat 1: 20BJ (5€)
+Seat 2: Ab1sse (5.27€)
+Seat 3: 6T3MAT1K (5.10€)
+Seat 4: Abparieur09 (5€)
+Seat 5: Air 0ne (6.64€)
+*** ANTE/BLINDS ***
+Ab1sse posts small blind 0.02€
+6T3MAT1K posts big blind 0.05€
+Dealt to 6T3MAT1K [Ac Jh]
+*** PRE-FLOP *** 
+Abparieur09 folds
+Air 0ne folds
+20BJ folds
+Ab1sse folds
+6T3MAT1K collected 0.07€ from pot
+*** SUMMARY ***
+Total pot 0.07€ | No rake
+Seat 3: 6T3MAT1K (big blind) won 0.07€
+
+
+Winamax Poker - CashGame - HandId: #20183568-898-1728410075 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:54:35 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #2 is the button
+Seat 1: 20BJ (5€)
+Seat 2: Ab1sse (5.25€)
+Seat 3: 6T3MAT1K (5.12€)
+Seat 4: Abparieur09 (5€)
+Seat 5: Air 0ne (6.64€)
+*** ANTE/BLINDS ***
+6T3MAT1K posts small blind 0.02€
+Abparieur09 posts big blind 0.05€
+Dealt to 6T3MAT1K [3s 3c]
+*** PRE-FLOP *** 
+Air 0ne raises 0.08€ to 0.13€
+20BJ folds
+Ab1sse folds
+6T3MAT1K folds
+Abparieur09 folds
+Air 0ne collected 0.20€ from pot
+*** SUMMARY ***
+Total pot 0.20€ | No rake
+Seat 5: Air 0ne won 0.20€
+
+
+Winamax Poker - CashGame - HandId: #20183568-899-1728410105 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:55:05 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #3 is the button
+Seat 1: 20BJ (5€)
+Seat 2: Ab1sse (5.25€)
+Seat 3: 6T3MAT1K (5.10€)
+Seat 4: Abparieur09 (5€)
+Seat 5: Air 0ne (6.71€)
+*** ANTE/BLINDS ***
+Abparieur09 posts small blind 0.02€
+Air 0ne posts big blind 0.05€
+Dealt to 6T3MAT1K [9s Jc]
+*** PRE-FLOP *** 
+20BJ calls 0.05€
+Ab1sse folds
+6T3MAT1K folds
+Abparieur09 folds
+Air 0ne checks
+*** FLOP *** [6d Ks 6s]
+Air 0ne checks
+20BJ checks
+*** TURN *** [6d Ks 6s][Ac]
+Air 0ne checks
+20BJ bets 0.12€
+Air 0ne calls 0.12€
+*** RIVER *** [6d Ks 6s Ac][Ah]
+Air 0ne checks
+20BJ bets 0.20€
+Air 0ne raises 0.42€ to 0.62€
+20BJ folds
+Air 0ne collected 1.14€ from pot
+*** SUMMARY ***
+Total pot 1.14€ | Rake 0.04€
+Board: [6d Ks 6s Ac Ah]
+Seat 5: Air 0ne (big blind) won 1.14€
+
+
+Winamax Poker - CashGame - HandId: #20183568-900-1728410179 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:56:19 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #4 is the button
+Seat 1: 20BJ (5€)
+Seat 2: Ab1sse (5.25€)
+Seat 3: 6T3MAT1K (5.10€)
+Seat 4: Abparieur09 (5€)
+Seat 5: Air 0ne (7.06€)
+*** ANTE/BLINDS ***
+Air 0ne posts small blind 0.02€
+20BJ posts big blind 0.05€
+Dealt to 6T3MAT1K [7c Kh]
+*** PRE-FLOP *** 
+Ab1sse folds
+6T3MAT1K folds
+Abparieur09 raises 0.08€ to 0.13€
+Air 0ne raises 0.39€ to 0.52€
+20BJ calls 0.47€
+Abparieur09 folds
+*** FLOP *** [Tc 5d 2d]
+Air 0ne bets 0.41€
+20BJ calls 0.41€
+*** TURN *** [Tc 5d 2d][8c]
+Air 0ne checks
+20BJ bets 1.12€
+Air 0ne folds
+20BJ collected 3€ from pot
+*** SUMMARY ***
+Total pot 3€ | Rake 0.11€
+Board: [Tc 5d 2d 8c]
+Seat 1: 20BJ (big blind) won 3€
+
+
+Winamax Poker - CashGame - HandId: #20183568-901-1728410284 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:58:04 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #5 is the button
+Seat 1: 20BJ (5.95€)
+Seat 2: Ab1sse (5.25€)
+Seat 3: 6T3MAT1K (5.10€)
+Seat 4: Abparieur09 (5€)
+Seat 5: Air 0ne (6.13€)
+*** ANTE/BLINDS ***
+20BJ posts small blind 0.02€
+Ab1sse posts big blind 0.05€
+Dealt to 6T3MAT1K [4h 9s]
+*** PRE-FLOP *** 
+6T3MAT1K folds
+Abparieur09 folds
+Air 0ne folds
+20BJ calls 0.03€
+Ab1sse raises 0.15€ to 0.20€
+20BJ calls 0.15€
+*** FLOP *** [2h 9d Kh]
+20BJ checks
+Ab1sse checks
+*** TURN *** [2h 9d Kh][8h]
+20BJ checks
+Ab1sse checks
+*** RIVER *** [2h 9d Kh 8h][6d]
+20BJ checks
+Ab1sse checks
+*** SHOW DOWN ***
+Ab1sse shows [5d Ac] (High card : Ace)
+20BJ shows [4d 4s] (One pair : 4)
+20BJ collected 0.38€ from pot
+*** SUMMARY ***
+Total pot 0.38€ | Rake 0.02€
+Board: [2h 9d Kh 8h 6d]
+Seat 1: 20BJ (small blind) showed [4d 4s] and won 0.38€ with One pair : 4
+Seat 2: Ab1sse (big blind) showed [5d Ac] and lost with High card : Ace
+
+
+Winamax Poker - CashGame - HandId: #20183568-902-1728410337 - Holdem no limit (0.02€/0.05€) - 2024/10/08 17:58:57 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #1 is the button
+Seat 1: 20BJ (6.13€)
+Seat 2: Ab1sse (5.05€)
+Seat 3: 6T3MAT1K (5.10€)
+Seat 4: Abparieur09 (5€)
+Seat 5: Air 0ne (6.13€)
+*** ANTE/BLINDS ***
+Ab1sse posts small blind 0.02€
+6T3MAT1K posts big blind 0.05€
+Dealt to 6T3MAT1K [5h 8s]
+*** PRE-FLOP *** 
+Abparieur09 folds
+Air 0ne folds
+20BJ calls 0.05€
+Ab1sse folds
+6T3MAT1K checks
+*** FLOP *** [Ad 6s Tc]
+6T3MAT1K checks
+20BJ checks
+*** TURN *** [Ad 6s Tc][Ac]
+6T3MAT1K checks
+20BJ bets 0.10€
+6T3MAT1K folds
+20BJ collected 0.21€ from pot
+*** SUMMARY ***
+Total pot 0.21€ | Rake 0.01€
+Board: [Ad 6s Tc Ac]
+Seat 1: 20BJ (button) won 0.21€
+
+
+Winamax Poker - CashGame - HandId: #20183568-903-1728410401 - Holdem no limit (0.02€/0.05€) - 2024/10/08 18:00:01 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #2 is the button
+Seat 1: 20BJ (6.19€)
+Seat 2: Ab1sse (5.03€)
+Seat 3: 6T3MAT1K (5.05€)
+Seat 4: Abparieur09 (5€)
+Seat 5: Air 0ne (6.13€)
+*** ANTE/BLINDS ***
+6T3MAT1K posts small blind 0.02€
+Abparieur09 posts big blind 0.05€
+Dealt to 6T3MAT1K [6d 5h]
+*** PRE-FLOP *** 
+Air 0ne folds
+20BJ calls 0.05€
+Ab1sse folds
+6T3MAT1K folds
+Abparieur09 checks
+*** FLOP *** [Td 5c Qs]
+Abparieur09 checks
+20BJ bets 0.05€
+Abparieur09 calls 0.05€
+*** TURN *** [Td 5c Qs][2h]
+Abparieur09 checks
+20BJ checks
+*** RIVER *** [Td 5c Qs 2h][2s]
+Abparieur09 bets 4.90€ and is all-in
+20BJ folds
+Abparieur09 collected 5.11€ from pot
+*** SUMMARY ***
+Total pot 5.11€ | Rake 0.01€
+Board: [Td 5c Qs 2h 2s]
+Seat 4: Abparieur09 (big blind) won 5.11€
+
+
+Winamax Poker - CashGame - HandId: #20183568-904-1728410461 - Holdem no limit (0.02€/0.05€) - 2024/10/08 18:01:01 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #3 is the button
+Seat 1: 20BJ (6.09€)
+Seat 2: Ab1sse (5.03€)
+Seat 3: 6T3MAT1K (5.03€)
+Seat 4: Abparieur09 (5.11€)
+Seat 5: Air 0ne (6.13€)
+*** ANTE/BLINDS ***
+Abparieur09 posts small blind 0.02€
+Air 0ne posts big blind 0.05€
+Dealt to 6T3MAT1K [Ac 2s]
+*** PRE-FLOP *** 
+20BJ raises 0.15€ to 0.20€
+Ab1sse folds
+6T3MAT1K folds
+Abparieur09 folds
+Air 0ne folds
+20BJ collected 0.27€ from pot
+*** SUMMARY ***
+Total pot 0.27€ | No rake
+Seat 1: 20BJ won 0.27€
+
+
+Winamax Poker - CashGame - HandId: #20183568-905-1728410482 - Holdem no limit (0.02€/0.05€) - 2024/10/08 18:01:22 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #4 is the button
+Seat 1: 20BJ (6.16€)
+Seat 2: Ab1sse (5.03€)
+Seat 3: 6T3MAT1K (5.03€)
+Seat 4: Abparieur09 (5.09€)
+Seat 5: Air 0ne (6.08€)
+*** ANTE/BLINDS ***
+Air 0ne posts small blind 0.02€
+20BJ posts big blind 0.05€
+Dealt to 6T3MAT1K [7d Ad]
+*** PRE-FLOP *** 
+Ab1sse folds
+6T3MAT1K raises 0.10€ to 0.15€
+Abparieur09 folds
+Air 0ne folds
+20BJ calls 0.10€
+*** FLOP *** [Ac 4c 3s]
+20BJ checks
+6T3MAT1K checks
+*** TURN *** [Ac 4c 3s][Qc]
+20BJ checks
+6T3MAT1K bets 0.20€
+20BJ folds
+6T3MAT1K collected 0.50€ from pot
+*** SUMMARY ***
+Total pot 0.50€ | Rake 0.02€
+Board: [Ac 4c 3s Qc]
+Seat 3: 6T3MAT1K won 0.50€
+
+
+Winamax Poker - CashGame - HandId: #20183568-906-1728410532 - Holdem no limit (0.02€/0.05€) - 2024/10/08 18:02:12 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #5 is the button
+Seat 1: 20BJ (6.01€)
+Seat 2: Ab1sse (5.03€)
+Seat 3: 6T3MAT1K (5.18€)
+Seat 4: Abparieur09 (5.09€)
+Seat 5: Air 0ne (6.06€)
+*** ANTE/BLINDS ***
+20BJ posts small blind 0.02€
+Ab1sse posts big blind 0.05€
+Dealt to 6T3MAT1K [8c Qd]
+*** PRE-FLOP *** 
+6T3MAT1K folds
+Abparieur09 raises 0.08€ to 0.13€
+Air 0ne raises 0.26€ to 0.39€
+20BJ folds
+Ab1sse folds
+Abparieur09 folds
+Air 0ne collected 0.59€ from pot
+*** SUMMARY ***
+Total pot 0.59€ | No rake
+Seat 5: Air 0ne (button) won 0.59€
+
+
+Winamax Poker - CashGame - HandId: #20183568-907-1728410562 - Holdem no limit (0.02€/0.05€) - 2024/10/08 18:02:42 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #1 is the button
+Seat 1: 20BJ (5.99€)
+Seat 2: Ab1sse (5€)
+Seat 3: 6T3MAT1K (5.18€)
+Seat 4: Abparieur09 (5€)
+Seat 5: Air 0ne (6.26€)
+*** ANTE/BLINDS ***
+Ab1sse posts small blind 0.02€
+6T3MAT1K posts big blind 0.05€
+Dealt to 6T3MAT1K [3c Ks]
+*** PRE-FLOP *** 
+Abparieur09 folds
+Air 0ne folds
+20BJ raises 0.09€ to 0.14€
+Ab1sse folds
+6T3MAT1K folds
+20BJ collected 0.21€ from pot
+*** SUMMARY ***
+Total pot 0.21€ | No rake
+Seat 1: 20BJ (button) won 0.21€
+
+
+Winamax Poker - CashGame - HandId: #20183568-908-1728410586 - Holdem no limit (0.02€/0.05€) - 2024/10/08 18:03:06 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #2 is the button
+Seat 1: 20BJ (6.06€)
+Seat 2: Ab1sse (5€)
+Seat 3: 6T3MAT1K (5.13€)
+Seat 4: Abparieur09 (5€)
+Seat 5: Air 0ne (6.26€)
+*** ANTE/BLINDS ***
+6T3MAT1K posts small blind 0.02€
+Abparieur09 posts big blind 0.05€
+Dealt to 6T3MAT1K [5s 8s]
+*** PRE-FLOP *** 
+Air 0ne folds
+20BJ folds
+Ab1sse folds
+6T3MAT1K raises 0.10€ to 0.15€
+Abparieur09 folds
+6T3MAT1K collected 0.20€ from pot
+*** SUMMARY ***
+Total pot 0.20€ | No rake
+Seat 3: 6T3MAT1K (small blind) won 0.20€
+
+
+Winamax Poker - CashGame - HandId: #20183568-909-1728410619 - Holdem no limit (0.02€/0.05€) - 2024/10/08 18:03:39 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #3 is the button
+Seat 1: 20BJ (6.06€)
+Seat 2: Ab1sse (5€)
+Seat 3: 6T3MAT1K (5.18€)
+Seat 4: Abparieur09 (5€)
+Seat 5: Air 0ne (6.26€)
+*** ANTE/BLINDS ***
+Abparieur09 posts small blind 0.02€
+Air 0ne posts big blind 0.05€
+Dealt to 6T3MAT1K [8d Kc]
+*** PRE-FLOP *** 
+20BJ folds
+Ab1sse raises 0.10€ to 0.15€
+6T3MAT1K folds
+Abparieur09 folds
+Air 0ne folds
+Ab1sse collected 0.22€ from pot
+*** SUMMARY ***
+Total pot 0.22€ | No rake
+Seat 2: Ab1sse won 0.22€
+
+
+Winamax Poker - CashGame - HandId: #20183568-910-1728410658 - Holdem no limit (0.02€/0.05€) - 2024/10/08 18:04:18 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #4 is the button
+Seat 1: 20BJ (6.06€)
+Seat 2: Ab1sse (5.07€)
+Seat 3: 6T3MAT1K (5.18€)
+Seat 4: Abparieur09 (5€)
+Seat 5: Air 0ne (6.21€)
+*** ANTE/BLINDS ***
+Air 0ne posts small blind 0.02€
+20BJ posts big blind 0.05€
+Dealt to 6T3MAT1K [Ks 5d]
+*** PRE-FLOP *** 
+Ab1sse folds
+6T3MAT1K folds
+Abparieur09 folds
+Air 0ne raises 0.10€ to 0.15€
+20BJ folds
+Air 0ne collected 0.20€ from pot
+*** SUMMARY ***
+Total pot 0.20€ | No rake
+Seat 5: Air 0ne (small blind) won 0.20€
+
+
+Winamax Poker - CashGame - HandId: #20183568-911-1728410691 - Holdem no limit (0.02€/0.05€) - 2024/10/08 18:04:51 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #5 is the button
+Seat 1: 20BJ (6.01€)
+Seat 2: Ab1sse (5.07€)
+Seat 3: 6T3MAT1K (5.18€)
+Seat 4: Abparieur09 (5€)
+Seat 5: Air 0ne (6.26€)
+*** ANTE/BLINDS ***
+20BJ posts small blind 0.02€
+Ab1sse posts big blind 0.05€
+Dealt to 6T3MAT1K [Kc 4h]
+*** PRE-FLOP *** 
+6T3MAT1K folds
+Abparieur09 folds
+Air 0ne folds
+20BJ folds
+Ab1sse collected 0.07€ from pot
+*** SUMMARY ***
+Total pot 0.07€ | No rake
+Seat 2: Ab1sse (big blind) won 0.07€
+
+
+Winamax Poker - CashGame - HandId: #20183568-912-1728410707 - Holdem no limit (0.02€/0.05€) - 2024/10/08 18:05:07 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #1 is the button
+Seat 1: 20BJ (5.99€)
+Seat 2: Ab1sse (5.09€)
+Seat 3: 6T3MAT1K (5.18€)
+Seat 4: Abparieur09 (5€)
+Seat 5: Air 0ne (6.26€)
+*** ANTE/BLINDS ***
+Ab1sse posts small blind 0.02€
+6T3MAT1K posts big blind 0.05€
+Dealt to 6T3MAT1K [Jc 3d]
+*** PRE-FLOP *** 
+Abparieur09 folds
+Air 0ne raises 0.08€ to 0.13€
+20BJ folds
+Ab1sse folds
+6T3MAT1K folds
+Air 0ne collected 0.20€ from pot
+*** SUMMARY ***
+Total pot 0.20€ | No rake
+Seat 5: Air 0ne won 0.20€
+
+
+Winamax Poker - CashGame - HandId: #20183568-913-1728410732 - Holdem no limit (0.02€/0.05€) - 2024/10/08 18:05:32 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #2 is the button
+Seat 1: 20BJ (5.99€)
+Seat 2: Ab1sse (5.07€)
+Seat 3: 6T3MAT1K (5.13€)
+Seat 4: Abparieur09 (5€)
+Seat 5: Air 0ne (6.33€)
+*** ANTE/BLINDS ***
+6T3MAT1K posts small blind 0.02€
+Abparieur09 posts big blind 0.05€
+Dealt to 6T3MAT1K [Tc Ah]
+*** PRE-FLOP *** 
+Air 0ne folds
+20BJ calls 0.05€
+Ab1sse folds
+6T3MAT1K raises 0.15€ to 0.20€
+Abparieur09 folds
+20BJ calls 0.15€
+*** FLOP *** [5d Kc 5c]
+6T3MAT1K bets 0.15€
+20BJ folds
+6T3MAT1K collected 0.57€ from pot
+*** SUMMARY ***
+Total pot 0.57€ | Rake 0.03€
+Board: [5d Kc 5c]
+Seat 3: 6T3MAT1K (small blind) won 0.57€
+
+
+Winamax Poker - CashGame - HandId: #20183568-914-1728410768 - Holdem no limit (0.02€/0.05€) - 2024/10/08 18:06:08 UTC
+Table: 'Alcácer do Sal 02' 5-max (real money) Seat #3 is the button
+Seat 1: 20BJ (5.79€)
+Seat 2: Ab1sse (5.07€)
+Seat 3: 6T3MAT1K (5.35€)
+Seat 4: Abparieur09 (5€)
+Seat 5: Air 0ne (6.33€)
+*** ANTE/BLINDS ***
+Abparieur09 posts small blind 0.02€
+Air 0ne posts big blind 0.05€
+Dealt to 6T3MAT1K [2s Td]
+*** PRE-FLOP *** 
+20BJ calls 0.05€
+Ab1sse folds
+6T3MAT1K folds
+Abparieur09 raises 0.24€ to 0.29€
+Air 0ne folds
+20BJ folds
+Abparieur09 collected 0.39€ from pot
+*** SUMMARY ***
+Total pot 0.39€ | No rake
+Seat 4: Abparieur09 (small blind) won 0.39€
+
+

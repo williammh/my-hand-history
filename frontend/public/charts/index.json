@@ -1,0 +1,397 @@
+{
+  "version": 1,
+  "charts": [
+    {
+      "id": "mtt-6max-btn-5bb-rfi",
+      "tableSize": 6,
+      "position": "BTN",
+      "stackBB": 5,
+      "scenario": "rfi",
+      "path": "mtt-6max/btn-5bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-btn-8bb-rfi",
+      "tableSize": 6,
+      "position": "BTN",
+      "stackBB": 8,
+      "scenario": "rfi",
+      "path": "mtt-6max/btn-8bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-btn-10bb-rfi",
+      "tableSize": 6,
+      "position": "BTN",
+      "stackBB": 10,
+      "scenario": "rfi",
+      "path": "mtt-6max/btn-10bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-btn-12bb-rfi",
+      "tableSize": 6,
+      "position": "BTN",
+      "stackBB": 12,
+      "scenario": "rfi",
+      "path": "mtt-6max/btn-12bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-btn-15bb-rfi",
+      "tableSize": 6,
+      "position": "BTN",
+      "stackBB": 15,
+      "scenario": "rfi",
+      "path": "mtt-6max/btn-15bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-btn-20bb-rfi",
+      "tableSize": 6,
+      "position": "BTN",
+      "stackBB": 20,
+      "scenario": "rfi",
+      "path": "mtt-6max/btn-20bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-btn-25bb-rfi",
+      "tableSize": 6,
+      "position": "BTN",
+      "stackBB": 25,
+      "scenario": "rfi",
+      "path": "mtt-6max/btn-25bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-sb-5bb-rfi",
+      "tableSize": 6,
+      "position": "SB",
+      "stackBB": 5,
+      "scenario": "blind-vs-blind",
+      "path": "mtt-6max/sb-5bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-sb-8bb-rfi",
+      "tableSize": 6,
+      "position": "SB",
+      "stackBB": 8,
+      "scenario": "blind-vs-blind",
+      "path": "mtt-6max/sb-8bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-sb-10bb-rfi",
+      "tableSize": 6,
+      "position": "SB",
+      "stackBB": 10,
+      "scenario": "blind-vs-blind",
+      "path": "mtt-6max/sb-10bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-sb-12bb-rfi",
+      "tableSize": 6,
+      "position": "SB",
+      "stackBB": 12,
+      "scenario": "blind-vs-blind",
+      "path": "mtt-6max/sb-12bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-sb-15bb-rfi",
+      "tableSize": 6,
+      "position": "SB",
+      "stackBB": 15,
+      "scenario": "blind-vs-blind",
+      "path": "mtt-6max/sb-15bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-sb-20bb-rfi",
+      "tableSize": 6,
+      "position": "SB",
+      "stackBB": 20,
+      "scenario": "blind-vs-blind",
+      "path": "mtt-6max/sb-20bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-sb-25bb-rfi",
+      "tableSize": 6,
+      "position": "SB",
+      "stackBB": 25,
+      "scenario": "blind-vs-blind",
+      "path": "mtt-6max/sb-25bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-co-5bb-rfi",
+      "tableSize": 6,
+      "position": "CO",
+      "stackBB": 5,
+      "scenario": "rfi",
+      "path": "mtt-6max/co-5bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-co-8bb-rfi",
+      "tableSize": 6,
+      "position": "CO",
+      "stackBB": 8,
+      "scenario": "rfi",
+      "path": "mtt-6max/co-8bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-co-10bb-rfi",
+      "tableSize": 6,
+      "position": "CO",
+      "stackBB": 10,
+      "scenario": "rfi",
+      "path": "mtt-6max/co-10bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-co-12bb-rfi",
+      "tableSize": 6,
+      "position": "CO",
+      "stackBB": 12,
+      "scenario": "rfi",
+      "path": "mtt-6max/co-12bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-co-15bb-rfi",
+      "tableSize": 6,
+      "position": "CO",
+      "stackBB": 15,
+      "scenario": "rfi",
+      "path": "mtt-6max/co-15bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-co-20bb-rfi",
+      "tableSize": 6,
+      "position": "CO",
+      "stackBB": 20,
+      "scenario": "rfi",
+      "path": "mtt-6max/co-20bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-co-25bb-rfi",
+      "tableSize": 6,
+      "position": "CO",
+      "stackBB": 25,
+      "scenario": "rfi",
+      "path": "mtt-6max/co-25bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-hj-5bb-rfi",
+      "tableSize": 6,
+      "position": "HJ",
+      "stackBB": 5,
+      "scenario": "rfi",
+      "path": "mtt-6max/hj-5bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-hj-8bb-rfi",
+      "tableSize": 6,
+      "position": "HJ",
+      "stackBB": 8,
+      "scenario": "rfi",
+      "path": "mtt-6max/hj-8bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-hj-10bb-rfi",
+      "tableSize": 6,
+      "position": "HJ",
+      "stackBB": 10,
+      "scenario": "rfi",
+      "path": "mtt-6max/hj-10bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-hj-12bb-rfi",
+      "tableSize": 6,
+      "position": "HJ",
+      "stackBB": 12,
+      "scenario": "rfi",
+      "path": "mtt-6max/hj-12bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-hj-15bb-rfi",
+      "tableSize": 6,
+      "position": "HJ",
+      "stackBB": 15,
+      "scenario": "rfi",
+      "path": "mtt-6max/hj-15bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-hj-20bb-rfi",
+      "tableSize": 6,
+      "position": "HJ",
+      "stackBB": 20,
+      "scenario": "rfi",
+      "path": "mtt-6max/hj-20bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-hj-25bb-rfi",
+      "tableSize": 6,
+      "position": "HJ",
+      "stackBB": 25,
+      "scenario": "rfi",
+      "path": "mtt-6max/hj-25bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-lj-5bb-rfi",
+      "tableSize": 6,
+      "position": "LJ",
+      "stackBB": 5,
+      "scenario": "rfi",
+      "path": "mtt-6max/lj-5bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-lj-8bb-rfi",
+      "tableSize": 6,
+      "position": "LJ",
+      "stackBB": 8,
+      "scenario": "rfi",
+      "path": "mtt-6max/lj-8bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-lj-10bb-rfi",
+      "tableSize": 6,
+      "position": "LJ",
+      "stackBB": 10,
+      "scenario": "rfi",
+      "path": "mtt-6max/lj-10bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-lj-12bb-rfi",
+      "tableSize": 6,
+      "position": "LJ",
+      "stackBB": 12,
+      "scenario": "rfi",
+      "path": "mtt-6max/lj-12bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-lj-15bb-rfi",
+      "tableSize": 6,
+      "position": "LJ",
+      "stackBB": 15,
+      "scenario": "rfi",
+      "path": "mtt-6max/lj-15bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-lj-20bb-rfi",
+      "tableSize": 6,
+      "position": "LJ",
+      "stackBB": 20,
+      "scenario": "rfi",
+      "path": "mtt-6max/lj-20bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-lj-25bb-rfi",
+      "tableSize": 6,
+      "position": "LJ",
+      "stackBB": 25,
+      "scenario": "rfi",
+      "path": "mtt-6max/lj-25bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-utg-5bb-rfi",
+      "tableSize": 6,
+      "position": "UTG",
+      "stackBB": 5,
+      "scenario": "rfi",
+      "path": "mtt-6max/utg-5bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-utg-8bb-rfi",
+      "tableSize": 6,
+      "position": "UTG",
+      "stackBB": 8,
+      "scenario": "rfi",
+      "path": "mtt-6max/utg-8bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-utg-10bb-rfi",
+      "tableSize": 6,
+      "position": "UTG",
+      "stackBB": 10,
+      "scenario": "rfi",
+      "path": "mtt-6max/utg-10bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-utg-12bb-rfi",
+      "tableSize": 6,
+      "position": "UTG",
+      "stackBB": 12,
+      "scenario": "rfi",
+      "path": "mtt-6max/utg-12bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-utg-15bb-rfi",
+      "tableSize": 6,
+      "position": "UTG",
+      "stackBB": 15,
+      "scenario": "rfi",
+      "path": "mtt-6max/utg-15bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-utg-20bb-rfi",
+      "tableSize": 6,
+      "position": "UTG",
+      "stackBB": 20,
+      "scenario": "rfi",
+      "path": "mtt-6max/utg-20bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-utg-25bb-rfi",
+      "tableSize": 6,
+      "position": "UTG",
+      "stackBB": 25,
+      "scenario": "rfi",
+      "path": "mtt-6max/utg-25bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-bb-5bb-rfi",
+      "tableSize": 6,
+      "position": "BB",
+      "stackBB": 5,
+      "scenario": "rfi",
+      "path": "mtt-6max/bb-5bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-bb-8bb-rfi",
+      "tableSize": 6,
+      "position": "BB",
+      "stackBB": 8,
+      "scenario": "rfi",
+      "path": "mtt-6max/bb-8bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-bb-10bb-rfi",
+      "tableSize": 6,
+      "position": "BB",
+      "stackBB": 10,
+      "scenario": "rfi",
+      "path": "mtt-6max/bb-10bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-bb-12bb-rfi",
+      "tableSize": 6,
+      "position": "BB",
+      "stackBB": 12,
+      "scenario": "rfi",
+      "path": "mtt-6max/bb-12bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-bb-15bb-rfi",
+      "tableSize": 6,
+      "position": "BB",
+      "stackBB": 15,
+      "scenario": "rfi",
+      "path": "mtt-6max/bb-15bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-bb-20bb-rfi",
+      "tableSize": 6,
+      "position": "BB",
+      "stackBB": 20,
+      "scenario": "rfi",
+      "path": "mtt-6max/bb-20bb-rfi.json"
+    },
+    {
+      "id": "mtt-6max-bb-25bb-rfi",
+      "tableSize": 6,
+      "position": "BB",
+      "stackBB": 25,
+      "scenario": "rfi",
+      "path": "mtt-6max/bb-25bb-rfi.json"
+    }
+  ]
+}

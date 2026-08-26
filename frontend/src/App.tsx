@@ -1,0 +1,173 @@
+import { useEffect, useMemo } from 'react';
+import { useHandsStore } from '@/state/hands-store.js';
+import { useReplayStore } from '@/state/replay-store.js';
+import { useAnalysisStore } from '@/state/analysis-store.js';
+import { FileDropzone } from '@/components/upload/FileDropzone.js';
+import { SiteRadioGroup } from '@/components/upload/SiteRadioGroup.js';
+import { ParseReport } from '@/components/upload/ParseReport.js';
+import { DisplaySettingsMenu } from '@/components/upload/DisplaySettingsMenu.js';
+import { HandList } from '@/components/hands/HandList.js';
+import { Table } from '@/components/replay/Table.js';
+import { ReplayControls } from '@/components/replay/ReplayControls.js';
+import { ActionLog } from '@/components/replay/ActionLog.js';
+import { AnalysisPanel } from '@/components/analysis/AnalysisPanel.js';
+import { ScrollArea } from '@/components/ui/ScrollArea.js';
+import { replayTimeline } from '@/domain/stacks.js';
+import { formatDateTime, formatGameMode } from '@/lib/format.js';
+import { useDisplayStore } from '@/state/display-store.js';
+
+export function App() {
+  const { hands, selectedId, siteId, importing, report, setSite, importFile, select, hydrate, clearAll } =
+    useHandsStore();
+  const { stepIndex, playing, setIndex, reset, setPlaying } = useReplayStore();
+  const { byHandId, pending, engineError, analyze } = useAnalysisStore();
+  const timezone = useDisplayStore((s) => s.timezone);
+
+  const hand = useMemo(() => hands.find((h) => h.id === selectedId) ?? null, [hands, selectedId]);
+
+  useEffect(() => { void hydrate(); }, [hydrate]);
+  useEffect(() => { reset(); }, [selectedId, reset]);
+  useEffect(() => { if (hand) void analyze(hand); }, [hand, analyze]);
+
+  const analysis = hand ? byHandId[hand.id] : undefined;
+
+  // The replay scrubs over timeline STEPS, which include the card-only steps of
+  // an all-in run-out; everything downstream still speaks in action indices.
+  const timeline = useMemo(() => (hand ? replayTimeline(hand) : []), [hand]);
+  const current = timeline[Math.min(stepIndex, timeline.length - 1)] ?? null;
+  const actionIndex = current?.actionIndex ?? -1;
+
+  // ActionLog and AnalysisPanel select by ACTION index (they don't know about
+  // run-out deal steps), so clicking a row needs to land on the timeline step
+  // that plays that action — the last step carrying that actionIndex, since a
+  // deal step for the FOLLOWING street can share it too.
+  const stepOfAction = useMemo(() => {
+    const map = new Map<number, number>();
+    timeline.forEach((s, i) => { if (s.dealt === null) map.set(s.actionIndex, i); });
+    return map;
+  }, [timeline]);
+  const selectAction = (i: number) => setIndex(stepOfAction.get(i) ?? 0);
+
+  return (
+    <div className="min-h-screen lg:h-screen lg:overflow-hidden bg-slate-950 text-slate-100 flex flex-col">
+      <header className="border-b border-slate-800 shrink-0">
+        <div className="mx-auto w-full max-w-[96rem] px-4 py-4 sm:px-6 md:px-8 md:py-5 flex flex-wrap items-start gap-x-6 gap-y-3">
+          <div className="min-w-0">
+            <h1 className="text-lg font-semibold tracking-tight text-slate-50">MyHandHistory</h1>
+           
+          </div>
+          <div className="ml-auto shrink-0">
+            <DisplaySettingsMenu />
+          </div>
+        </div>
+      </header>
+
+      <main className="flex-1 lg:min-h-0 w-full max-w-[96rem] mx-auto px-4 py-4 sm:px-6 md:px-8 md:py-6 flex flex-col gap-4 md:gap-5">
+        {hand && (
+          <div className="flex items-baseline gap-x-2.5 gap-y-1 flex-wrap shrink-0">
+            <span className="text-base font-semibold uppercase tracking-[0.08em] text-slate-200">
+              {formatGameMode(hand.meta.gameMode)}
+            </span>
+            <span className="text-slate-700" aria-hidden="true">/</span>
+            <h2 className="text-base font-normal tracking-tight text-slate-300">
+              {hand.meta.tournament?.name ?? hand.meta.tableName ?? 'Unnamed game'}
+            </h2>
+            <span className="t-micro text-slate-500">
+              {formatDateTime(hand.meta.playedAt, timezone)} · blinds{' '}
+              {hand.money.smallBlind.toLocaleString('en-US')}/
+              {hand.money.bigBlind.toLocaleString('en-US')}
+              {hand.money.ante > 0 && ` · ante ${hand.money.ante.toLocaleString('en-US')}`}
+            </span>
+            {hand.warnings.length > 0 && (
+              <span
+                className="t-micro font-medium text-amber-400"
+                title={hand.warnings.map((w) => w.message).join('\n')}
+              >
+                {hand.warnings.length} parse warning(s)
+              </span>
+            )}
+          </div>
+        )}
+
+        {hand && engineError && (
+          <p className="t-micro text-amber-400 shrink-0">{engineError}</p>
+        )}
+
+        {/* Four columns — source, hands, action log, replay — but only at 2xl.
+            Four needs 19rem + a usable hand list + 21rem + a felt wide enough to
+            read, which does not fit until ~1536px; at xl the felt ends up
+            narrower than its own contents. So xl keeps hands stacked under
+            source in a three-column layout, and below lg everything is a single
+            stack.
+
+            The replay track is fit-content, so it takes only what the felt needs
+            (the felt sizes itself from --seat-w) but is still capped by the
+            space actually left over — a plain max-content track ignores the
+            container and overflows it. The hand list is a 1fr track with a
+            floor, so it absorbs the slack without being crushed to nothing. */}
+        <div className="flex-1 lg:min-h-0 grid grid-cols-1 lg:grid-cols-[19rem_minmax(0,1fr)] lg:grid-rows-[auto_minmax(0,1fr)] xl:grid-cols-[19rem_21rem_minmax(0,1fr)] 2xl:grid-rows-1 2xl:grid-cols-[19rem_minmax(15rem,1fr)_21rem_fit-content(34rem)] gap-4 md:gap-5">
+          <aside className="lg:min-h-0 flex flex-col gap-4 md:gap-5">
+            <div className="shrink-0 rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden">
+              <div className="px-3 py-2 border-b border-slate-800 t-panel-title">
+                Source
+              </div>
+              <div className="p-3 space-y-3.5">
+                <SiteRadioGroup value={siteId} onChange={setSite} />
+                <FileDropzone onFile={(text, name) => void importFile(text, name)} busy={importing} />
+                <ParseReport
+                  report={report}
+                  onClear={hands.length > 0 ? () => void clearAll() : undefined}
+                />
+              </div>
+            </div>
+          </aside>
+
+          {/* Hands gets its own column at 2xl; below that it stacks under
+              Source in the first column, where it needs an explicit height
+              because the page is not a fixed-height grid there. */}
+          <div className="lg:min-h-0 h-[22rem] lg:h-auto lg:col-start-1 lg:row-start-2 2xl:col-start-2 2xl:row-start-1">
+            <HandList hands={hands} selectedId={selectedId} onSelect={select} />
+          </div>
+
+          {!hand && (
+            <div className="lg:col-start-2 lg:row-start-1 lg:row-span-2 xl:col-start-2 xl:col-span-2 2xl:col-start-3 rounded-sm border border-slate-800 bg-slate-900/40 p-6 sm:p-10 text-center text-sm text-slate-500 self-start">
+              Upload a hand history to get started.
+            </div>
+          )}
+
+          {hand && (
+            <>
+              <div className="min-h-0 max-h-[24rem] lg:max-h-72 xl:max-h-none flex flex-col lg:col-start-2 lg:row-start-1 xl:col-start-2 xl:row-start-1 xl:row-span-2 2xl:col-start-3 2xl:row-span-1">
+                <ActionLog
+                  hand={hand}
+                  actionIndex={actionIndex}
+                  analysis={analysis}
+                  pending={Boolean(pending[hand.id])}
+                  onSelect={selectAction}
+                />
+              </div>
+              {/* w-fit sizes this column to its widest child — the replay
+                  panel, which is itself sized to the felt — so the analysis
+                  panel below stretches to exactly the replay's width instead of
+                  filling the whole track. */}
+              <div className="w-fit max-w-full min-h-0 flex flex-col gap-4 md:gap-5 lg:col-start-2 lg:row-start-2 xl:col-start-3 xl:row-start-1 xl:row-span-2 2xl:col-start-4 2xl:row-span-1">
+                <ScrollArea className="flex lg:min-h-0" viewportClassName="[&>div]:!flex">
+                  <Table hand={hand} actionIndex={actionIndex} board={current?.board ?? []}>
+                    <ReplayControls
+                      timeline={timeline}
+                      stepIndex={stepIndex}
+                      playing={playing}
+                      onIndex={setIndex}
+                      onPlaying={setPlaying}
+                    />
+                  </Table>
+                </ScrollArea>
+                <AnalysisPanel hand={hand} actionIndex={actionIndex} analysis={analysis} />
+              </div>
+            </>
+          )}
+        </div>
+      </main>
+    </div>
+  );
+}

@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+/*
+ * TYPE SCALE
+ *
+ * The app had seven sizes with three arbitrary pixel values (9/10/11px) below
+ * text-xs, which is why hierarchy read inconsistently. These four steps below
+ * `text-sm` replace them. `micro` is the floor — nothing should be smaller.
+ */
+@theme {
+  --text-micro: 0.6875rem;   /* 11px — dense tabular data, seat chrome */
+  --text-micro--line-height: 1.1;
+  --text-label: 0.6875rem;   /* 11px — uppercase labels; tracking sets it apart */
+  --text-label--line-height: 1.2;
+  --text-eyebrow: 0.75rem;   /* 12px — section/panel titles */
+  --text-eyebrow--line-height: 1.2;
+}
+
+:root { color-scheme: dark; }
+body { margin: 0; background: #0b1220; }
+
+/*
+ * SEMANTIC TYPE ROLES
+ *
+ * One class per role so a treatment is defined once and stays consistent. The
+ * uppercase roles differ by COLOR and TRACKING, not size — shrinking a label
+ * to signal "secondary" is what inverted the hierarchy in the first place.
+ */
+@layer components {
+  /* Panel titles: "Source", "Hands", "Action log", "Replay". */
+  .t-panel-title {
+    font-size: var(--text-eyebrow);
+    line-height: var(--text-eyebrow--line-height);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-slate-400);
+  }
+  /* Structural labels inside a panel: street headers, menu group labels. */
+  .t-label {
+    font-size: var(--text-label);
+    line-height: var(--text-label--line-height);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--color-slate-400);
+  }
+  /* Position chips (UTG, BB, …) — a fixed-width token, not a size step. */
+  .t-chip {
+    font-size: var(--text-label);
+    line-height: var(--text-label--line-height);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  /* Dense numerics: stacks, pots, timestamps. Tabular so columns align. */
+  .t-micro {
+    font-size: var(--text-micro);
+    line-height: var(--text-micro--line-height);
+  }
+}
+
+/*
+ * Radix Collapsible exposes the measured content height as a CSS var, which is
+ * the only way to animate to `auto`. Used by the action log's verdict rows.
+ */
+@keyframes collapsible-down {
+  from { height: 0; }
+  to { height: var(--radix-collapsible-content-height); }
+}
+@keyframes collapsible-up {
+  from { height: var(--radix-collapsible-content-height); }
+  to { height: 0; }
+}
+[data-slot="collapsible-content"] { overflow: hidden; }
+[data-slot="collapsible-content"][data-state="open"] {
+  animation: collapsible-down 160ms ease-out;
+}
+[data-slot="collapsible-content"][data-state="closed"] {
+  animation: collapsible-up 140ms ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-slot="collapsible-content"] { animation: none !important; }
+}

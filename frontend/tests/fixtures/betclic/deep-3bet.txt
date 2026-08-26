@@ -1,0 +1,48 @@
+*** HEADER ***
+Site: Betclic.fr
+Game Mode: Tournament
+Game Type: NL Texas Hold'em
+Game Name: MARATHON
+Game ID: 01JZP0KHC6GRW9YCFBY9ZKJ9QH
+Buy In: 5.00€
+Hand ID: 01K09RSX5A3Y6GWTPWQWM1WG1X
+Date & Time: 2025-07-16 15:04:21 (UTC)
+Table ID: 01K09CSPN04Y8JEN6MB704V4C5
+Ante: 20
+Blinds: 100/200
+Total Pot: 4760
+Rake: 0
+*** PLAYERS ***
+Seat 1: AceNineBrave (20000) [SB]
+Seat 2: albiscus (20000) [BB]
+Seat 3: zalixa (20000)
+Seat 4: SIMBAROI (20000) [Hero]
+Seat 5: JRochefort (20000) [BTN]
+*** HOLE CARDS ***
+SIMBAROI: [Qh Qd]
+*** PRE-FLOP ***
+15:04:21 - AceNineBrave: Posts Ante 20
+15:04:21 - albiscus: Posts Ante 20
+15:04:21 - zalixa: Posts Ante 20
+15:04:21 - SIMBAROI: Posts Ante 20
+15:04:21 - JRochefort: Posts Ante 20
+15:04:21 - AceNineBrave: Posts SB 100
+15:04:21 - albiscus: Posts BB 200
+15:04:28 - zalixa: Raises to 400
+15:04:33 - SIMBAROI: Raises to 1200
+15:04:35 - JRochefort: Folds
+15:04:36 - AceNineBrave: Folds
+15:04:37 - albiscus: Folds
+15:04:40 - zalixa: Calls 800
+*** FLOP *** [Jd 2c Qs]
+15:05:01 - zalixa: Checks
+15:05:03 - SIMBAROI: Bets 980
+15:05:06 - zalixa: Calls 980
+*** TURN *** [Jd 2c Qs 5s]
+15:05:20 - zalixa: Checks
+15:05:22 - SIMBAROI: Checks
+*** RIVER *** [Jd 2c Qs 5s 9d]
+15:05:40 - zalixa: Checks
+15:05:42 - SIMBAROI: Checks
+*** SUMMARY ***
+SIMBAROI wins main pot of 4760

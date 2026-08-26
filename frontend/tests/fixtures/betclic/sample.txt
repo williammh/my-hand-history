@@ -1,0 +1,137 @@
+*** HEADER ***
+Site: Betclic.fr
+Game Mode: Tournament
+Game Type: NL Texas Hold'em
+Game Name: MARATHON
+Game ID: 01JZP0KHC6GRW9YCFBY9ZKJ9QH
+Buy In: 5.00â‚¬
+Hand ID: 01K09RSX5A3Y6GWTPWQWM1WG1R
+Date & Time: 2025-07-16 14:04:21 (UTC)
+Table ID: 01K09CSPN04Y8JEN6MB704V4C5
+Ante: 800
+Blinds: 4000/8000
+Total Pot: 453766
+Rake: 0
+*** PLAYERS ***
+Seat 1: DrFullHouse (139371) [SB]
+Seat 2: LaCigale (441766) [BB]
+Seat 3: mehdiiii (157170)
+Seat 4: Kamaz (142259)
+Seat 5: SIMBAROI (56394) [Hero]
+Seat 6: YouReOkKris (335827) [BTN]
+*** HOLE CARDS ***
+SIMBAROI: [9s 2c]
+*** PRE-FLOP ***
+14:04:21 - DrFullHouse: Posts Ante 800
+14:04:21 - LaCigale: Posts Ante 800
+14:04:21 - mehdiiii: Posts Ante 800
+14:04:21 - Kamaz: Posts Ante 800
+14:04:21 - SIMBAROI: Posts Ante 800
+14:04:21 - YouReOkKris: Posts Ante 800
+14:04:21 - DrFullHouse: Posts SB 4000
+14:04:21 - LaCigale: Posts BB 8000
+14:04:28 - mehdiiii: Folds
+14:04:33 - Kamaz: Folds
+14:05:03 - SIMBAROI: Folds
+14:05:03 - YouReOkKris: Folds
+14:05:16 - DrFullHouse: Calls 4000
+14:05:34 - LaCigale: Raises to 440966 and is all-in
+14:05:51 - DrFullHouse: Folds
+*** SUMMARY ***
+LaCigale wins main pot of 453766
+
+------------
+
+*** HEADER ***
+Site: Betclic.fr
+Game Mode: Tournament
+Game Type: NL Texas Hold'em
+Game Name: MARATHON
+Game ID: 01JZP0KHC6GRW9YCFBY9ZKJ9QH
+Buy In: 5.00â‚¬
+Hand ID: 01K09RSF8N9V5PME0DRQ12ZKDQ
+Date & Time: 2025-07-16 14:04:07 (UTC)
+Table ID: 01K09CSPN04Y8JEN6MB704V4C5
+Ante: 800
+Blinds: 4000/8000
+Total Pot: 16800
+Rake: 0
+*** PLAYERS ***
+Seat 1: DrFullHouse (131371) [BB]
+Seat 2: LaCigale (442566)
+Seat 3: mehdiiii (157970)
+Seat 4: Kamaz (143059)
+Seat 5: SIMBAROI (57194) [BTN Hero]
+Seat 6: YouReOkKris (340627) [SB]
+*** HOLE CARDS ***
+SIMBAROI: [4h 7s]
+*** PRE-FLOP ***
+14:04:07 - DrFullHouse: Posts Ante 800
+14:04:07 - LaCigale: Posts Ante 800
+14:04:07 - mehdiiii: Posts Ante 800
+14:04:07 - Kamaz: Posts Ante 800
+14:04:07 - SIMBAROI: Posts Ante 800
+14:04:07 - YouReOkKris: Posts Ante 800
+14:04:07 - YouReOkKris: Posts SB 4000
+14:04:07 - DrFullHouse: Posts BB 8000
+14:04:11 - LaCigale: Folds
+14:04:13 - mehdiiii: Folds
+14:04:18 - Kamaz: Folds
+14:04:18 - SIMBAROI: Folds
+14:04:18 - YouReOkKris: Folds
+*** SUMMARY ***
+DrFullHouse wins main pot of 16800
+
+------------
+
+*** HEADER ***
+Site: Betclic.fr
+Game Mode: Tournament
+Game Type: NL Texas Hold'em
+Game Name: MARATHON
+Game ID: 01JZP0KHC6GRW9YCFBY9ZKJ9QH
+Buy In: 5.00â‚¬
+Hand ID: 01K09RQ2PYJCAYXQ5ESYTZFY60
+Date & Time: 2025-07-16 14:02:48 (UTC)
+Table ID: 01K09CSPN04Y8JEN6MB704V4C5
+Ante: 800
+Blinds: 4000/8000
+Total Pot: 108800
+Rake: 0
+*** PLAYERS ***
+Seat 1: DrFullHouse (132171)
+Seat 2: LaCigale (443366)
+Seat 3: mehdiiii (158770)
+Seat 4: Kamaz (143859) [BTN]
+Seat 5: SIMBAROI (89994) [SB Hero]
+Seat 6: YouReOkKris (304627) [BB]
+*** HOLE CARDS ***
+SIMBAROI: [Jh Td]
+*** PRE-FLOP ***
+14:02:48 - DrFullHouse: Posts Ante 800
+14:02:48 - LaCigale: Posts Ante 800
+14:02:48 - mehdiiii: Posts Ante 800
+14:02:48 - Kamaz: Posts Ante 800
+14:02:48 - SIMBAROI: Posts Ante 800
+14:02:48 - YouReOkKris: Posts Ante 800
+14:02:48 - SIMBAROI: Posts SB 4000
+14:02:48 - YouReOkKris: Posts BB 8000
+14:03:03 - DrFullHouse: Folds
+14:03:03 - LaCigale: Folds
+14:03:17 - mehdiiii: Folds
+14:03:32 - Kamaz: Folds
+14:03:34 - SIMBAROI: Calls 4000
+14:03:38 - YouReOkKris: Checks
+*** FLOP *** [Qh 9d Qd]
+14:03:42 - SIMBAROI: Bets 8000
+14:03:44 - YouReOkKris: Calls 8000
+*** TURN *** [Qh 9d Qd 5c]
+14:03:47 - SIMBAROI: Bets 8000
+14:03:50 - YouReOkKris: Raises to 16000
+14:03:51 - SIMBAROI: Calls 8000
+*** RIVER *** [Qh 9d Qd 5c Ah]
+14:03:54 - SIMBAROI: Checks
+14:04:00 - YouReOkKris: Bets 40000
+14:04:03 - SIMBAROI: Folds
+*** SUMMARY ***
+YouReOkKris wins main pot of 108800
