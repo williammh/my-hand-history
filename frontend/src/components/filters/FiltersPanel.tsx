@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { IconChevronDown, IconX } from '@tabler/icons-react';
 import { Select } from 'radix-ui';
 import type { Street } from '@/domain/position.js';
@@ -7,8 +8,12 @@ import { activeCount } from '@/filters/match.js';
 import type { RelativePosition } from '@/filters/types.js';
 import {
   CONNECTEDNESS, POT_TYPES, POSITIONS, PREFLOP_AGGRESSION, RELATIVE_POSITIONS, SEVERITIES,
-  STACKS, STREETS, SUIT_TEXTURES, linesFor,
+  STACKS, STREETS, SUIT_TEXTURES, linesFor, siteOptions, sourceFileOptions,
+  type SourceOption,
 } from '@/filters/options.js';
+import { useHandsStore } from '@/state/hands-store.js';
+import { registry } from '@/parsers/index.js';
+import type { SiteId } from '@/domain/hand.js';
 import { RANK_OPTIONS } from '@/filters/board.js';
 import { FilterMenu } from './FilterMenu.js';
 import { ScrollArea } from '@/components/ui/ScrollArea.js';
@@ -92,6 +97,11 @@ function RankSelect({
   );
 }
 
+/** The per-option tallies FilterMenu renders, keyed by option value. */
+function countsOf<T extends string>(options: readonly SourceOption<T>[]): ReadonlyMap<T, number> {
+  return new Map(options.map((o) => [o.value, o.count]));
+}
+
 const SELECT_ITEM =
   'px-3 py-1.5 rounded-sm cursor-pointer outline-none ' +
   'data-[highlighted]:bg-emerald-400/10 data-[highlighted]:text-emerald-200 ' +
@@ -111,7 +121,18 @@ export function FiltersPanel() {
     criteria, toggle, clearAxis, setStreet, setHeroStreetPosition, setSawFlopOnly,
     setHighestRank, setLowestRank, clearAll,
   } = useFiltersStore();
+  const hands = useHandsStore((s) => s.hands);
   const active = activeCount(criteria);
+
+  // Room and file options are whatever the library holds, so they are derived
+  // from the hands rather than declared. Both are cheap counts over the hand
+  // list — no action walking — so they recompute on import and nothing else.
+  const siteNames = useMemo(
+    () => new Map(registry.list().map((p) => [p.siteId as SiteId, p.displayName])),
+    [],
+  );
+  const sites = useMemo(() => siteOptions(hands, siteNames), [hands, siteNames]);
+  const files = useMemo(() => sourceFileOptions(hands), [hands]);
 
   return (
     <div className="rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden h-full flex flex-col">
@@ -140,6 +161,31 @@ export function FiltersPanel() {
 
       <ScrollArea className="flex-1 min-h-0">
       <div className="p-3 space-y-3">
+        {/* Source axes first: they scope WHICH hands the axes below describe,
+            and they are the ones whose vocabulary comes from the library rather
+            than from this file. Both sit disabled until something is loaded,
+            since until then there is no room or file to choose between. */}
+        <FilterMenu
+          label="Poker room"
+          options={sites}
+          selected={criteria.sites}
+          onToggle={(v) => toggle('sites', v)}
+          onClear={() => clearAxis('sites')}
+          counts={countsOf(sites)}
+          emptyLabel="No hands loaded"
+        />
+
+        <FilterMenu
+          label="Source file"
+          options={files}
+          selected={criteria.sourceFiles}
+          onToggle={(v) => toggle('sourceFiles', v)}
+          onClear={() => clearAxis('sourceFiles')}
+          counts={countsOf(files)}
+          emptyLabel="No hands loaded"
+        />
+
+        <div className="pt-1 border-t border-slate-800 space-y-3">
         <FilterMenu
           label="Pot type"
           options={POT_TYPES}
@@ -187,6 +233,7 @@ export function FiltersPanel() {
           onToggle={(v) => toggle('preflopAggression', v)}
           onClear={() => clearAxis('preflopAggression')}
         />
+        </div>
 
         <div className="pt-1 border-t border-slate-800 space-y-3">
           <div>

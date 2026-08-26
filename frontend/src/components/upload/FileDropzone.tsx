@@ -1,21 +1,32 @@
 import { useCallback, useRef, useState } from 'react';
 import { IconUpload } from '@tabler/icons-react';
 
+export interface UploadedFile {
+  readonly text: string;
+  readonly fileName: string;
+}
+
 interface Props {
-  onFile: (text: string, fileName: string) => void;
+  onFiles: (files: readonly UploadedFile[]) => void;
   busy: boolean;
 }
 
-export function FileDropzone({ onFile, busy }: Props) {
+export function FileDropzone({ onFiles, busy }: Props) {
   const [dragging, setDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const read = useCallback(
-    (file: File) => {
+    (files: FileList | null) => {
+      const list = [...(files ?? [])];
+      if (list.length === 0) return;
       // Read as UTF-8; the parser repairs the room's own mojibake afterwards.
-      file.text().then((text) => onFile(text, file.name));
+      // Handed over as one batch so the store imports them in a single pass and
+      // reports on them together, rather than once per file.
+      void Promise.all(
+        list.map(async (f) => ({ text: await f.text(), fileName: f.name })),
+      ).then(onFiles);
     },
-    [onFile],
+    [onFiles],
   );
 
   return (
@@ -25,8 +36,7 @@ export function FileDropzone({ onFile, busy }: Props) {
       onDrop={(e) => {
         e.preventDefault();
         setDragging(false);
-        const file = e.dataTransfer.files[0];
-        if (file) read(file);
+        read(e.dataTransfer.files);
       }}
       onClick={() => inputRef.current?.click()}
       className={`rounded-sm border-2 border-dashed px-3 py-3 text-center cursor-pointer transition ${
@@ -39,10 +49,11 @@ export function FileDropzone({ onFile, busy }: Props) {
         ref={inputRef}
         type="file"
         accept=".txt,text/plain"
+        multiple
         className="hidden"
         onChange={(e) => {
-          const file = e.target.files?.[0];
-          if (file) read(file);
+          read(e.target.files);
+          // Cleared so re-picking the same file still fires a change event.
           e.target.value = '';
         }}
       />
@@ -51,10 +62,10 @@ export function FileDropzone({ onFile, busy }: Props) {
       <div className="flex items-center justify-center gap-2">
         <IconUpload size={16} stroke={1.5} className="text-slate-500 shrink-0" aria-hidden />
         <span className="text-sm text-slate-200 font-medium">
-          {busy ? 'Parsing…' : 'Drop a hand history .txt'}
+          {busy ? 'Parsing…' : 'Drop hand history .txt files'}
         </span>
       </div>
-      <p className="t-micro text-slate-500 mt-0.5">or click to choose</p>
+      <p className="t-micro text-slate-500 mt-0.5">or click to choose — several at once is fine</p>
     </div>
   );
 }

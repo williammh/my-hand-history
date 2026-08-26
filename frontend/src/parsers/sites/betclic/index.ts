@@ -516,6 +516,7 @@ export const betclicParser: SiteParser = {
       variant: /hold\s*'?em/i.test(fields.get('game type') ?? '') ? 'nlhe' : 'unknown',
       tournament,
       rake: asAmount(Math.round(parseNumeric(fields.get('rake')) ?? 0)),
+      sourceFile: ctx.fileName,
     };
 
     const reportedTotal = parseNumeric(fields.get('total pot'));

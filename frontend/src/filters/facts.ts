@@ -182,6 +182,7 @@ export function deriveFacts(hand: Hand, analysis?: HandAnalysis): HandFacts {
   return {
     handId: hand.id,
     siteId: hand.meta.siteId,
+    sourceFile: hand.meta.sourceFile,
     potType: derivePotType(hand, heroSeat),
     heroPosition: heroPlayer?.position ?? null,
     opponentPositions,

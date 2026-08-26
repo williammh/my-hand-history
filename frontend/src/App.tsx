@@ -21,13 +21,14 @@ import { deriveFacts } from '@/filters/facts.js';
 import { matches } from '@/filters/match.js';
 
 export function App() {
-  const { hands, selectedId, siteId, importing, report, setSite, importFile, select, hydrate, clearAll } =
+  const { hands, selectedId, siteId, importing, report, setSite, importFiles, select, hydrate, clearAll } =
     useHandsStore();
   const { stepIndex, playing, setIndex, reset, setPlaying } = useReplayStore();
   const { byHandId, pending, engineError, analyze } = useAnalysisStore();
   const timezone = useDisplayStore((s) => s.timezone);
 
   const criteria = useFiltersStore((s) => s.criteria);
+  const pruneSourceFiles = useFiltersStore((s) => s.pruneSourceFiles);
 
   // Facts are derived per hand and memoised on the library, not on the
   // criteria: changing a filter must not re-walk every hand's action list.
@@ -46,6 +47,16 @@ export function App() {
   const hand = useMemo(() => hands.find((h) => h.id === selectedId) ?? null, [hands, selectedId]);
 
   useEffect(() => { void hydrate(); }, [hydrate]);
+
+  // A source-file selection outlives the hands that justified it — clearing the
+  // library, or importing a different set, would otherwise leave a filter
+  // pinned to a name nothing matches. Pruned against the library as it changes.
+  useEffect(() => {
+    pruneSourceFiles(
+      new Set(hands.map((h) => h.meta.sourceFile).filter((f): f is string => f !== null)),
+    );
+  }, [hands, pruneSourceFiles]);
+
   useEffect(() => { reset(); }, [selectedId, reset]);
   useEffect(() => { if (hand) void analyze(hand); }, [hand, analyze]);
 
@@ -114,18 +125,18 @@ export function App() {
         )}
 
         {/* Four columns — source, hands, action log, replay — but only at 2xl.
-            Four needs 19rem + a usable hand list + 21rem + a felt wide enough to
-            read, which does not fit until ~1536px; at xl the felt ends up
-            narrower than its own contents. So xl keeps hands stacked under
-            source in a three-column layout, and below lg everything is a single
-            stack.
+            Four needs 19rem + 19rem + 19rem + a felt wide enough to read,
+            which does not fit until ~1536px; at xl the felt ends up narrower
+            than its own contents. So xl keeps hands stacked under source in a
+            three-column layout, and below lg everything is a single stack.
 
-            The replay track is fit-content, so it takes only what the felt needs
-            (the felt sizes itself from --seat-w) but is still capped by the
-            space actually left over — a plain max-content track ignores the
-            container and overflows it. The hand list is a 1fr track with a
-            floor, so it absorbs the slack without being crushed to nothing. */}
-        <div className="flex-1 lg:min-h-0 grid grid-cols-1 lg:grid-cols-[19rem_minmax(0,1fr)] lg:grid-rows-[auto_minmax(0,1fr)] xl:grid-cols-[19rem_21rem_minmax(0,1fr)] 2xl:grid-rows-1 2xl:grid-cols-[19rem_minmax(15rem,1fr)_21rem_fit-content(34rem)] gap-4 md:gap-5">
+            The first three tracks are pinned to the same 19rem so source,
+            hands, and action log line up as equal-width columns. The replay
+            track is fit-content, so it takes only what the felt needs (the
+            felt sizes itself from --seat-w) but is still capped by the space
+            actually left over — a plain max-content track ignores the
+            container and overflows it. */}
+        <div className="flex-1 lg:min-h-0 grid grid-cols-1 lg:grid-cols-[19rem_minmax(0,1fr)] lg:grid-rows-[auto_minmax(0,1fr)] xl:grid-cols-[19rem_21rem_minmax(0,1fr)] 2xl:grid-rows-1 2xl:grid-cols-[19rem_19rem_19rem_fit-content(34rem)] gap-4 md:gap-5">
           <aside className="lg:min-h-0 flex flex-col gap-4 md:gap-5">
             <div className="shrink-0 rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden">
               <div className="px-3 py-2 border-b border-slate-800 t-panel-title">
@@ -133,7 +144,7 @@ export function App() {
               </div>
               <div className="p-3 space-y-3.5">
                 <SiteRadioGroup value={siteId} onChange={setSite} />
-                <FileDropzone onFile={(text, name) => void importFile(text, name)} busy={importing} />
+                <FileDropzone onFiles={(files) => void importFiles(files)} busy={importing} />
                 <ParseReport
                   report={report}
                   onClear={hands.length > 0 ? () => void clearAll() : undefined}

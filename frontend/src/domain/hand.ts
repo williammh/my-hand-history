@@ -77,6 +77,13 @@ export interface HandMeta {
   readonly variant: GameVariant;
   readonly tournament: TournamentInfo | null;
   readonly rake: Amount;
+  /**
+   * Name of the file this hand was imported from, or null when it was parsed
+   * without one. Lives on the hand rather than only in the storage summary
+   * because the library is now a merge of several files, and "which file did
+   * this come from" is a filter axis that has to survive a page reload.
+   */
+  readonly sourceFile: string | null;
 }
 
 export interface Hand {

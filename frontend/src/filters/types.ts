@@ -51,6 +51,8 @@ export type StackBucket = 20 | 40 | 50 | 75 | 100 | 150 | 200;
 export interface HandFacts {
   readonly handId: string;
   readonly siteId: SiteId;
+  /** File this hand was imported from; null when it was parsed without one. */
+  readonly sourceFile: string | null;
   readonly potType: PotType;
   readonly heroPosition: Position | null;
   /** Positions of every opponent who voluntarily put money in preflop. */
@@ -81,6 +83,18 @@ export interface HandFacts {
  * Within an axis values are OR'd; across axes they are AND'ed.
  */
 export interface FilterCriteria {
+  /** Poker rooms to keep. Empty means every room in the library. */
+  readonly sites: ReadonlySet<SiteId>;
+  /**
+   * Source files to keep, matched on the file name a hand was imported from.
+   *
+   * Unlike every other axis, the values here are not a fixed vocabulary — they
+   * are whatever the library happens to hold, so a selection can outlive the
+   * hands that justified it (clear the library, re-import different files). The
+   * panel prunes stale names against the files actually present; matching stays
+   * a plain set membership test so a stale name simply matches nothing.
+   */
+  readonly sourceFiles: ReadonlySet<string>;
   readonly potTypes: ReadonlySet<PotType>;
   readonly relativePositions: ReadonlySet<RelativePosition>;
   readonly heroPositions: ReadonlySet<Position>;
@@ -107,6 +121,8 @@ export interface FilterCriteria {
 }
 
 export const EMPTY_CRITERIA: FilterCriteria = {
+  sites: new Set(),
+  sourceFiles: new Set(),
   potTypes: new Set(),
   relativePositions: new Set(),
   heroPositions: new Set(),

@@ -8,6 +8,10 @@ interface Props<T extends string | number> {
   selected: ReadonlySet<T>;
   onToggle: (value: T) => void;
   onClear: () => void;
+  /** Per-option tally, shown right-aligned. Only the library-derived axes pass it. */
+  counts?: ReadonlyMap<T, number> | undefined;
+  /** Replaces the trigger text when there is nothing to choose from. */
+  emptyLabel?: string | undefined;
 }
 
 /**
@@ -39,11 +43,13 @@ const ITEM_CLASS =
  * a glance with every menu closed.
  */
 export function FilterMenu<T extends string | number>({
-  label, options, selected, onToggle, onClear,
+  label, options, selected, onToggle, onClear, counts, emptyLabel,
 }: Props<T>) {
   const chosen = options.filter((o) => selected.has(o.value));
+  const empty = options.length === 0;
   const summary =
-    chosen.length === 0 ? 'Any'
+    empty ? emptyLabel ?? 'Any'
+      : chosen.length === 0 ? 'Any'
       : chosen.length <= 2 ? chosen.map((o) => o.label).join(', ')
       : `${chosen.length} selected`;
 
@@ -63,7 +69,8 @@ export function FilterMenu<T extends string | number>({
 
       <DropdownMenu.Root>
         <DropdownMenu.Trigger
-          className={`flex items-center justify-between gap-2 w-full px-2.5 py-1.5 rounded-sm border text-sm text-left outline-none transition ${
+          disabled={empty}
+          className={`flex items-center justify-between gap-2 w-full px-2.5 py-1.5 rounded-sm border text-sm text-left outline-none transition disabled:cursor-default disabled:border-slate-800 disabled:bg-slate-900/40 disabled:text-slate-600 ${
             chosen.length > 0
               ? 'border-emerald-500/50 bg-emerald-400/5 text-emerald-200'
               : 'border-slate-700 bg-slate-800/50 text-slate-400 hover:border-slate-500'
@@ -77,7 +84,9 @@ export function FilterMenu<T extends string | number>({
           <DropdownMenu.Content
             align="start"
             sideOffset={4}
-            className="z-50 min-w-[11rem] max-h-[18rem] overflow-y-auto p-1 rounded-sm border border-slate-700 bg-slate-800 text-slate-200 shadow-lg"
+            // Capped as well as floored: file names are arbitrarily long, and an
+            // uncapped menu would grow far past the panel it drops out of.
+            className="z-50 min-w-[11rem] max-w-[min(22rem,calc(100vw-2rem))] max-h-[18rem] overflow-y-auto p-1 rounded-sm border border-slate-700 bg-slate-800 text-slate-200 shadow-lg"
           >
             {options.map((o) => (
               <DropdownMenu.CheckboxItem
@@ -87,11 +96,18 @@ export function FilterMenu<T extends string | number>({
                 // open so several options can be ticked in one pass.
                 onSelect={(e) => e.preventDefault()}
                 onCheckedChange={() => onToggle(o.value)}
-                title={o.hint}
+                title={o.hint ?? (typeof o.value === 'string' ? o.value : undefined)}
                 className={ITEM_CLASS}
               >
                 <Indicator />
-                {o.label}
+                {/* File names are long and arbitrary — the label truncates and
+                    the count keeps its own column so it never gets pushed out. */}
+                <span className="truncate">{o.label}</span>
+                {counts && (
+                  <span className="ml-auto shrink-0 t-micro tabular-nums text-slate-500">
+                    {counts.get(o.value)}
+                  </span>
+                )}
               </DropdownMenu.CheckboxItem>
             ))}
           </DropdownMenu.Content>

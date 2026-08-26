@@ -8,7 +8,7 @@ are parsed locally and stored in IndexedDB on your own device.
 ```bash
 npm install       # installs all workspaces
 npm run dev       # http://localhost:5173
-npm test          # 98 tests
+npm test          # 189 tests
 npm run build     # static site in frontend/dist/
 npm run deploy    # build + wrangler deploy (Cloudflare Workers)
 ```
@@ -27,11 +27,17 @@ Target a single workspace with `--workspace @my-hand-history/frontend` (or `/bac
 
 ## What it does
 
-- **Parses** Betclic.fr tournament hand histories (multi-hand files).
+- **Parses** Betclic.fr and Winamax tournament hand histories (multi-hand files).
+  Drop in several files at once — hands accumulate into one library, deduped on
+  hand id, so re-importing a file you already loaded changes nothing.
 - **Replays** each hand action by action — stacks, pot, board, and chips in front,
   scrubbable with the slider or arrow keys.
 - **Analyzes** hero's decisions: preflop against Nash push/fold charts, postflop
   against pot-odds-versus-equity heuristics.
+- **Filters** the library by spot — pot type, positions, stack depth, line, board
+  texture — and by where the hands came from: poker room and source file. Since
+  a library can now pool several sessions, those two axes are what scope it back
+  down to one.
 
 Every verdict is tagged with its confidence — `CHART` for chart lookups, `HEURISTIC`
 for pot-odds estimates — so the two are never confused. Spots the engine cannot judge

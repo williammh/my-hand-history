@@ -550,6 +550,7 @@ export const winamaxParser: SiteParser = {
       variant: /hold\s*'?em/i.test(gameTypeStr) ? 'nlhe' : 'unknown',
       tournament,
       rake: asAmount(reportedRake ?? 0),
+      sourceFile: ctx.fileName,
     };
 
     const hand: Hand = {

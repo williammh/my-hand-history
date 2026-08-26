@@ -1,4 +1,5 @@
 import type { Position, Street } from '@/domain/position.js';
+import type { SiteId } from '@/domain/hand.js';
 import type { Severity } from '@/analysis/types.js';
 import type { Connectedness, SuitTexture } from './board.js';
 import type {
@@ -120,3 +121,50 @@ export const SUIT_TEXTURES: readonly Option<SuitTexture>[] = [
   { value: 'two-tone', label: 'Two tone' },
   { value: 'monotone', label: 'Monotone' },
 ];
+
+/**
+ * Source options are derived from the library, not declared here.
+ *
+ * Every other axis has a closed vocabulary known at build time; rooms present
+ * and file names imported are only knowable at runtime, so these are computed
+ * from the hands themselves. Counts ride along because a file name alone does
+ * not say whether picking it leaves you with 4 hands or 400.
+ */
+export interface SourceOption<T extends string> extends Option<T> {
+  readonly count: number;
+}
+
+/** Rooms present in the library, labelled by the parser registry, most hands first. */
+export function siteOptions(
+  hands: readonly { meta: { siteId: SiteId } }[],
+  displayNames: ReadonlyMap<SiteId, string>,
+): readonly SourceOption<SiteId>[] {
+  const counts = new Map<SiteId, number>();
+  for (const h of hands) counts.set(h.meta.siteId, (counts.get(h.meta.siteId) ?? 0) + 1);
+
+  return [...counts.entries()]
+    .map(([value, count]) => ({ value, label: displayNames.get(value) ?? value, count }))
+    .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
+}
+
+/**
+ * File names present in the library.
+ *
+ * Sorted by name rather than by count: exports are usually named with a date,
+ * so alphabetical puts a player's sessions in chronological order — which is
+ * how they think about them. Hands with no file name are left out entirely,
+ * since there is no name to offer as a choice.
+ */
+export function sourceFileOptions(
+  hands: readonly { meta: { sourceFile: string | null } }[],
+): readonly SourceOption<string>[] {
+  const counts = new Map<string, number>();
+  for (const h of hands) {
+    const f = h.meta.sourceFile;
+    if (f !== null) counts.set(f, (counts.get(f) ?? 0) + 1);
+  }
+
+  return [...counts.entries()]
+    .map(([value, count]) => ({ value, label: value, count }))
+    .sort((a, b) => a.label.localeCompare(b.label));
+}

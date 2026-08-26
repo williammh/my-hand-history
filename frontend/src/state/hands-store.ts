@@ -6,14 +6,23 @@ import { createRepository } from '@/storage/indexeddb-repository.js';
 
 const repository = createRepository();
 
-export interface ImportReport {
+/** Outcome of parsing one file. A multi-file import produces one per file. */
+export interface FileReport {
   readonly fileName: string;
   readonly siteId: SiteId;
   readonly parsed: number;
+  /** Hands new to the library — parsed minus the ones already stored. */
   readonly added: number;
   readonly failures: readonly HandParseFailure[];
   readonly fileWarnings: readonly ParseWarning[];
   readonly warnedHands: number;
+}
+
+/** The whole import, across every file dropped in one go. */
+export interface ImportReport {
+  readonly files: readonly FileReport[];
+  readonly parsed: number;
+  readonly added: number;
 }
 
 interface HandsState {
@@ -24,10 +33,15 @@ interface HandsState {
   report: ImportReport | null;
 
   setSite: (siteId: SiteId) => void;
-  importFile: (text: string, fileName: string) => Promise<void>;
+  importFiles: (files: readonly { text: string; fileName: string }[]) => Promise<void>;
   select: (id: string | null) => void;
   clearAll: () => Promise<void>;
   hydrate: () => Promise<void>;
+}
+
+/** Newest first — the order the hand list and every hydrate share. */
+function byNewest(hands: readonly Hand[]): Hand[] {
+  return [...hands].sort((a, b) => b.meta.playedAt.localeCompare(a.meta.playedAt));
 }
 
 export const useHandsStore = create<HandsState>((set, get) => ({
@@ -39,28 +53,33 @@ export const useHandsStore = create<HandsState>((set, get) => ({
 
   setSite: (siteId) => set({ siteId }),
 
-  importFile: async (text, fileName) => {
+  /**
+   * Parses every file and MERGES the result into the library.
+   *
+   * Imports used to replace the library, so that statistics could never pool
+   * hands the player never meant to pool. Filtering now carries that guarantee
+   * instead: the room and source-file axes scope the library back down to a
+   * single session on demand, which a replace-on-import could only ever do by
+   * throwing the other sessions away. Accumulating is also the only thing that
+   * makes dropping several files at once mean anything.
+   *
+   * Files are parsed sequentially rather than in parallel: they are parsed on
+   * the main thread, so racing them would not make them finish sooner, and
+   * sequential keeps the per-file reports in the order they were dropped.
+   */
+  importFiles: async (files) => {
+    if (files.length === 0) return;
     set({ importing: true, report: null });
-    try {
-      const result = registry.parseFile(text, get().siteId, fileName);
 
-      // One file at a time: an import REPLACES the library rather than merging
-      // into it. Hands from different files are different sessions — and often
-      // different rooms and stakes — so combining them silently would make
-      // every filtered statistic an average over sets the player never meant
-      // to pool. Clearing first also keeps the store and IndexedDB in step.
-      await repository.clear();
-      const added = await repository.saveHands(result.hands, fileName);
+    const reports: FileReport[] = [];
+    const parsedHands: Hand[] = [];
 
-      const hands = [...result.hands].sort((a, b) =>
-        b.meta.playedAt.localeCompare(a.meta.playedAt),
-      );
-
-      set({
-        hands,
-        selectedId: hands[0]?.id ?? null,
-        importing: false,
-        report: {
+    for (const { text, fileName } of files) {
+      try {
+        const result = registry.parseFile(text, get().siteId, fileName);
+        const added = await repository.saveHands(result.hands, fileName);
+        parsedHands.push(...result.hands);
+        reports.push({
           fileName,
           siteId: result.siteId,
           parsed: result.hands.length,
@@ -68,21 +87,42 @@ export const useHandsStore = create<HandsState>((set, get) => ({
           failures: result.failures,
           fileWarnings: result.fileWarnings,
           warnedHands: result.hands.filter((h) => h.warnings.length > 0).length,
-        },
-      });
-    } catch (e) {
-      set({
-        importing: false,
-        report: {
-          fileName, siteId: get().siteId, parsed: 0, added: 0, failures: [],
+        });
+      } catch (e) {
+        // One bad file must not cost the player the others in the same drop.
+        reports.push({
+          fileName,
+          siteId: get().siteId,
+          parsed: 0,
+          added: 0,
+          failures: [],
           fileWarnings: [{
             code: 'IMPORT_FAILED', message: String(e),
             lineNumber: null, rawLine: null, severity: 'error',
           }],
           warnedHands: 0,
-        },
-      });
+        });
+      }
     }
+
+    // Re-imported hands replace their stored twin rather than duplicating it,
+    // so the merge is keyed on Hand.id — the same key the repository dedupes on.
+    const merged = new Map(get().hands.map((h) => [h.id, h]));
+    for (const h of parsedHands) merged.set(h.id, h);
+    const hands = byNewest([...merged.values()]);
+
+    set({
+      hands,
+      // Keep the player where they were if their hand survived the import.
+      selectedId:
+        hands.some((h) => h.id === get().selectedId) ? get().selectedId : hands[0]?.id ?? null,
+      importing: false,
+      report: {
+        files: reports,
+        parsed: reports.reduce((n, r) => n + r.parsed, 0),
+        added: reports.reduce((n, r) => n + r.added, 0),
+      },
+    });
   },
 
   select: (id) => set({ selectedId: id }),
