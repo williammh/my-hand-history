@@ -1,7 +1,7 @@
-import type { DecisionPoint } from '../types.js';
+import type { DecisionPoint } from '../types';
 import {
   type Range, openingRange, threeBetRange, fourBetRange, topRange,
-} from './preflop-ranges.js';
+} from './preflop-ranges';
 
 /**
  * The range a BALANCED villain holds at this decision point.

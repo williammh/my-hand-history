@@ -1,10 +1,10 @@
-import type { Position, Street } from '@/domain/position.js';
-import type { SiteId } from '@/domain/hand.js';
-import type { Severity } from '@/analysis/types.js';
-import type { Connectedness, SuitTexture } from './board.js';
+import type { Position, Street } from '@/domain/position';
+import type { SiteId } from '@/domain/hand';
+import type { Severity } from '@/analysis/types';
+import type { Connectedness, SuitTexture } from './board';
 import type {
   LineToken, PotType, PreflopAggression, RelativePosition, StackBucket,
-} from './types.js';
+} from './types';
 
 export interface Option<T> {
   readonly value: T;
@@ -134,7 +134,15 @@ export interface SourceOption<T extends string> extends Option<T> {
   readonly count: number;
 }
 
-/** Rooms present in the library, labelled by the parser registry, most hands first. */
+/**
+ * Every supported room, labelled by the parser registry, most hands first.
+ *
+ * Unlike source files, rooms are a closed vocabulary known at build time — the
+ * registry's own list — so every supported room is always offered, even one
+ * with zero hands loaded yet: a player choosing which room to filter to should
+ * not need hands from that room already sitting in the library to see it as
+ * an option.
+ */
 export function siteOptions(
   hands: readonly { meta: { siteId: SiteId } }[],
   displayNames: ReadonlyMap<SiteId, string>,
@@ -142,8 +150,13 @@ export function siteOptions(
   const counts = new Map<SiteId, number>();
   for (const h of hands) counts.set(h.meta.siteId, (counts.get(h.meta.siteId) ?? 0) + 1);
 
-  return [...counts.entries()]
-    .map(([value, count]) => ({ value, label: displayNames.get(value) ?? value, count }))
+  // Every registered room first, even at zero hands, plus any room a hand
+  // carries that the registry no longer names (e.g. a parser that was
+  // retired after hands from it were already imported).
+  const rooms = new Set<SiteId>([...displayNames.keys(), ...counts.keys()]);
+
+  return [...rooms]
+    .map((value) => ({ value, label: displayNames.get(value) ?? value, count: counts.get(value) ?? 0 }))
     .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
 }
 

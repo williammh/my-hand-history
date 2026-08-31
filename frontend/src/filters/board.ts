@@ -1,5 +1,5 @@
-import type { Board, Rank } from '@/domain/cards.js';
-import { cardRank, cardSuit, rankValue, RANKS } from '@/domain/cards.js';
+import type { Board, Rank } from '@/domain/cards';
+import { cardRank, cardSuit, rankValue, RANKS } from '@/domain/cards';
 
 /**
  * How tightly the flop's three ranks run together.

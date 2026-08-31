@@ -1,15 +1,18 @@
+'use client';
+
 import { create } from 'zustand';
-import type { Hand, SiteId } from '@/domain/hand.js';
-import type { HandParseFailure, ParseWarning } from '@/parsers/types.js';
-import { registry } from '@/parsers/index.js';
-import { createRepository } from '@/storage/indexeddb-repository.js';
+import type { Hand, SiteId } from '@/domain/hand';
+import type { HandParseFailure, ParseWarning } from '@/parsers/types';
+import { registry } from '@/parsers/index';
+import { createRepository } from '@/storage/indexeddb-repository';
 
 const repository = createRepository();
 
 /** Outcome of parsing one file. A multi-file import produces one per file. */
 export interface FileReport {
   readonly fileName: string;
-  readonly siteId: SiteId;
+  /** Null when no registered parser could detect the room for this file. */
+  readonly siteId: SiteId | null;
   readonly parsed: number;
   /** Hands new to the library — parsed minus the ones already stored. */
   readonly added: number;
@@ -28,11 +31,9 @@ export interface ImportReport {
 interface HandsState {
   hands: Hand[];
   selectedId: string | null;
-  siteId: SiteId;
   importing: boolean;
   report: ImportReport | null;
 
-  setSite: (siteId: SiteId) => void;
   importFiles: (files: readonly { text: string; fileName: string }[]) => Promise<void>;
   select: (id: string | null) => void;
   clearAll: () => Promise<void>;
@@ -47,11 +48,8 @@ function byNewest(hands: readonly Hand[]): Hand[] {
 export const useHandsStore = create<HandsState>((set, get) => ({
   hands: [],
   selectedId: null,
-  siteId: 'betclic-fr',
   importing: false,
   report: null,
-
-  setSite: (siteId) => set({ siteId }),
 
   /**
    * Parses every file and MERGES the result into the library.
@@ -62,6 +60,10 @@ export const useHandsStore = create<HandsState>((set, get) => ({
    * single session on demand, which a replace-on-import could only ever do by
    * throwing the other sessions away. Accumulating is also the only thing that
    * makes dropping several files at once mean anything.
+   *
+   * The room is never chosen by the player — each file is sniffed by the
+   * parser registry, which is the only thing that actually knows what a
+   * Betclic vs. a Winamax export looks like.
    *
    * Files are parsed sequentially rather than in parallel: they are parsed on
    * the main thread, so racing them would not make them finish sooner, and
@@ -76,7 +78,7 @@ export const useHandsStore = create<HandsState>((set, get) => ({
 
     for (const { text, fileName } of files) {
       try {
-        const result = registry.parseFile(text, get().siteId, fileName);
+        const result = registry.parseFile(text, null, fileName);
         const added = await repository.saveHands(result.hands, fileName);
         parsedHands.push(...result.hands);
         reports.push({
@@ -92,7 +94,7 @@ export const useHandsStore = create<HandsState>((set, get) => ({
         // One bad file must not cost the player the others in the same drop.
         reports.push({
           fileName,
-          siteId: get().siteId,
+          siteId: null,
           parsed: 0,
           added: 0,
           failures: [],

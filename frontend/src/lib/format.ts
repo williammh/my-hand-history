@@ -1,7 +1,7 @@
-import type { GameMode } from '@/domain/hand.js';
-import type { Amount, MoneyContext } from '@/domain/money.js';
-import { toBB } from '@/domain/money.js';
-import { resolveTimezone, type DisplayTimezone } from '@/state/display-store.js';
+import type { GameMode } from '@/domain/hand';
+import type { Amount, MoneyContext } from '@/domain/money';
+import { toBB } from '@/domain/money';
+import { resolveTimezone, type DisplayTimezone } from '@/state/display-store';
 
 const CURRENCY_SYMBOL: Record<string, string> = { EUR: '€', USD: '$', GBP: '£' };
 

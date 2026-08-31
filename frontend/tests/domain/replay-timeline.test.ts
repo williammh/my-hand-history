@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { registry } from '@/parsers/index.js';
-import { replayTimeline } from '@/domain/stacks.js';
+import { registry } from '@/parsers/index';
+import { replayTimeline } from '@/domain/stacks';
 
 /**
  * Regression fixture for the reported bug: an all-in preflop run-out never

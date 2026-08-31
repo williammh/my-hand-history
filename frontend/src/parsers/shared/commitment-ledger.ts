@@ -1,4 +1,4 @@
-import { type Amount, asAmount } from '@/domain/money.js';
+import { type Amount, asAmount } from '@/domain/money';
 
 /**
  * Tracks per-street and whole-hand chip commitment so parsers can reconcile the

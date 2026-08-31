@@ -1,4 +1,4 @@
-import type { Position } from '@/domain/position.js';
+import type { Position } from '@/domain/position';
 
 export interface SeatTags {
   readonly declaredPosition: Position | null;

@@ -1,7 +1,7 @@
-import type { Amount } from '@/domain/money.js';
-import type { Board, HoleCards } from '@/domain/cards.js';
-import type { Position, Street } from '@/domain/position.js';
-import type { Action, ActionKind } from '@/domain/action.js';
+import type { Amount } from '@/domain/money';
+import type { Board, HoleCards } from '@/domain/cards';
+import type { Position, Street } from '@/domain/position';
+import type { Action, ActionKind } from '@/domain/action';
 
 export type Severity = 'ok' | 'inaccuracy' | 'mistake' | 'blunder';
 

@@ -1,8 +1,8 @@
-import { type Amount, asAmount, toBB } from './money.js';
-import { CHIP_MOVING } from './action.js';
-import type { Hand } from './hand.js';
-import type { Board } from './cards.js';
-import type { Street } from './position.js';
+import { type Amount, asAmount, toBB } from './money';
+import { CHIP_MOVING } from './action';
+import type { Hand } from './hand';
+import type { Board } from './cards';
+import type { Street } from './position';
 
 export interface StackSnapshot {
   /** Remaining stack per seat, after the given action resolves. */

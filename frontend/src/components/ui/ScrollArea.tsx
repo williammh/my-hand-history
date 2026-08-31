@@ -1,3 +1,5 @@
+'use client';
+
 import { ScrollArea as Primitive } from 'radix-ui';
 import type { ReactNode } from 'react';
 

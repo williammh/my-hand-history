@@ -1,18 +1,18 @@
-import { asAmount, type Amount, type MoneyContext, type AnteType, type CurrencyCode } from '@/domain/money.js';
-import { parseCardList, type Card, type HoleCards } from '@/domain/cards.js';
-import { derivePositions, STREET_ORDER, type Street } from '@/domain/position.js';
-import type { Action, ActionKind } from '@/domain/action.js';
-import { CHIP_MOVING } from '@/domain/action.js';
-import { computePots } from '@/domain/pot.js';
+import { asAmount, type Amount, type MoneyContext, type AnteType, type CurrencyCode } from '@/domain/money';
+import { parseCardList, type Card, type HoleCards } from '@/domain/cards';
+import { derivePositions, STREET_ORDER, type Street } from '@/domain/position';
+import type { Action, ActionKind } from '@/domain/action';
+import { CHIP_MOVING } from '@/domain/action';
+import { computePots } from '@/domain/pot';
 import type {
   GameMode, Hand, HandMeta, ParseWarning, PlayerSeat, Showdown, StreetState, TournamentInfo,
-} from '@/domain/hand.js';
-import type { PotAward } from '@/domain/pot.js';
-import type { DetectionResult, ParseContext, ParseResult, SiteParser } from '@/parsers/types.js';
-import { CommitmentLedger } from '@/parsers/shared/commitment-ledger.js';
-import { normalizeSource } from '@/parsers/shared/text.js';
-import { WarningCode, warn, fail } from '@/parsers/shared/warnings.js';
-import { WINAMAX, parseNumeric, parseCents, SECTION_TO_STREET } from './patterns.js';
+} from '@/domain/hand';
+import type { PotAward } from '@/domain/pot';
+import type { DetectionResult, ParseContext, ParseResult, SiteParser } from '@/parsers/types';
+import { CommitmentLedger } from '@/parsers/shared/commitment-ledger';
+import { normalizeSource } from '@/parsers/shared/text';
+import { WarningCode, warn, fail } from '@/parsers/shared/warnings';
+import { WINAMAX, parseNumeric, parseCents, SECTION_TO_STREET } from './patterns';
 
 const SITE_ID = 'winamax' as const;
 

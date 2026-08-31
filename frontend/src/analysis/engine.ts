@@ -1,5 +1,5 @@
-import type { Hand } from '@/domain/hand.js';
-import type { HandAnalysis } from './types.js';
+import type { Hand } from '@/domain/hand';
+import type { HandAnalysis } from './types';
 
 export interface EngineCapabilities {
   readonly preflop: boolean;

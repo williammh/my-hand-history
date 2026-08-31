@@ -1,7 +1,9 @@
+'use client';
+
 import { create } from 'zustand';
-import type { Position, Street } from '@/domain/position.js';
-import type { Severity } from '@/analysis/types.js';
-import type { Rank } from '@/domain/cards.js';
+import type { Position, Street } from '@/domain/position';
+import type { Severity } from '@/analysis/types';
+import type { Rank } from '@/domain/cards';
 import {
   EMPTY_CRITERIA,
   type FilterCriteria,
@@ -10,7 +12,7 @@ import {
   type PreflopAggression,
   type RelativePosition,
   type StackBucket,
-} from '@/filters/types.js';
+} from '@/filters/types';
 
 /** Set-valued axes, i.e. everything `toggle` can operate on. */
 type SetAxis = {

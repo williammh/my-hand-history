@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath, URL } from 'node:url';
-import { registry } from '@/parsers/index.js';
-import type { Hand } from '@/domain/hand.js';
-import { deriveFacts, stackBucket } from '@/filters/facts.js';
-import { matches, activeCount, isActive } from '@/filters/match.js';
-import { EMPTY_CRITERIA, type FilterCriteria } from '@/filters/types.js';
+import { registry } from '@/parsers/index';
+import type { Hand } from '@/domain/hand';
+import { deriveFacts, stackBucket } from '@/filters/facts';
+import { matches, activeCount, isActive } from '@/filters/match';
+import { EMPTY_CRITERIA, type FilterCriteria } from '@/filters/types';
 
 const url = (p: string) => fileURLToPath(new URL(p, import.meta.url));
 

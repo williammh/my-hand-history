@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { evaluate, categoryOf, HandCategory, describe as describeHand } from '@/analysis/equity/evaluator.js';
-import type { Card } from '@/domain/cards.js';
+import { evaluate, categoryOf, HandCategory, describe as describeHand } from '@/analysis/equity/evaluator';
+import type { Card } from '@/domain/cards';
 
 const h = (s: string) => s.split(' ') as Card[];
 

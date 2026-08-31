@@ -1,8 +1,8 @@
-import type { Position, Street } from '@/domain/position.js';
-import type { SiteId } from '@/domain/hand.js';
-import type { Severity } from '@/analysis/types.js';
-import type { Rank } from '@/domain/cards.js';
-import type { BoardTexture, Connectedness, SuitTexture } from './board.js';
+import type { Position, Street } from '@/domain/position';
+import type { SiteId } from '@/domain/hand';
+import type { Severity } from '@/analysis/types';
+import type { Rank } from '@/domain/cards';
+import type { BoardTexture, Connectedness, SuitTexture } from './board';
 
 /**
  * How hero entered the pot preflop. This is the "Pot Type" axis of the filter:

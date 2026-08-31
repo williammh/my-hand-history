@@ -1,4 +1,7 @@
-import type { FileReport, ImportReport } from '@/state/hands-store.js';
+'use client';
+
+import type { FileReport, ImportReport } from '@/state/hands-store';
+import { registry } from '@/parsers/index';
 
 interface Props {
   report: ImportReport | null;
@@ -10,6 +13,12 @@ function hasErrors(f: FileReport): boolean {
   return f.fileWarnings.length > 0 || f.failures.length > 0;
 }
 
+/** The room name to show next to a file, or a fallback when detection failed. */
+function roomLabel(siteId: FileReport['siteId']): string {
+  if (siteId === null) return 'Unknown room';
+  return registry.get(siteId)?.displayName ?? siteId;
+}
+
 /** One file's line in the report, with its own warnings nested under it. */
 function FileRow({ file }: { file: FileReport }) {
   return (
@@ -17,7 +26,8 @@ function FileRow({ file }: { file: FileReport }) {
       <p className="text-slate-200 min-w-0">
         {/* The name wraps rather than truncates: with several files listed, the
             name is the only thing distinguishing one row's numbers from another's. */}
-        <span className="font-medium break-all">{file.fileName}</span>: parsed {file.parsed}{' '}
+        <span className="font-medium break-all">{file.fileName}</span>{' '}
+        <span className="text-slate-400">({roomLabel(file.siteId)})</span>: parsed {file.parsed}{' '}
         {file.parsed === 1 ? 'hand' : 'hands'}
         {file.added !== file.parsed && (
           <span className="text-slate-400">

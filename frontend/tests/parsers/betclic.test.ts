@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath, URL } from 'node:url';
-import { registry } from '@/parsers/index.js';
-import { stacksAtAction, heroStartingStackBB } from '@/domain/stacks.js';
-import { validateHand } from '@/parsers/shared/validate.js';
+import { registry } from '@/parsers/index';
+import { stacksAtAction, heroStartingStackBB } from '@/domain/stacks';
+import { validateHand } from '@/parsers/shared/validate';
 
 const samplePath = fileURLToPath(new URL('../fixtures/betclic/sample.txt', import.meta.url));
 const sample = readFileSync(samplePath, 'utf8');

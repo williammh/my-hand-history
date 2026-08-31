@@ -1,7 +1,7 @@
-import { CHIP_MOVING } from '@/domain/action.js';
-import { STREET_BOARD_LENGTH } from '@/domain/position.js';
-import type { Hand, ParseWarning } from '@/domain/hand.js';
-import { WarningCode, warn } from './warnings.js';
+import { CHIP_MOVING } from '@/domain/action';
+import { STREET_BOARD_LENGTH } from '@/domain/position';
+import type { Hand, ParseWarning } from '@/domain/hand';
+import { WarningCode, warn } from './warnings';
 
 /**
  * Post-parse sanity checks. Every issue is a warning, never a throw: one odd

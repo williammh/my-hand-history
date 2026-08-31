@@ -1,9 +1,12 @@
-import type { Hand } from '@/domain/hand.js';
-import { heroNetResult } from '@/domain/stacks.js';
-import { formatUnit, formatSignedUnit, formatDateTime } from '@/lib/format.js';
-import { useDisplayStore } from '@/state/display-store.js';
-import { CardView } from '@/components/replay/CardView.js';
-import { ScrollArea } from '@/components/ui/ScrollArea.js';
+'use client';
+
+import type { Hand } from '@/domain/hand';
+import { heroNetResult } from '@/domain/stacks';
+import { formatUnit, formatSignedUnit, formatDateTime } from '@/lib/format';
+import { useDisplayStore } from '@/state/display-store';
+import { CardView } from '@/components/replay/CardView';
+import { ScrollArea } from '@/components/ui/ScrollArea';
+import { registry } from '@/parsers/index';
 
 interface Props {
   hands: readonly Hand[];
@@ -63,8 +66,12 @@ export function HandList({ hands, selectedId, onSelect }: Props) {
                     </span>
                   </div>
                 </div>
-                <div className="text-sm text-slate-500 mt-1">
-                  {formatDateTime(h.meta.playedAt, timezone)}
+                <div className="text-sm text-slate-500 mt-1 flex items-center gap-1.5 min-w-0">
+                  <span className="truncate">{formatDateTime(h.meta.playedAt, timezone)}</span>
+                  <span aria-hidden="true">·</span>
+                  <span className="truncate">
+                    {registry.get(h.meta.siteId)?.displayName ?? h.meta.siteId}
+                  </span>
                 </div>
               </button>
             </li>

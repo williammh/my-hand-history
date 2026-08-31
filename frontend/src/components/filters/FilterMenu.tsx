@@ -1,6 +1,8 @@
+'use client';
+
 import { DropdownMenu } from 'radix-ui';
 import { IconChevronDown } from '@tabler/icons-react';
-import type { Option } from '@/filters/options.js';
+import type { Option } from '@/filters/options';
 
 interface Props<T extends string | number> {
   label: string;

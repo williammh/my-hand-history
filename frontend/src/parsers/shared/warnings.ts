@@ -1,4 +1,4 @@
-import type { ParseWarning, ParseSeverity } from '@/domain/hand.js';
+import type { ParseWarning, ParseSeverity } from '@/domain/hand';
 
 export const WarningCode = {
   MALFORMED_CHUNK: 'MALFORMED_CHUNK',

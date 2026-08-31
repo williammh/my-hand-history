@@ -1,8 +1,10 @@
-import type { Amount, MoneyContext } from '@/domain/money.js';
-import type { PlayerSeat } from '@/domain/hand.js';
-import { formatUnit } from '@/lib/format.js';
-import { useDisplayStore } from '@/state/display-store.js';
-import { CardView } from './CardView.js';
+'use client';
+
+import type { Amount, MoneyContext } from '@/domain/money';
+import type { PlayerSeat } from '@/domain/hand';
+import { formatUnit } from '@/lib/format';
+import { useDisplayStore } from '@/state/display-store';
+import { CardView } from './CardView';
 
 interface Props {
   seat: PlayerSeat;

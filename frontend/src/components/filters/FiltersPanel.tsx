@@ -1,22 +1,24 @@
+'use client';
+
 import { useMemo } from 'react';
 import { IconChevronDown, IconX } from '@tabler/icons-react';
 import { Select } from 'radix-ui';
-import type { Street } from '@/domain/position.js';
-import type { Rank } from '@/domain/cards.js';
-import { useFiltersStore } from '@/state/filters-store.js';
-import { activeCount } from '@/filters/match.js';
-import type { RelativePosition } from '@/filters/types.js';
+import type { Street } from '@/domain/position';
+import type { Rank } from '@/domain/cards';
+import { useFiltersStore } from '@/state/filters-store';
+import { activeCount } from '@/filters/match';
+import type { RelativePosition } from '@/filters/types';
 import {
   CONNECTEDNESS, POT_TYPES, POSITIONS, PREFLOP_AGGRESSION, RELATIVE_POSITIONS, SEVERITIES,
   STACKS, STREETS, SUIT_TEXTURES, linesFor, siteOptions, sourceFileOptions,
   type SourceOption,
-} from '@/filters/options.js';
-import { useHandsStore } from '@/state/hands-store.js';
-import { registry } from '@/parsers/index.js';
-import type { SiteId } from '@/domain/hand.js';
-import { RANK_OPTIONS } from '@/filters/board.js';
-import { FilterMenu } from './FilterMenu.js';
-import { ScrollArea } from '@/components/ui/ScrollArea.js';
+} from '@/filters/options';
+import { useHandsStore } from '@/state/hands-store';
+import { registry } from '@/parsers/index';
+import type { SiteId } from '@/domain/hand';
+import { RANK_OPTIONS } from '@/filters/board';
+import { FilterMenu } from './FilterMenu';
+import { ScrollArea } from '@/components/ui/ScrollArea';
 
 const SEGMENT_BASE =
   'flex-1 px-2 py-1 text-center text-sm rounded-sm transition outline-none';
@@ -161,10 +163,11 @@ export function FiltersPanel() {
 
       <ScrollArea className="flex-1 min-h-0">
       <div className="p-3 space-y-3">
-        {/* Source axes first: they scope WHICH hands the axes below describe,
-            and they are the ones whose vocabulary comes from the library rather
-            than from this file. Both sit disabled until something is loaded,
-            since until then there is no room or file to choose between. */}
+        {/* Source axes first: they scope WHICH hands the axes below describe.
+            Poker room is a closed vocabulary — every supported room is always
+            offered, counts included, even before anything is loaded. Source
+            file's vocabulary comes from the library instead, so it sits
+            disabled until something is loaded. */}
         <FilterMenu
           label="Poker room"
           options={sites}
@@ -172,7 +175,6 @@ export function FiltersPanel() {
           onToggle={(v) => toggle('sites', v)}
           onClear={() => clearAxis('sites')}
           counts={countsOf(sites)}
-          emptyLabel="No hands loaded"
         />
 
         <FilterMenu

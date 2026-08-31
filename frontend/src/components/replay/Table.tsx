@@ -1,15 +1,17 @@
+'use client';
+
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import type { Hand, PlayerSeat } from '@/domain/hand.js';
-import type { Board } from '@/domain/cards.js';
-import { stacksAtAction } from '@/domain/stacks.js';
-import { potAtAction } from '@/domain/pot.js';
-import { CHIP_MOVING } from '@/domain/action.js';
-import { asAmount } from '@/domain/money.js';
-import { formatUnit } from '@/lib/format.js';
-import { useDisplayStore } from '@/state/display-store.js';
-import { CommunityCards } from './CommunityCards.js';
-import { Seat, EmptySeat } from './Seat.js';
-import { ScrollArea } from '@/components/ui/ScrollArea.js';
+import type { Hand, PlayerSeat } from '@/domain/hand';
+import type { Board } from '@/domain/cards';
+import { stacksAtAction } from '@/domain/stacks';
+import { potAtAction } from '@/domain/pot';
+import { CHIP_MOVING } from '@/domain/action';
+import { asAmount } from '@/domain/money';
+import { formatUnit } from '@/lib/format';
+import { useDisplayStore } from '@/state/display-store';
+import { CommunityCards } from './CommunityCards';
+import { Seat, EmptySeat } from './Seat';
+import { ScrollArea } from '@/components/ui/ScrollArea';
 
 /** Ring shape to show when no hand is loaded — a plain 6-max layout of blanks. */
 const EMPTY_RING = {

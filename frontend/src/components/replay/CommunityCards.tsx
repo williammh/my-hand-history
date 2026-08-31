@@ -1,5 +1,7 @@
-import type { Board } from '@/domain/cards.js';
-import { CardView } from './CardView.js';
+'use client';
+
+import type { Board } from '@/domain/cards';
+import { CardView } from './CardView';
 
 /**
  * "Turn" and "River" are each wider than the single 1.75rem card they label, so

@@ -1,8 +1,8 @@
-import type { Amount, MoneyContext } from './money.js';
-import type { Board, HoleCards } from './cards.js';
-import type { Position, Street } from './position.js';
-import type { Action } from './action.js';
-import type { PotState, PotAward } from './pot.js';
+import type { Amount, MoneyContext } from './money';
+import type { Board, HoleCards } from './cards';
+import type { Position, Street } from './position';
+import type { Action } from './action';
+import type { PotState, PotAward } from './pot';
 
 export type SiteId = 'betclic-fr' | 'pokerstars' | 'ggpoker' | 'winamax';
 export type GameMode = 'tournament' | 'cash' | 'sit-n-go';

@@ -1,10 +1,10 @@
-import type { Hand } from '@/domain/hand.js';
+import type { Hand } from '@/domain/hand';
 import type {
   HandParseFailure, ParsedFile, ParserStatus, ParseWarning, SiteId, SiteParser,
-} from './types.js';
-import { normalizeSource } from './shared/text.js';
-import { validateHand } from './shared/validate.js';
-import { WarningCode, fail } from './shared/warnings.js';
+} from './types';
+import { normalizeSource } from './shared/text';
+import { validateHand } from './shared/validate';
+import { WarningCode, fail } from './shared/warnings';
 
 export interface ParserSummary {
   readonly siteId: SiteId;
@@ -62,7 +62,7 @@ export class ParserRegistry {
 
     if (!parser) {
       return {
-        siteId: siteId ?? ('betclic-fr' as SiteId),
+        siteId: null,
         hands: [],
         failures: [],
         fileWarnings: [fail(

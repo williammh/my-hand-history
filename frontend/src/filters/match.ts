@@ -1,6 +1,6 @@
-import type { HandFacts, FilterCriteria } from './types.js';
-import { stackBucket } from './facts.js';
-import { rankValue } from '@/domain/cards.js';
+import type { HandFacts, FilterCriteria } from './types';
+import { stackBucket } from './facts';
+import { rankValue } from '@/domain/cards';
 
 /**
  * Whether a hand passes the criteria.

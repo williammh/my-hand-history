@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import {
   handStrength, topRange, openingRange, threeBetRange, rangeCombos, rankedClasses,
-} from '@/analysis/ranges/preflop-ranges.js';
-import { classifyMadeHand } from '@/analysis/postflop/made-hand.js';
-import { equityVsRange } from '@/analysis/equity/monte-carlo.js';
-import type { Board, HoleCards } from '@/domain/cards.js';
+} from '@/analysis/ranges/preflop-ranges';
+import { classifyMadeHand } from '@/analysis/postflop/made-hand';
+import { equityVsRange } from '@/analysis/equity/monte-carlo';
+import type { Board, HoleCards } from '@/domain/cards';
 
 const hole = (a: string, b: string) => [a, b] as unknown as HoleCards;
 const board = (...c: string[]) => c as unknown as Board;

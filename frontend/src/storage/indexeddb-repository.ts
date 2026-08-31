@@ -1,7 +1,7 @@
 import { openDB, type DBSchema, type IDBPDatabase } from 'idb';
-import type { Hand } from '@/domain/hand.js';
-import type { HandAnalysis } from '@/analysis/types.js';
-import { type HandRepository, type StoredHandSummary, summarize } from './repository.js';
+import type { Hand } from '@/domain/hand';
+import type { HandAnalysis } from '@/analysis/types';
+import { type HandRepository, type StoredHandSummary, summarize } from './repository';
 
 interface PokerDB extends DBSchema {
   hands: { key: string; value: { hand: Hand; summary: StoredHandSummary }; indexes: { playedAt: string } };

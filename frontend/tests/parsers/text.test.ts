@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { repairMojibake, normalizeLineEndings, normalizeSource } from '@/parsers/shared/text.js';
+import { repairMojibake, normalizeLineEndings, normalizeSource } from '@/parsers/shared/text';
 
 // The exact mojibake sequence in the real file: U+00E2 U+201A U+00AC.
 const MOJI_EURO = 'â‚¬';

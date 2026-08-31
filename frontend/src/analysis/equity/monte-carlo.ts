@@ -1,6 +1,6 @@
-import { RANKS, SUITS, handClass, type Board, type Card, type HoleCards } from '@/domain/cards.js';
-import { evaluate } from './evaluator.js';
-import type { Range } from '../ranges/preflop-ranges.js';
+import { RANKS, SUITS, handClass, type Board, type Card, type HoleCards } from '@/domain/cards';
+import { evaluate } from './evaluator';
+import type { Range } from '../ranges/preflop-ranges';
 
 const FULL_DECK: Card[] = [];
 for (const r of RANKS) for (const s of SUITS) FULL_DECK.push(`${r}${s}` as Card);

@@ -2,15 +2,17 @@
 
 Upload a poker hand history, replay it visually, and see where hero deviated from GTO.
 
-**Runs entirely in the browser.** No backend, no accounts, no upload — hand histories
-are parsed locally and stored in IndexedDB on your own device.
+**Parsing and storage happen entirely in the browser.** No accounts, no upload —
+hand histories are parsed locally and stored in IndexedDB on your own device.
+The Next.js server renders the page shell and nothing else; no hand history is
+ever sent to it.
 
 ```bash
 npm install       # installs all workspaces
-npm run dev       # http://localhost:5173
+npm run dev       # http://localhost:3000
 npm test          # 189 tests
-npm run build     # static site in frontend/dist/
-npm run deploy    # build + wrangler deploy (Cloudflare Workers)
+npm run build     # next build
+npm run start     # serve the production build locally
 ```
 
 ## Layout
@@ -18,12 +20,11 @@ npm run deploy    # build + wrangler deploy (Cloudflare Workers)
 npm workspaces. Frontend-first — the app is complete without a server.
 
 ```
-frontend/    The app. React + Vite, deployed to Cloudflare Workers static assets.
-backend/     Stub. Nothing calls it yet; see backend/README.md.
+frontend/    The app. Next.js (App Router) + React, deployed to Vercel.
 samples/     Example hand history exports.
 ```
 
-Target a single workspace with `--workspace @my-hand-history/frontend` (or `/backend`).
+There is one workspace, so root scripts already target it; `--workspace @my-hand-history/frontend` is only needed to run something the root scripts don't expose.
 
 ## What it does
 
@@ -46,10 +47,25 @@ well are listed as "not judged" with a reason rather than guessed at.
 ## Architecture
 
 ```
+frontend/app/            Next App Router entry. Thin: a layout, a page, and the client shell.
 frontend/src/domain/     Pure types and math. Imports nothing from parsers or analysis.
 frontend/src/parsers/    Site-specific text -> domain model. Only the registry is imported outward.
 frontend/src/analysis/   Domain model -> verdicts. Takes a Hand and nothing else.
 ```
+
+### Why the app is client-rendered
+
+`app/page.tsx` mounts `AppShell`, which imports the app with `ssr: false`. That is
+deliberate, not a workaround. Hand histories live in IndexedDB and display
+preferences in `localStorage`, neither of which exists on the server, and the
+display store reads `localStorage` at module scope to seed its initial state — a
+server render would build markup from defaults and then disagree with the client
+on hydration. There is also nothing to render before the user drops a file.
+
+`'use client'` is confined to `src/components/` and `src/state/`. The
+domain, parser, analysis, and filter layers carry no directive and import no
+browser API, so they can be imported from server components unchanged whenever
+a server surface is added.
 
 ### Adding a poker room
 
@@ -68,12 +84,18 @@ the rest of the file.
 ### Swapping in a real solver
 
 `AnalysisEngine.analyze()` is async and takes a JSON-serializable `Hand`, so a
-server-side solver drops in as a new implementation with no changes to the UI —
-this is what `backend/` is reserved for:
+server-side solver drops in as a new implementation with no changes to the UI.
+It lands as a Route Handler — `frontend/app/api/analyze/route.ts` — called from
+a new `AnalysisEngine`:
 
 ```ts
 export function createServerSolverEngine(opts: { baseUrl: string }): AnalysisEngine;
 ```
+
+A solve is CPU-heavy, so the route should stay on the Node runtime (the
+default) rather than edge; if a real solver ever needs more than a Vercel
+function affords, that is a deploy-target change for that one route, not an
+architecture change.
 
 ## Format notes
 

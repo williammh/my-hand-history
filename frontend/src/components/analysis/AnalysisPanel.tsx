@@ -1,6 +1,8 @@
-import type { Hand } from '@/domain/hand.js';
-import type { HandAnalysis } from '@/analysis/types.js';
-import { VerdictDetail } from '@/components/analysis/VerdictDetail.js';
+'use client';
+
+import type { Hand } from '@/domain/hand';
+import type { HandAnalysis } from '@/analysis/types';
+import { VerdictDetail } from '@/components/analysis/VerdictDetail';
 
 interface Props {
   hand: Hand | null;

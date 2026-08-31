@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { boardTexture } from '@/filters/board.js';
-import { rankValue } from '@/domain/cards.js';
-import type { Board } from '@/domain/cards.js';
+import { boardTexture } from '@/filters/board';
+import { rankValue } from '@/domain/cards';
+import type { Board } from '@/domain/cards';
 
 const b = (s: string): Board => s.split(' ') as Board;
 

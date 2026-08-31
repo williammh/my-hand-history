@@ -1,4 +1,4 @@
-import { type Card, RANKS, cardRank, cardSuit } from '@/domain/cards.js';
+import { type Card, RANKS, cardRank, cardSuit } from '@/domain/cards';
 
 export const HandCategory = {
   HIGH_CARD: 0, PAIR: 1, TWO_PAIR: 2, TRIPS: 3, STRAIGHT: 4,

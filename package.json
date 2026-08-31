@@ -4,14 +4,12 @@
   "version": "0.1.0",
   "type": "module",
   "workspaces": [
-    "frontend",
-    "backend"
+    "frontend"
   ],
   "scripts": {
     "dev": "npm run dev --workspace @my-hand-history/frontend",
     "build": "npm run build --workspace @my-hand-history/frontend",
-    "preview": "npm run preview --workspace @my-hand-history/frontend",
-    "deploy": "npm run deploy --workspace @my-hand-history/frontend",
+    "start": "npm run start --workspace @my-hand-history/frontend",
     "test": "npm run test --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present"
   }

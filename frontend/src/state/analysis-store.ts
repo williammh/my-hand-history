@@ -1,10 +1,12 @@
+'use client';
+
 import { create } from 'zustand';
-import type { Hand } from '@/domain/hand.js';
-import type { HandAnalysis } from '@/analysis/types.js';
-import type { AnalysisEngine } from '@/analysis/engine.js';
-import { ChartLookup } from '@/analysis/charts/lookup.js';
-import { ChartLoader } from '@/analysis/charts/loader.js';
-import { createClientHeuristicEngine } from '@/analysis/engines/client-heuristic.js';
+import type { Hand } from '@/domain/hand';
+import type { HandAnalysis } from '@/analysis/types';
+import type { AnalysisEngine } from '@/analysis/engine';
+import { ChartLookup } from '@/analysis/charts/lookup';
+import { ChartLoader } from '@/analysis/charts/loader';
+import { createClientHeuristicEngine } from '@/analysis/engines/client-heuristic';
 
 interface AnalysisState {
   engine: AnalysisEngine | null;

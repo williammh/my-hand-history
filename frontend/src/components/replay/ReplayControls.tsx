@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect } from 'react';
 import {
   IconPlayerTrackPrevFilled,
@@ -7,7 +9,7 @@ import {
   IconPlayerSkipForwardFilled,
   IconPlayerTrackNextFilled,
 } from '@tabler/icons-react';
-import type { ReplayStep } from '@/domain/stacks.js';
+import type { ReplayStep } from '@/domain/stacks';
 
 interface Props {
   /** Full replay timeline (see replayTimeline) — one entry per scrubbable stop,

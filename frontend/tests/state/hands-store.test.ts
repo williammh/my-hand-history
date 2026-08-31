@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath, URL } from 'node:url';
-import { useHandsStore } from '@/state/hands-store.js';
+import { useHandsStore } from '@/state/hands-store';
 
 const url = (p: string) => fileURLToPath(new URL(p, import.meta.url));
 const read = (p: string) => readFileSync(url(p), 'utf8');
@@ -13,7 +13,6 @@ const store = () => useHandsStore.getState();
 
 beforeEach(async () => {
   await store().clearAll();
-  useHandsStore.setState({ siteId: 'betclic-fr' });
 });
 
 describe('importing several files at once', () => {

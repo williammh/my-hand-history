@@ -1,5 +1,5 @@
-import type { Position } from '@/domain/position.js';
-import type { PreflopScenario } from '../types.js';
+import type { Position } from '@/domain/position';
+import type { PreflopScenario } from '../types';
 
 export interface PreflopChart {
   readonly id: string;

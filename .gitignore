@@ -1,8 +1,8 @@
 node_modules
-dist
 *.local
 *.tsbuildinfo
 
-# cloudflare / wrangler
-.wrangler
-.dev.vars
+# next
+.next
+next-env.d.ts
+.vercel

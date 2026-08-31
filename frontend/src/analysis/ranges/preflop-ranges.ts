@@ -1,6 +1,6 @@
-import { rankValue, type Rank } from '@/domain/cards.js';
-import type { Position } from '@/domain/position.js';
-import { allHandClasses, comboCount } from '../charts/hand-class.js';
+import { rankValue, type Rank } from '@/domain/cards';
+import type { Position } from '@/domain/position';
+import { allHandClasses, comboCount } from '../charts/hand-class';
 
 /**
  * A villain's assumed holding distribution: hand class -> weight in 0..1.

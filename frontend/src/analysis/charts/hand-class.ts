@@ -1,5 +1,5 @@
-import { RANKS, type HoleCards, type Rank } from '@/domain/cards.js';
-import { handClass } from '@/domain/cards.js';
+import { RANKS, type HoleCards, type Rank } from '@/domain/cards';
+import { handClass } from '@/domain/cards';
 
 export { handClass };
 

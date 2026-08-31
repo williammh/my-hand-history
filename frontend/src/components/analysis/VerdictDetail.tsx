@@ -1,10 +1,12 @@
-import type { Hand } from '@/domain/hand.js';
-import type { Action } from '@/domain/action.js';
-import type { MoneyContext } from '@/domain/money.js';
-import type { DecisionVerdict } from '@/analysis/types.js';
-import { formatUnit, formatBBNumber } from '@/lib/format.js';
-import type { DisplayUnit } from '@/state/display-store.js';
-import { useDisplayStore } from '@/state/display-store.js';
+'use client';
+
+import type { Hand } from '@/domain/hand';
+import type { Action } from '@/domain/action';
+import type { MoneyContext } from '@/domain/money';
+import type { DecisionVerdict } from '@/analysis/types';
+import { formatUnit, formatBBNumber } from '@/lib/format';
+import type { DisplayUnit } from '@/state/display-store';
+import { useDisplayStore } from '@/state/display-store';
 
 /** How the player's actual action reads on screen: "call 4,000", "shove", "fold". */
 export function heroLine(action: Action, money: MoneyContext, unit: DisplayUnit): string {

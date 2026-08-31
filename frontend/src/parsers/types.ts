@@ -1,4 +1,4 @@
-import type { Hand, ParseWarning, SiteId } from '@/domain/hand.js';
+import type { Hand, ParseWarning, SiteId } from '@/domain/hand';
 
 export type { ParseWarning, SiteId };
 
@@ -14,7 +14,8 @@ export interface HandParseFailure {
 }
 
 export interface ParsedFile {
-  readonly siteId: SiteId;
+  /** Null when no registered parser could detect the room for this file. */
+  readonly siteId: SiteId | null;
   readonly hands: readonly Hand[];
   /** Hands that failed hard, so the UI can say "3 of 50 hands failed". */
   readonly failures: readonly HandParseFailure[];

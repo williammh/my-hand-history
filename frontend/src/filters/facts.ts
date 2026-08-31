@@ -1,14 +1,14 @@
-import type { Hand } from '@/domain/hand.js';
-import type { Position, Street } from '@/domain/position.js';
-import { STREET_ORDER, postflopOrder } from '@/domain/position.js';
-import { isVoluntary } from '@/domain/action.js';
-import type { Action } from '@/domain/action.js';
-import { heroEffectiveStackBB } from '@/domain/stacks.js';
-import type { HandAnalysis, Severity } from '@/analysis/types.js';
-import { boardTexture } from './board.js';
+import type { Hand } from '@/domain/hand';
+import type { Position, Street } from '@/domain/position';
+import { STREET_ORDER, postflopOrder } from '@/domain/position';
+import { isVoluntary } from '@/domain/action';
+import type { Action } from '@/domain/action';
+import { heroEffectiveStackBB } from '@/domain/stacks';
+import type { HandAnalysis, Severity } from '@/analysis/types';
+import { boardTexture } from './board';
 import type {
   HandFacts, LineToken, PotType, PreflopAggression, RelativePosition, StackBucket,
-} from './types.js';
+} from './types';
 
 /** The ladder the stack filter offers. A hand snaps to the nearest rung at or below it. */
 export const STACK_BUCKETS: readonly StackBucket[] = [20, 40, 50, 75, 100, 150, 200];

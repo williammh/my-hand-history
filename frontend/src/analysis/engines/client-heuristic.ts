@@ -1,17 +1,17 @@
-import { toBB } from '@/domain/money.js';
-import { handClass } from '@/domain/cards.js';
-import type { Hand } from '@/domain/hand.js';
-import type { AnalysisEngine, EngineCapabilities } from '../engine.js';
+import { toBB } from '@/domain/money';
+import { handClass } from '@/domain/cards';
+import type { Hand } from '@/domain/hand';
+import type { AnalysisEngine, EngineCapabilities } from '../engine';
 import type {
   DecisionPoint, DecisionVerdict, HandAnalysis, Severity, SkippedDecision, SuggestedAction,
-} from '../types.js';
-import { extractDecisions } from '../decision-points.js';
-import type { ChartLookup } from '../charts/lookup.js';
-import { MAX_STACK_DELTA_BB } from '../charts/lookup.js';
-import { equityVsRange, potOdds } from '../equity/monte-carlo.js';
-import { openingRange, threeBetRange } from '../ranges/preflop-ranges.js';
-import { villainRange } from '../ranges/villain-range.js';
-import { classifyMadeHand, type MadeHand } from '../postflop/made-hand.js';
+} from '../types';
+import { extractDecisions } from '../decision-points';
+import type { ChartLookup } from '../charts/lookup';
+import { MAX_STACK_DELTA_BB } from '../charts/lookup';
+import { equityVsRange, potOdds } from '../equity/monte-carlo';
+import { openingRange, threeBetRange } from '../ranges/preflop-ranges';
+import { villainRange } from '../ranges/villain-range';
+import { classifyMadeHand, type MadeHand } from '../postflop/made-hand';
 
 const ENGINE_ID = 'client-heuristic';
 const ENGINE_VERSION = '1.1.0';

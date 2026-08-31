@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { computePots, potAtAction } from '@/domain/pot.js';
-import { asAmount } from '@/domain/money.js';
-import type { Action, ActionKind } from '@/domain/action.js';
-import type { Street } from '@/domain/position.js';
+import { computePots, potAtAction } from '@/domain/pot';
+import { asAmount } from '@/domain/money';
+import type { Action, ActionKind } from '@/domain/action';
+import type { Street } from '@/domain/position';
 
 let idx = 0;
 function act(seat: number, kind: ActionKind, amount: number, street: Street = 'preflop'): Action {

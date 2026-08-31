@@ -1,5 +1,5 @@
-import type { Hand, SiteId } from '@/domain/hand.js';
-import type { HandAnalysis } from '@/analysis/types.js';
+import type { Hand, SiteId } from '@/domain/hand';
+import type { HandAnalysis } from '@/analysis/types';
 
 export interface StoredHandSummary {
   readonly id: string;

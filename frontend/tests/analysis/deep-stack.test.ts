@@ -1,13 +1,13 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath, URL } from 'node:url';
-import { registry } from '@/parsers/index.js';
-import { ChartLookup } from '@/analysis/charts/lookup.js';
-import type { PreflopChart, ChartManifest } from '@/analysis/charts/loader.js';
-import { createClientHeuristicEngine, VerdictCode } from '@/analysis/engines/client-heuristic.js';
-import { extractHeroDecisions } from '@/analysis/decision-points.js';
-import type { Hand } from '@/domain/hand.js';
-import type { AnalysisEngine } from '@/analysis/engine.js';
+import { registry } from '@/parsers/index';
+import { ChartLookup } from '@/analysis/charts/lookup';
+import type { PreflopChart, ChartManifest } from '@/analysis/charts/loader';
+import { createClientHeuristicEngine, VerdictCode } from '@/analysis/engines/client-heuristic';
+import { extractHeroDecisions } from '@/analysis/decision-points';
+import type { Hand } from '@/domain/hand';
+import type { AnalysisEngine } from '@/analysis/engine';
 
 const url = (p: string) => fileURLToPath(new URL(p, import.meta.url));
 const chartsDir = url('../../public/charts');

@@ -1,5 +1,5 @@
-import type { Amount } from './money.js';
-import type { Street } from './position.js';
+import type { Amount } from './money';
+import type { Street } from './position';
 
 export type ActionKind =
   | 'post-ante'

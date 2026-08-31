@@ -1,6 +1,6 @@
-import type { Position } from '@/domain/position.js';
-import type { PreflopScenario } from '../types.js';
-import type { PreflopChart } from './loader.js';
+import type { Position } from '@/domain/position';
+import type { PreflopScenario } from '../types';
+import type { PreflopChart } from './loader';
 
 export interface ChartQuery {
   readonly tableSize: number;

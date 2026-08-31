@@ -1,6 +1,6 @@
-import { type Amount, ZERO, asAmount } from './money.js';
-import type { Action } from './action.js';
-import { CHIP_MOVING } from './action.js';
+import { type Amount, ZERO, asAmount } from './money';
+import type { Action } from './action';
+import { CHIP_MOVING } from './action';
 
 export interface Pot {
   /** 0 = main pot; 1..n = side pots in creation order. */

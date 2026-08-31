@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath, URL } from 'node:url';
-import { registry } from '@/parsers/index.js';
-import { validateHand } from '@/parsers/shared/validate.js';
+import { registry } from '@/parsers/index';
+import { validateHand } from '@/parsers/shared/validate';
 
 const samplePath = fileURLToPath(
   new URL('../fixtures/betclic/showdown-and-edge-cases.txt', import.meta.url),

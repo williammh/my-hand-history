@@ -1,4 +1,6 @@
-import { SUIT_SYMBOL } from '@/lib/format.js';
+'use client';
+
+import { SUIT_SYMBOL } from '@/lib/format';
 
 interface Props {
   card: string | null;

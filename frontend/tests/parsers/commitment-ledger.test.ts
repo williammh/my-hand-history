@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { CommitmentLedger } from '@/parsers/shared/commitment-ledger.js';
-import { asAmount } from '@/domain/money.js';
+import { CommitmentLedger } from '@/parsers/shared/commitment-ledger';
+import { asAmount } from '@/domain/money';
 
 const stacks = (o: Record<number, number>) =>
   new Map(Object.entries(o).map(([k, v]) => [Number(k), asAmount(v)]));

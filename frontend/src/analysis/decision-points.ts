@@ -1,8 +1,8 @@
-import { asAmount, toBB } from '@/domain/money.js';
-import { CHIP_MOVING, isVoluntary } from '@/domain/action.js';
-import type { Hand } from '@/domain/hand.js';
-import { stacksAtAction } from '@/domain/stacks.js';
-import type { DecisionPoint, PreflopScenario } from './types.js';
+import { asAmount, toBB } from '@/domain/money';
+import { CHIP_MOVING, isVoluntary } from '@/domain/action';
+import type { Hand } from '@/domain/hand';
+import { stacksAtAction } from '@/domain/stacks';
+import type { DecisionPoint, PreflopScenario } from './types';
 
 /**
  * Extracts every voluntary decision made by the given seat, with the context

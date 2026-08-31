@@ -1,4 +1,6 @@
-import type { Severity } from '@/analysis/types.js';
+'use client';
+
+import type { Severity } from '@/analysis/types';
 
 /**
  * Tabler `check` and `x`, inlined as SVG rather than pulled from a package:

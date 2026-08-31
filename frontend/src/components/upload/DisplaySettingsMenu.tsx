@@ -1,3 +1,5 @@
+'use client';
+
 import { DropdownMenu } from 'radix-ui';
 import { IconChevronDown } from '@tabler/icons-react';
 import {
@@ -5,7 +7,7 @@ import {
   resolveTimezone,
   type DisplayUnit,
   type DisplayTimezone,
-} from '@/state/display-store.js';
+} from '@/state/display-store';
 
 const UNITS: readonly { value: DisplayUnit; label: string }[] = [
   { value: 'chips', label: 'Chips' },

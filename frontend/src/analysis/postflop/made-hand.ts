@@ -1,5 +1,5 @@
-import { RANKS, cardRank, cardSuit, type Board, type Card, type HoleCards } from '@/domain/cards.js';
-import { HandCategory, categoryOf, evaluate } from '../equity/evaluator.js';
+import { RANKS, cardRank, cardSuit, type Board, type Card, type HoleCards } from '@/domain/cards';
+import { HandCategory, categoryOf, evaluate } from '../equity/evaluator';
 
 /**
  * What hero actually holds right now, in the terms a bet decision turns on.

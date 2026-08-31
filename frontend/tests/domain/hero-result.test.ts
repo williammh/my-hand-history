@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { registry } from '@/parsers/index.js';
-import { heroNetResult } from '@/domain/stacks.js';
-import { asAmount } from '@/domain/money.js';
-import type { Hand } from '@/domain/hand.js';
+import { registry } from '@/parsers/index';
+import { heroNetResult } from '@/domain/stacks';
+import { asAmount } from '@/domain/money';
+import type { Hand } from '@/domain/hand';
 
 const samplePath = fileURLToPath(new URL('../fixtures/betclic/sample.txt', import.meta.url));
 const parsed = registry.parseFile(readFileSync(samplePath, 'utf8'), 'betclic-fr', 'sample.txt');

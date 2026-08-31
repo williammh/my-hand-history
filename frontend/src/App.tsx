@@ -1,27 +1,28 @@
+'use client';
+
 import { useEffect, useMemo } from 'react';
-import { useHandsStore } from '@/state/hands-store.js';
-import { useReplayStore } from '@/state/replay-store.js';
-import { useAnalysisStore } from '@/state/analysis-store.js';
-import { FileDropzone } from '@/components/upload/FileDropzone.js';
-import { SiteRadioGroup } from '@/components/upload/SiteRadioGroup.js';
-import { ParseReport } from '@/components/upload/ParseReport.js';
-import { DisplaySettingsMenu } from '@/components/upload/DisplaySettingsMenu.js';
-import { HandList } from '@/components/hands/HandList.js';
-import { Table } from '@/components/replay/Table.js';
-import { ReplayControls } from '@/components/replay/ReplayControls.js';
-import { ActionLog } from '@/components/replay/ActionLog.js';
-import { AnalysisPanel } from '@/components/analysis/AnalysisPanel.js';
-import { FiltersPanel } from '@/components/filters/FiltersPanel.js';
-import { ScrollArea } from '@/components/ui/ScrollArea.js';
-import { replayTimeline } from '@/domain/stacks.js';
-import { formatDateTime, formatGameMode } from '@/lib/format.js';
-import { useDisplayStore } from '@/state/display-store.js';
-import { useFiltersStore } from '@/state/filters-store.js';
-import { deriveFacts } from '@/filters/facts.js';
-import { matches } from '@/filters/match.js';
+import { useHandsStore } from '@/state/hands-store';
+import { useReplayStore } from '@/state/replay-store';
+import { useAnalysisStore } from '@/state/analysis-store';
+import { FileDropzone } from '@/components/upload/FileDropzone';
+import { ParseReport } from '@/components/upload/ParseReport';
+import { DisplaySettingsMenu } from '@/components/upload/DisplaySettingsMenu';
+import { HandList } from '@/components/hands/HandList';
+import { Table } from '@/components/replay/Table';
+import { ReplayControls } from '@/components/replay/ReplayControls';
+import { ActionLog } from '@/components/replay/ActionLog';
+import { AnalysisPanel } from '@/components/analysis/AnalysisPanel';
+import { FiltersPanel } from '@/components/filters/FiltersPanel';
+import { ScrollArea } from '@/components/ui/ScrollArea';
+import { replayTimeline } from '@/domain/stacks';
+import { formatDateTime, formatGameMode } from '@/lib/format';
+import { useDisplayStore } from '@/state/display-store';
+import { useFiltersStore } from '@/state/filters-store';
+import { deriveFacts } from '@/filters/facts';
+import { matches } from '@/filters/match';
 
 export function App() {
-  const { hands, selectedId, siteId, importing, report, setSite, importFiles, select, hydrate, clearAll } =
+  const { hands, selectedId, importing, report, importFiles, select, hydrate, clearAll } =
     useHandsStore();
   const { stepIndex, playing, setIndex, reset, setPlaying } = useReplayStore();
   const { byHandId, pending, engineError, analyze } = useAnalysisStore();
@@ -143,7 +144,6 @@ export function App() {
                 Source
               </div>
               <div className="p-3 space-y-3.5">
-                <SiteRadioGroup value={siteId} onChange={setSite} />
                 <FileDropzone onFiles={(files) => void importFiles(files)} busy={importing} />
                 <ParseReport
                   report={report}

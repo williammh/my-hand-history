@@ -1,11 +1,13 @@
-import type { Hand } from '@/domain/hand.js';
-import type { Action } from '@/domain/action.js';
-import type { HandAnalysis, DecisionVerdict } from '@/analysis/types.js';
-import { formatUnit } from '@/lib/format.js';
-import { useDisplayStore } from '@/state/display-store.js';
-import { VerdictIcon } from '@/components/analysis/VerdictBadge.js';
-import { ScrollArea } from '@/components/ui/ScrollArea.js';
-import { CardView } from '@/components/replay/CardView.js';
+'use client';
+
+import type { Hand } from '@/domain/hand';
+import type { Action } from '@/domain/action';
+import type { HandAnalysis, DecisionVerdict } from '@/analysis/types';
+import { formatUnit } from '@/lib/format';
+import { useDisplayStore } from '@/state/display-store';
+import { VerdictIcon } from '@/components/analysis/VerdictBadge';
+import { ScrollArea } from '@/components/ui/ScrollArea';
+import { CardView } from '@/components/replay/CardView';
 
 interface Props {
   hand: Hand | null;
