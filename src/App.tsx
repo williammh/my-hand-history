@@ -85,7 +85,7 @@ export function App() {
       <header className="border-b border-slate-800 shrink-0">
         <div className="mx-auto w-full max-w-[96rem] px-4 py-4 sm:px-6 md:px-8 md:py-5 flex flex-wrap items-start gap-x-6 gap-y-3">
           <div className="min-w-0">
-            <h1 className="text-lg font-semibold tracking-tight text-slate-50">MyHandHistory</h1>
+            <h1 className="text-lg font-semibold tracking-tight text-slate-50">MyHandHistory.com</h1>
            
           </div>
           <div className="ml-auto shrink-0">

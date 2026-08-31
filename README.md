@@ -8,7 +8,7 @@ The Next.js server renders the page shell and nothing else; no hand history is
 ever sent to it.
 
 ```bash
-npm install       # installs all workspaces
+npm install       # installs dependencies
 npm run dev       # http://localhost:3000
 npm test          # 189 tests
 npm run build     # next build
@@ -17,14 +17,14 @@ npm run start     # serve the production build locally
 
 ## Layout
 
-npm workspaces. Frontend-first — the app is complete without a server.
+A single Next.js app at the repo root — the standard `create-next-app` shape.
 
 ```
-frontend/    The app. Next.js (App Router) + React, deployed to Vercel.
+app/         Next App Router entry.
+src/         Domain logic, parsers, analysis, UI components, state.
+public/      Static assets (preflop charts).
 samples/     Example hand history exports.
 ```
-
-There is one workspace, so root scripts already target it; `--workspace @my-hand-history/frontend` is only needed to run something the root scripts don't expose.
 
 ## What it does
 
@@ -47,10 +47,10 @@ well are listed as "not judged" with a reason rather than guessed at.
 ## Architecture
 
 ```
-frontend/app/            Next App Router entry. Thin: a layout, a page, and the client shell.
-frontend/src/domain/     Pure types and math. Imports nothing from parsers or analysis.
-frontend/src/parsers/    Site-specific text -> domain model. Only the registry is imported outward.
-frontend/src/analysis/   Domain model -> verdicts. Takes a Hand and nothing else.
+app/            Next App Router entry. Thin: a layout, a page, and the client shell.
+src/domain/     Pure types and math. Imports nothing from parsers or analysis.
+src/parsers/    Site-specific text -> domain model. Only the registry is imported outward.
+src/analysis/   Domain model -> verdicts. Takes a Hand and nothing else.
 ```
 
 ### Why the app is client-rendered
@@ -69,8 +69,8 @@ a server surface is added.
 
 ### Adding a poker room
 
-Implement `SiteParser` (`frontend/src/parsers/types.ts`) and register it in
-`frontend/src/parsers/index.ts`. Its radio button appears automatically. Shared helpers
+Implement `SiteParser` (`src/parsers/types.ts`) and register it in
+`src/parsers/index.ts`. Its radio button appears automatically. Shared helpers
 handle the parts that are the same everywhere:
 
 - `shared/text.ts` — encoding repair
@@ -85,7 +85,7 @@ the rest of the file.
 
 `AnalysisEngine.analyze()` is async and takes a JSON-serializable `Hand`, so a
 server-side solver drops in as a new implementation with no changes to the UI.
-It lands as a Route Handler — `frontend/app/api/analyze/route.ts` — called from
+It lands as a Route Handler — `app/api/analyze/route.ts` — called from
 a new `AnalysisEngine`:
 
 ```ts

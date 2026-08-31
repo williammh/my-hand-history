@@ -12,7 +12,7 @@ import { replayTimeline } from '@/domain/stacks';
  * street" lookup.
  */
 const samplePath = fileURLToPath(
-  new URL('../../../samples/55003941_ExportHH_2025-7-16.txt', import.meta.url),
+  new URL('../../samples/55003941_ExportHH_2025-7-16.txt', import.meta.url),
 );
 const parsed = registry.parseFile(readFileSync(samplePath, 'utf8'), 'betclic-fr', 'sample.txt');
 const hand = parsed.hands.find((h) => h.actions.some((a) => a.amount === 52157));
