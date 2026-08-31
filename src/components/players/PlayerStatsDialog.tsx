@@ -24,40 +24,40 @@ interface Props {
  */
 const STAT_FULL_LABEL: Record<string, string> = {
   VPIP:
-    'Voluntarily Put money In Pot — hands where you called, bet, or raised preflop, '
-    + 'out of every hand you were dealt in. Posting a blind is forced, so it does not count.',
+    'Voluntarily Put money In Pot — hands where the player called, bet, or raised preflop, '
+    + 'out of every hand they were dealt in. Posting a blind is forced, so it does not count.',
   PFR:
-    'PreFlop Raise — hands where you bet or raised preflop, out of every hand you were '
-    + 'dealt in. Same denominator as VPIP, so PFR can never exceed it.',
+    'PreFlop Raise — hands where the player bet or raised preflop, out of every hand they '
+    + 'were dealt in. Same denominator as VPIP, so PFR can never exceed it.',
   '3Bet':
-    'Three-bet — you re-raised, out of the spots where your first preflop action faced '
-    + 'exactly one raise. Facing two or more raises is a 4bet+ spot and is excluded entirely.',
+    'Three-bet — the player re-raised, out of the spots where their first preflop action '
+    + 'faced exactly one raise. Facing two or more raises is a 4bet+ spot and is excluded entirely.',
   'Fold to 3Bet':
-    'Folded to a three-bet — you folded, out of the spots where you open-raised (no raise '
-    + 'before you), someone re-raised, and the action came back to you.',
+    'Folded to a three-bet — the player folded, out of the spots where they open-raised (no '
+    + 'raise before them), someone re-raised, and the action came back to them.',
   ATS:
-    'Attempt To Steal — you raised, out of the hands where you were first in from the '
-    + 'cutoff, button, or small blind. Any limp or raise ahead of you removes the spot; '
-    + 'folding or limping the spot counts against you.',
+    'Attempt To Steal — the player raised, out of the hands where they were first in from '
+    + 'the cutoff, button, or small blind. Any limp or raise ahead of them removes the spot; '
+    + 'folding or limping the spot counts against them.',
   'Fold to Steal':
-    'Folded to a steal — you folded, out of the hands where you were in a blind and faced '
-    + 'a first-in raise from the cutoff, button, or small blind. Only the blinds are counted, '
-    + 'since only a blind is what a steal is aiming at.',
+    'Folded to a steal — the player folded, out of the hands where they were in a blind and '
+    + 'faced a first-in raise from the cutoff, button, or small blind. Only the blinds are '
+    + 'counted, since only a blind is what a steal is aiming at.',
   'Flop CBet':
-    'Flop Continuation Bet — you bet the flop, out of the flops where you were the LAST '
-    + 'preflop raiser and the action reached you unbet. Opening and then getting re-raised '
-    + 'makes someone else the continuation bettor, so it is not counted here.',
+    'Flop Continuation Bet — the player bet the flop, out of the flops where they were the '
+    + 'LAST preflop raiser and the action reached them unbet. Opening and then getting '
+    + 're-raised makes someone else the continuation bettor, so it is not counted here.',
   'Fold to Flop CBet':
-    "Folded to a flop continuation bet — you folded, out of the flops where the last preflop "
-    + 'raiser led out with a bet and you had a chance to respond.',
+    'Folded to a flop continuation bet — the player folded, out of the flops where the last '
+    + 'preflop raiser led out with a bet and they had a chance to respond.',
   WTSD:
-    'Went To ShowDown — hands you reached a showdown in, out of the hands where you saw a '
-    + 'flop. Folding preflop is not counted as declining a showdown.',
+    'Went To ShowDown — hands the player reached a showdown in, out of the hands where they '
+    + 'saw a flop. Folding preflop is not counted as declining a showdown.',
   WSD:
-    'Won money at ShowDown — showdowns where you were awarded part of the pot, out of the '
-    + 'showdowns you reached. A split pot counts as a win. A showdown is counted whenever '
-    + 'you never folded and at least one other player was still live, even on an all-in '
-    + 'run-out where the site printed no cards.',
+    'Won money at ShowDown — showdowns where the player was awarded part of the pot, out of '
+    + 'the showdowns they reached. A split pot counts as a win. A showdown is counted '
+    + 'whenever the player never folded and at least one other player was still live, even '
+    + 'on an all-in run-out where the site printed no cards.',
   'Aggression factor':
     'Aggression Factor — postflop bets and raises divided by postflop calls, across the '
     + 'flop, turn, and river. Checks and folds are ignored, and preflop is excluded. '
@@ -97,7 +97,7 @@ export function PlayerStatsDialog({ pool, totalFiltered }: Props) {
       title={
         stats ? (
           <span className="flex items-center gap-2">
-            <span>{stats.name}{stats.isHero ? ' (you)' : ''}</span>
+            <span>{stats.name}</span>
             <span className="t-label px-1.5 py-0.5 rounded-sm bg-slate-700 text-slate-300">{room}</span>
           </span>
         ) : (

@@ -107,7 +107,7 @@ export function ActionLog({ hand, actionIndex, analysis, pending, onSelect }: Pr
     <button
       type="button"
       onClick={(e) => { e.stopPropagation(); openPlayerAt(seat); }}
-      className={`relative z-10 truncate text-left outline-none hover:text-emerald-300 hover:underline ${className ?? ''}`}
+      className={`relative z-10 truncate text-left outline-none hover:text-white hover:underline ${className ?? ''}`}
     >
       {children}
     </button>
