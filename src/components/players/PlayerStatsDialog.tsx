@@ -1,15 +1,48 @@
 'use client';
 
-import type { PlayerKey, PlayerStats } from '@/stats/types';
-import { pct, aggressionFactor } from '@/stats/types';
+import type { ChipTotals, PlayerKey, PlayerStats } from '@/stats/types';
+import {
+  pct, aggressionFactor, averageWinBB, averageLossBB, averageWinAmount, averageLossAmount,
+} from '@/stats/types';
 import { BENCHMARKS } from '@/stats/benchmarks';
 import { registry } from '@/parsers/index';
 import { usePlayerDialogStore } from '@/state/player-dialog-store';
+import { useDisplayStore, type DisplayUnit } from '@/state/display-store';
 import { Dialog } from '@/components/ui/Dialog';
 import { StatBars, type StatBarRow } from '@/components/charts/StatBars';
 import { PoolScatter } from '@/components/charts/PoolScatter';
 import { StreetAggression } from '@/components/charts/StreetAggression';
 import { BarTooltip, ChartTooltipProvider } from '@/components/charts/ChartTooltip';
+
+const CURRENCY_SYMBOL: Record<string, string> = { EUR: '€', USD: '$', GBP: '£' };
+
+const UNIT_OPTIONS: readonly { value: DisplayUnit; label: string }[] = [
+  { value: 'chips', label: 'Chips' },
+  { value: 'bb', label: 'BB' },
+];
+
+/**
+ * Chips/BB switch for the Results section — shares the app's global display
+ * unit (`useDisplayStore`) rather than keeping its own, so flipping it here
+ * also updates the header's setting and vice versa.
+ */
+function UnitToggle({ unit, onChange }: { unit: DisplayUnit; onChange: (u: DisplayUnit) => void }) {
+  return (
+    <div className="flex gap-0.5 p-0.5 rounded-sm border border-slate-700 bg-slate-800/50">
+      {UNIT_OPTIONS.map((o) => (
+        <button
+          key={o.value}
+          onClick={() => onChange(o.value)}
+          className={`px-2 py-0.5 text-[11px] rounded-sm transition ${
+            unit === o.value ? 'bg-slate-700 text-slate-100' : 'text-slate-400 hover:text-slate-200'
+          }`}
+        >
+          {o.label}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 interface Props {
   pool: ReadonlyMap<PlayerKey, PlayerStats>;
@@ -62,18 +95,37 @@ const STAT_FULL_LABEL: Record<string, string> = {
     'Aggression Factor — postflop bets and raises divided by postflop calls, across the '
     + 'flop, turn, and river. Checks and folds are ignored, and preflop is excluded. '
     + 'Higher means more betting than calling; "\u221e" means aggression with no calls at all.',
+  'W/L':
+    'Win/Loss record — hands with a strictly positive net result versus hands with a '
+    + 'strictly negative one. A hand with a net result of exactly zero (a chopped pot, or '
+    + 'nothing ever put in) counts as neither.',
+  'P/L':
+    'Profit/Loss — net result summed across every hand in this sample. Shown in chips or '
+    + 'cash when every hand shares one currency; falls back to big blinds — the one unit '
+    + 'that always adds up — once the sample mixes currencies or buy-ins.',
+  'Avg win':
+    'Average net result on hands with a strictly positive result.',
+  'Avg loss':
+    'Average net result on hands with a strictly negative result.',
 };
 
-function StatTile({ label, value, sample }: { label: string; value: string; sample: string }) {
+function StatTile({
+  label, value, sample, valueClassName,
+}: { label: string; value: string; sample: string; valueClassName?: string }) {
   return (
     <BarTooltip label={STAT_FULL_LABEL[label] ?? label}>
       <div className="rounded-sm border border-slate-700 bg-slate-900/40 px-2.5 py-2 cursor-default">
         <div className="t-label text-slate-500">{label}</div>
-        <div className="text-lg font-semibold tabular-nums text-slate-100">{value}</div>
+        <div className={`text-lg font-semibold tabular-nums ${valueClassName ?? 'text-slate-100'}`}>{value}</div>
         <div className="t-micro text-slate-500 tabular-nums">{sample}</div>
       </div>
     </BarTooltip>
   );
+}
+
+/** Green for a positive result, red for negative, matching HandList's net-result color. */
+function signColor(v: number | null): string {
+  return v === null ? 'text-slate-100' : v > 0 ? 'text-emerald-400' : v < 0 ? 'text-rose-400' : 'text-slate-100';
 }
 
 /**
@@ -84,11 +136,18 @@ function StatTile({ label, value, sample }: { label: string; value: string; samp
 export function PlayerStatsDialog({ pool, totalFiltered }: Props) {
   const openKey = usePlayerDialogStore((s) => s.openKey);
   const close = usePlayerDialogStore((s) => s.close);
+  const unit = useDisplayStore((s) => s.unit);
+  const setUnit = useDisplayStore((s) => s.setUnit);
   const stats = openKey ? pool.get(openKey) : undefined;
 
   if (!openKey) return null;
 
   const room = stats ? registry.get(stats.siteId)?.displayName ?? stats.siteId : null;
+  // Chips mode needs every hand in the sample to agree on currency; once one
+  // doesn't, `chips` is null and results fall back to BB with a note, since a
+  // raw sum across currencies or buy-ins would be a meaningless number.
+  const showChips = unit === 'chips' && stats && stats.chips !== null;
+  const mixedCurrency = unit === 'chips' && stats && stats.chips === null;
 
   return (
     <Dialog
@@ -117,6 +176,41 @@ export function PlayerStatsDialog({ pool, totalFiltered }: Props) {
               {stats.hands} hand{stats.hands === 1 ? '' : 's'} in this sample
               {totalFiltered > 0 && ` of ${totalFiltered} filtered`}
             </span>
+          </div>
+
+          <div>
+            <div className="mb-2 flex items-center gap-3">
+              <div className="t-panel-title text-slate-400">Results</div>
+              <UnitToggle unit={unit} onChange={setUnit} />
+            </div>
+            {mixedCurrency && (
+              <p className="t-micro text-slate-500 mb-2">
+                This sample mixes currencies or buy-ins, so results are shown in big blinds — the
+                one unit every hand in it can be added together.
+              </p>
+            )}
+            <ChartTooltipProvider>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <StatTile
+                  label="W/L"
+                  value={`${stats.winLoss.wins}/${stats.winLoss.losses}`}
+                  sample={stats.winLoss.ties > 0 ? `${stats.winLoss.ties} tie${stats.winLoss.ties === 1 ? '' : 's'}` : ''}
+                />
+                {showChips && stats.chips ? (
+                  <>
+                    <StatTile label="P/L" value={fmtSignedAmount(stats.chips.net, stats.chips)} sample={stats.chips.exponent === 0 ? 'chips' : stats.chips.currency} valueClassName={signColor(stats.chips.net)} />
+                    <StatTile label="Avg win" value={fmtSignedAmount(averageWinAmount(stats), stats.chips)} sample="per winning hand" valueClassName={signColor(averageWinAmount(stats))} />
+                    <StatTile label="Avg loss" value={fmtSignedAmount(averageLossAmount(stats), stats.chips)} sample="per losing hand" valueClassName={signColor(averageLossAmount(stats))} />
+                  </>
+                ) : (
+                  <>
+                    <StatTile label="P/L" value={fmtSignedBB(stats.netBB)} sample="big blinds" valueClassName={signColor(stats.netBB)} />
+                    <StatTile label="Avg win" value={fmtSignedBB(averageWinBB(stats))} sample="per winning hand" valueClassName={signColor(averageWinBB(stats))} />
+                    <StatTile label="Avg loss" value={fmtSignedBB(averageLossBB(stats))} sample="per losing hand" valueClassName={signColor(averageLossBB(stats))} />
+                  </>
+                )}
+              </div>
+            </ChartTooltipProvider>
           </div>
 
           <div>
@@ -161,6 +255,23 @@ export function PlayerStatsDialog({ pool, totalFiltered }: Props) {
 
 function fmtPct(v: number | null): string {
   return v === null ? '–' : `${v.toFixed(1)}%`;
+}
+
+/** "+12.3bb" / "−4.0bb" / "–" — signed BB, since P/L and averages can go either way. */
+function fmtSignedBB(v: number | null): string {
+  if (v === null) return '–';
+  const sign = v > 0 ? '+' : v < 0 ? '−' : '';
+  return `${sign}${Math.abs(v).toFixed(1)}bb`;
+}
+
+/** "+11.64 €" / "−340" (chips) / "–" — signed chips/cash, given only currency + exponent. */
+function fmtSignedAmount(v: number | null, chips: ChipTotals): string {
+  if (v === null) return '–';
+  const sign = v > 0 ? '+' : v < 0 ? '−' : '';
+  const abs = Math.abs(v);
+  if (chips.exponent === 0) return `${sign}${abs.toLocaleString('en-US')}`;
+  const symbol = CURRENCY_SYMBOL[chips.currency] ?? chips.currency;
+  return `${sign}${(abs / 100).toFixed(2)} ${symbol}`;
 }
 
 function fmtAf(v: number | null): string {

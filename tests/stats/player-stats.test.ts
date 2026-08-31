@@ -3,7 +3,7 @@ import { registry } from '@/parsers/index';
 import type { Hand } from '@/domain/hand';
 import { playerHandFacts } from '@/stats/player-facts';
 import { aggregatePlayers } from '@/stats/aggregate';
-import { pct, aggressionFactor, playerKey } from '@/stats/types';
+import { pct, aggressionFactor, averageWinBB, averageLossBB, playerKey } from '@/stats/types';
 
 /**
  * Synthetic Winamax hands, one scenario per hand, so each stat's exact
@@ -93,10 +93,10 @@ P5 checks
 *** RIVER *** [Ks Jd 2d 9c 4h]
 P1 checks
 P5 checks
-P5 collected 0.54€ from pot
+P5 collected 0.61€ from pot
 *** SUMMARY ***
-Total pot 0.54€ | No rake
-Seat 5: P5 (button) won 0.54€
+Total pot 0.61€ | No rake
+Seat 5: P5 (button) won 0.61€
 `;
 
 /**
@@ -130,9 +130,9 @@ P3 checks
 P2 shows [Ah Ad] (One pair : Aces)
 P3 shows [Kh Qh] (One pair : Kings)
 *** SUMMARY ***
-Total pot 0.24€ | No rake
+Total pot 0.26€ | No rake
 Board: [2c 7d 9h 4s Ks]
-Seat 2: P2 (big blind) won 0.24€
+Seat 2: P2 (big blind) won 0.26€
 `;
 
 function url(): string {
@@ -245,6 +245,35 @@ describe('playerHandFacts', () => {
     expect(p5.byStreet.turn).toEqual({ betsRaises: 0, calls: 0 });
     expect(aggressionFactor(p5.byStreet.turn)).toBeNull();
   });
+
+  it('computes each seat\'s net result in BB and classifies win/loss/tie', () => {
+    // Hand 1: pot 0.67 (0.02 SB + 0.05 BB + 0.15 P3 + 0.45 P4). P4 wins it
+    // having paid 0.45 (net +0.22 = +4.4bb); P3 paid 0.15 and won nothing
+    // (net -3bb); the blinds forfeit what they posted; P5 never paid in.
+    const facts = playerHandFacts(hands[0]!);
+    const p4 = facts.find((f) => f.name === 'P4')!;
+    const p3 = facts.find((f) => f.name === 'P3')!;
+    const p1 = facts.find((f) => f.name === 'P1')!;
+    const p2 = facts.find((f) => f.name === 'P2')!;
+    const p5 = facts.find((f) => f.name === 'P5')!;
+
+    expect(p4.netBB).toBeCloseTo(4.4, 5);
+    expect(p4.winLoss).toEqual({ wins: 1, losses: 0, ties: 0 });
+
+    expect(p3.netBB).toBeCloseTo(-3.0, 5);
+    expect(p3.winLoss).toEqual({ wins: 0, losses: 1, ties: 0 });
+
+    expect(p1.netBB).toBeCloseTo(-0.4, 5);
+    expect(p1.winLoss).toEqual({ wins: 0, losses: 1, ties: 0 });
+
+    expect(p2.netBB).toBeCloseTo(-1.0, 5);
+    expect(p2.winLoss).toEqual({ wins: 0, losses: 1, ties: 0 });
+
+    // P5 folded before ever putting a chip in and won nothing — net exactly
+    // zero counts as a tie, not a loss.
+    expect(p5.netBB).toBe(0);
+    expect(p5.winLoss).toEqual({ wins: 0, losses: 0, ties: 1 });
+  });
 });
 
 describe('aggregatePlayers', () => {
@@ -272,5 +301,99 @@ describe('aggregatePlayers', () => {
     const p4 = pool.get(playerKey('winamax', 'p4'))!;
     expect(p4.foldToThreeBet.opportunities).toBe(0);
     expect(pct(p4.foldToThreeBet)).toBeNull();
+  });
+
+  it('sums net BB and win/loss across hands, and averages win/loss size separately', () => {
+    const facts = hands.map(playerHandFacts);
+    const pool = aggregatePlayers(facts);
+
+    // P2 loses hands 1-3 (-1.0bb each, forfeiting the BB or folding to the
+    // steal) and wins hand 4 (+2.8bb) — one win, three losses, net -0.2bb.
+    const p2 = pool.get(playerKey('winamax', 'p2'))!;
+    expect(p2.winLoss).toEqual({ wins: 1, losses: 3, ties: 0 });
+    expect(p2.netBB).toBeCloseTo(-0.2, 5);
+    expect(averageWinBB(p2)).toBeCloseTo(2.8, 5);
+    expect(averageLossBB(p2)).toBeCloseTo(-1.0, 5);
+
+    // P4 wins hands 1-2 and ties (never contests) hands 3-4 — no losses at
+    // all, so average loss must be null rather than 0 or NaN.
+    const p4 = pool.get(playerKey('winamax', 'p4'))!;
+    expect(p4.winLoss).toEqual({ wins: 2, losses: 0, ties: 2 });
+    expect(p4.netBB).toBeCloseTo(5.8, 5);
+    expect(averageWinBB(p4)).toBeCloseTo(2.9, 5);
+    expect(averageLossBB(p4)).toBeNull();
+  });
+
+  it('returns null average win for a player with no wins', () => {
+    const facts = hands.map(playerHandFacts);
+    const pool = aggregatePlayers(facts);
+    // P1 folds preflop or to a cbet in every hand and never wins one.
+    const p1 = pool.get(playerKey('winamax', 'p1'))!;
+    expect(p1.winLoss.wins).toBe(0);
+    expect(averageWinBB(p1)).toBeNull();
+  });
+});
+
+describe('chip totals', () => {
+  it('sums raw net amounts when every hand agrees on currency', () => {
+    const facts = hands.map(playerHandFacts);
+    const pool = aggregatePlayers(facts);
+
+    // P4 wins hand 1 (+22c: paid 45c of a 67c pot) and hand 2 (+7c: paid 12c
+    // of a 19c pot), and never puts a chip in on hands 3-4 — 29c total, all
+    // EUR cash, so chips must be a real (non-null) EUR total.
+    const p4 = pool.get(playerKey('winamax', 'p4'))!;
+    expect(p4.chips).not.toBeNull();
+    expect(p4.chips!.currency).toBe('EUR');
+    expect(p4.chips!.exponent).toBe(2);
+    expect(p4.chips!.net).toBe(29);
+    expect(p4.chips!.sumWin).toBe(29); // both contributing hands are wins
+    expect(p4.chips!.sumLoss).toBe(0);
+  });
+
+  it('falls back to null once one hand disagrees on currency', () => {
+    // Same player (by playerId), but one hand is a Winamax tournament (chip
+    // currency) instead of cash (EUR) — realistic for a player who plays both
+    // formats on the same site, and exactly the case a raw sum must not paper
+    // over: chips and cents are not the same unit.
+    const tourneyHand = `Winamax Poker - Tournament "Synthetic MTT"(5€ + 0.50€) - HandId: #99-1-1 - Holdem no limit (level1, 10/20) - 2024/10/08 18:00:00 UTC
+Table: 'Synthetic MTT(999)#1' 3-max Seat #1 is the button
+Seat 1: P1 (2000)
+Seat 2: P2 (1500)
+Seat 3: P3 (1000)
+*** ANTE/BLINDS ***
+P2 posts small blind 10
+P3 posts big blind 20
+Dealt to P1 [Ah Kh]
+*** PRE-FLOP ***
+P1 raises 480 to 500 and is all-in
+P2 folds
+P3 calls 480 and is all-in
+*** FLOP *** [2c 7d 9h]
+*** TURN *** [2c 7d 9h][Jd]
+*** RIVER *** [2c 7d 9h Jd][3s]
+*** SHOW DOWN ***
+P1 shows [Ah Kh] (High Card : Ace)
+P3 shows [Ks Qs] (High Card : King)
+P1 collected 1010 from pot
+*** SUMMARY ***
+Total pot 1010 | Rake 0
+Board: [2c 7d 9h Jd 3s]
+Seat 1: P1 (button) showed [Ah Kh] and won 1010 with High Card : Ace
+Seat 3: P3 (big blind) showed [Ks Qs] and lost with High Card : King
+`;
+
+    const parsed = registry.parseFile(tourneyHand, 'winamax', 'synthetic-tourney.txt');
+    expect(parsed.failures).toHaveLength(0);
+
+    const facts = [...hands, ...parsed.hands].map(playerHandFacts);
+    const pool = aggregatePlayers(facts);
+
+    const p1 = pool.get(playerKey('winamax', 'p1'))!;
+    expect(p1.chips).toBeNull();
+    // BB is unaffected by the currency mismatch — it stays a valid total
+    // across every hand regardless of which currency each one was in.
+    expect(typeof p1.netBB).toBe('number');
+    expect(Number.isFinite(p1.netBB)).toBe(true);
   });
 });

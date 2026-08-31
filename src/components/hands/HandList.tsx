@@ -7,6 +7,7 @@ import { useDisplayStore } from '@/state/display-store';
 import { CardView } from '@/components/replay/CardView';
 import { ScrollArea } from '@/components/ui/ScrollArea';
 import { registry } from '@/parsers/index';
+import { GAME_MODE_LABELS } from '@/filters/options';
 
 interface Props {
   hands: readonly Hand[];
@@ -41,7 +42,14 @@ export function HandList({ hands, selectedId, onSelect }: Props) {
                   h.id === selectedId ? 'border-slate-300' : 'border-transparent'
                 }`}
               >
-                <div className="flex items-center gap-2">
+                <div className="text-sm text-slate-500 flex items-center gap-1.5 min-w-0">
+                  <span className="truncate">
+                    {registry.get(h.meta.siteId)?.displayName ?? h.meta.siteId}
+                  </span>
+                  <span aria-hidden="true">·</span>
+                  <span className="truncate">{GAME_MODE_LABELS[h.meta.gameMode]}</span>
+                </div>
+                <div className="flex items-center gap-2 mt-1">
                   <div className="flex gap-0.5">
                     <CardView card={hero?.holeCards?.[0] ?? null} size="sm" />
                     <CardView card={hero?.holeCards?.[1] ?? null} size="sm" />
@@ -66,12 +74,8 @@ export function HandList({ hands, selectedId, onSelect }: Props) {
                     </span>
                   </div>
                 </div>
-                <div className="text-sm text-slate-500 mt-1 flex items-center gap-1.5 min-w-0">
-                  <span className="truncate">{formatDateTime(h.meta.playedAt, timezone)}</span>
-                  <span aria-hidden="true">·</span>
-                  <span className="truncate">
-                    {registry.get(h.meta.siteId)?.displayName ?? h.meta.siteId}
-                  </span>
+                <div className="text-sm text-slate-500 mt-1">
+                  {formatDateTime(h.meta.playedAt, timezone)}
                 </div>
               </button>
             </li>

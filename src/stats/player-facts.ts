@@ -1,9 +1,11 @@
 import type { Hand } from '@/domain/hand';
 import { isVoluntary } from '@/domain/action';
 import type { Position } from '@/domain/position';
+import { seatNetResult } from '@/domain/stacks';
+import { toBB } from '@/domain/money';
 import {
-  type Counter, type PlayerHandFacts, type PostflopStreet, type StreetAggression,
-  EMPTY_COUNTER, EMPTY_AGGRESSION, POSTFLOP_STREETS, playerKey,
+  type Counter, type PlayerHandFacts, type PostflopStreet, type StreetAggression, type WinLoss,
+  EMPTY_COUNTER, EMPTY_AGGRESSION, playerKey, POSTFLOP_STREETS,
 } from './types';
 
 const AGGRESSIVE = new Set(['bet', 'raise']);
@@ -171,6 +173,18 @@ function seatFacts(hand: Hand, seat: number): PlayerHandFacts {
     { ...EMPTY_AGGRESSION },
   );
 
+  // Net result in BB is the always-valid cross-hand unit: hands come from
+  // different currencies, buy-ins, and blind levels, so a raw chip or cent
+  // total across hands can be meaningless. The raw amount is carried too
+  // (netAmount/money) so the aggregator can sum it when a sample turns out to
+  // share one currency — see ChipTotals.
+  const netAmount = seatNetResult(hand, seat);
+  const netBB = toBB(netAmount, hand.money);
+  const winLoss: WinLoss =
+    netBB > 0 ? { wins: 1, losses: 0, ties: 0 }
+      : netBB < 0 ? { wins: 0, losses: 1, ties: 0 }
+      : { wins: 0, losses: 0, ties: 1 };
+
   return {
     key: playerKey(hand.meta.siteId, player.playerId),
     name: player.name,
@@ -188,6 +202,10 @@ function seatFacts(hand: Hand, seat: number): PlayerHandFacts {
     wsd,
     aggression,
     byStreet,
+    netBB,
+    winLoss,
+    netAmount,
+    money: hand.money,
   };
 }
 

@@ -103,24 +103,30 @@ export function heroEffectiveStackBB(hand: Hand, atActionIndex = -1): number | n
 }
 
 /**
- * Hero's net chip result for the hand: everything awarded to hero, minus
- * everything hero put in.
+ * A seat's net chip result for the hand: everything awarded to it, minus
+ * everything it put in.
  *
- * Not the same as the pot size. Hero's own chips fund part of any pot they win,
- * so a won pot of 100k after committing 40k is +60k, not +100k. `committed` is
- * already net of uncalled returns, which is what makes an uncalled river shove
- * come out at zero rather than a phantom loss.
- *
- * Returns null when the file has no hero seat.
+ * Not the same as the pot size. The seat's own chips fund part of any pot it
+ * wins, so a won pot of 100k after committing 40k is +60k, not +100k.
+ * `committed` is already net of uncalled returns, which is what makes an
+ * uncalled river shove come out at zero rather than a phantom loss.
+ */
+export function seatNetResult(hand: Hand, seat: number): Amount {
+  const { committed } = stacksAtAction(hand, hand.actions.length - 1);
+  const paid = committed.get(seat) ?? 0;
+  const won = hand.awards
+    .filter((a) => a.seat === seat)
+    .reduce((sum, a) => sum + a.amount, 0);
+  return asAmount(won - paid);
+}
+
+/**
+ * Hero's net chip result for the hand. Returns null when the file has no
+ * hero seat — see `seatNetResult` for the underlying computation.
  */
 export function heroNetResult(hand: Hand): Amount | null {
   if (hand.heroSeat === null) return null;
-  const { committed } = stacksAtAction(hand, hand.actions.length - 1);
-  const paid = committed.get(hand.heroSeat) ?? 0;
-  const won = hand.awards
-    .filter((a) => a.seat === hand.heroSeat)
-    .reduce((sum, a) => sum + a.amount, 0);
-  return asAmount(won - paid);
+  return seatNetResult(hand, hand.heroSeat);
 }
 
 /**

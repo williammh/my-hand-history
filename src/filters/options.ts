@@ -1,5 +1,5 @@
 import type { Position, Street } from '@/domain/position';
-import type { SiteId } from '@/domain/hand';
+import type { GameMode, SiteId } from '@/domain/hand';
 import type { Severity } from '@/analysis/types';
 import { type PlayerKey, playerKey } from '@/stats/types';
 import type { Connectedness, SuitTexture } from './board';
@@ -159,6 +159,29 @@ export function siteOptions(
   return [...rooms]
     .map((value) => ({ value, label: displayNames.get(value) ?? value, count: counts.get(value) ?? 0 }))
     .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
+}
+
+/**
+ * Every supported game mode, in play-frequency order (cash first), with
+ * counts from the loaded library.
+ *
+ * Closed vocabulary like `siteOptions` — all three modes are always offered,
+ * even at zero hands, so the axis is not empty on a fresh load.
+ */
+export const GAME_MODE_LABELS: Readonly<Record<GameMode, string>> = {
+  cash: 'Cash',
+  tournament: 'Tournament',
+  'sit-n-go': 'Sit & Go',
+};
+
+export function gameModeOptions(
+  hands: readonly { meta: { gameMode: GameMode } }[],
+): readonly SourceOption<GameMode>[] {
+  const counts = new Map<GameMode, number>();
+  for (const h of hands) counts.set(h.meta.gameMode, (counts.get(h.meta.gameMode) ?? 0) + 1);
+
+  return (Object.keys(GAME_MODE_LABELS) as GameMode[])
+    .map((value) => ({ value, label: GAME_MODE_LABELS[value], count: counts.get(value) ?? 0 }));
 }
 
 /**

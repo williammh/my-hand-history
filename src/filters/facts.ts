@@ -183,6 +183,7 @@ export function deriveFacts(hand: Hand, analysis?: HandAnalysis): HandFacts {
   return {
     handId: hand.id,
     siteId: hand.meta.siteId,
+    gameMode: hand.meta.gameMode,
     sourceFile: hand.meta.sourceFile,
     playerKeys: new Set(
       hand.seats.filter((s) => !s.sittingOut).map((s) => playerKey(hand.meta.siteId, s.playerId)),

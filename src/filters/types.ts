@@ -1,5 +1,5 @@
 import type { Position, Street } from '@/domain/position';
-import type { SiteId } from '@/domain/hand';
+import type { GameMode, SiteId } from '@/domain/hand';
 import type { Severity } from '@/analysis/types';
 import type { Rank } from '@/domain/cards';
 import type { PlayerKey } from '@/stats/types';
@@ -52,6 +52,7 @@ export type StackBucket = 20 | 40 | 50 | 75 | 100 | 150 | 200;
 export interface HandFacts {
   readonly handId: string;
   readonly siteId: SiteId;
+  readonly gameMode: GameMode;
   /** File this hand was imported from; null when it was parsed without one. */
   readonly sourceFile: string | null;
   /** Every seated player dealt into this hand, hero included. */
@@ -98,6 +99,8 @@ export interface FilterCriteria {
    * a plain set membership test so a stale name simply matches nothing.
    */
   readonly sourceFiles: ReadonlySet<string>;
+  /** Game modes to keep — cash, tournament, sit & go. Empty means every mode. */
+  readonly gameModes: ReadonlySet<GameMode>;
   /**
    * Players to keep, by per-room identity. A hand matches if ANY selected
    * player was dealt into it — folded preflop or not, this is the "was this
@@ -132,6 +135,7 @@ export interface FilterCriteria {
 export const EMPTY_CRITERIA: FilterCriteria = {
   sites: new Set(),
   sourceFiles: new Set(),
+  gameModes: new Set(),
   players: new Set(),
   potTypes: new Set(),
   relativePositions: new Set(),

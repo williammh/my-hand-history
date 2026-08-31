@@ -10,8 +10,8 @@ import { activeCount } from '@/filters/match';
 import type { RelativePosition } from '@/filters/types';
 import {
   CONNECTEDNESS, POT_TYPES, POSITIONS, PREFLOP_AGGRESSION, RELATIVE_POSITIONS, SEVERITIES,
-  STACKS, STREETS, SUIT_TEXTURES, linesFor, playerOptions, siteOptions, sourceFileOptions,
-  type SourceOption,
+  STACKS, STREETS, SUIT_TEXTURES, gameModeOptions, linesFor, playerOptions, siteOptions,
+  sourceFileOptions, type SourceOption,
 } from '@/filters/options';
 import { useHandsStore } from '@/state/hands-store';
 import { registry } from '@/parsers/index';
@@ -135,6 +135,7 @@ export function FiltersPanel() {
   );
   const sites = useMemo(() => siteOptions(hands, siteNames), [hands, siteNames]);
   const files = useMemo(() => sourceFileOptions(hands), [hands]);
+  const modes = useMemo(() => gameModeOptions(hands), [hands]);
   const players = useMemo(() => playerOptions(hands, siteNames), [hands, siteNames]);
 
   return (
@@ -170,6 +171,16 @@ export function FiltersPanel() {
             file's vocabulary comes from the library instead, so it sits
             disabled until something is loaded. */}
         <FilterMenu
+          label="Source file"
+          options={files}
+          selected={criteria.sourceFiles}
+          onToggle={(v) => toggle('sourceFiles', v)}
+          onClear={() => clearAxis('sourceFiles')}
+          counts={countsOf(files)}
+          emptyLabel="No hands loaded"
+        />
+
+        <FilterMenu
           label="Poker room"
           options={sites}
           selected={criteria.sites}
@@ -179,13 +190,12 @@ export function FiltersPanel() {
         />
 
         <FilterMenu
-          label="Source file"
-          options={files}
-          selected={criteria.sourceFiles}
-          onToggle={(v) => toggle('sourceFiles', v)}
-          onClear={() => clearAxis('sourceFiles')}
-          counts={countsOf(files)}
-          emptyLabel="No hands loaded"
+          label="Game mode"
+          options={modes}
+          selected={criteria.gameModes}
+          onToggle={(v) => toggle('gameModes', v)}
+          onClear={() => clearAxis('gameModes')}
+          counts={countsOf(modes)}
         />
 
         <FilterMenu

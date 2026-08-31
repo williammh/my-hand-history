@@ -26,7 +26,7 @@ export function VerdictIcon({ severity }: { severity: Severity }) {
       <path d="M5 12l5 5L20 7" />
     </svg>
   ) : (
-    <svg {...common} className="text-rose-500 shrink-0">
+    <svg {...common} className="text-rose-400 shrink-0">
       <path d="M18 6L6 18M6 6l12 12" />
     </svg>
   );
