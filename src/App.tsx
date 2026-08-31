@@ -13,6 +13,7 @@ import { ReplayControls } from '@/components/replay/ReplayControls';
 import { ActionLog } from '@/components/replay/ActionLog';
 import { AnalysisPanel } from '@/components/analysis/AnalysisPanel';
 import { FiltersPanel } from '@/components/filters/FiltersPanel';
+import { PlayerStatsDialog } from '@/components/players/PlayerStatsDialog';
 import { ScrollArea } from '@/components/ui/ScrollArea';
 import { replayTimeline } from '@/domain/stacks';
 import { formatDateTime, formatGameMode } from '@/lib/format';
@@ -20,6 +21,10 @@ import { useDisplayStore } from '@/state/display-store';
 import { useFiltersStore } from '@/state/filters-store';
 import { deriveFacts } from '@/filters/facts';
 import { matches } from '@/filters/match';
+import { registry } from '@/parsers/index';
+import { playerHandFacts } from '@/stats/player-facts';
+import { aggregatePlayers } from '@/stats/aggregate';
+import { playerKey } from '@/stats/types';
 
 export function App() {
   const { hands, selectedId, importing, report, importFiles, select, hydrate, clearAll } =
@@ -30,6 +35,7 @@ export function App() {
 
   const criteria = useFiltersStore((s) => s.criteria);
   const pruneSourceFiles = useFiltersStore((s) => s.pruneSourceFiles);
+  const prunePlayers = useFiltersStore((s) => s.prunePlayers);
 
   // Facts are derived per hand and memoised on the library, not on the
   // criteria: changing a filter must not re-walk every hand's action list.
@@ -40,9 +46,24 @@ export function App() {
     [hands, byHandId],
   );
 
-  const visibleHands = useMemo(
-    () => hands.filter((_, i) => matches(facts[i]!, criteria)),
+  // Player facts are similarly memoised on the library alone — a filter
+  // change never re-walks a hand's actions, only re-selects which hands'
+  // already-derived facts get summed by aggregatePlayers below.
+  const playerFacts = useMemo(() => hands.map(playerHandFacts), [hands]);
+
+  const visibleIndices = useMemo(
+    () => hands.map((_, i) => i).filter((i) => matches(facts[i]!, criteria)),
     [hands, facts, criteria],
+  );
+
+  const visibleHands = useMemo(
+    () => visibleIndices.map((i) => hands[i]!),
+    [visibleIndices, hands],
+  );
+
+  const playerPool = useMemo(
+    () => aggregatePlayers(visibleIndices.map((i) => playerFacts[i]!)),
+    [visibleIndices, playerFacts],
   );
 
   const hand = useMemo(() => hands.find((h) => h.id === selectedId) ?? null, [hands, selectedId]);
@@ -57,6 +78,17 @@ export function App() {
       new Set(hands.map((h) => h.meta.sourceFile).filter((f): f is string => f !== null)),
     );
   }, [hands, pruneSourceFiles]);
+
+  // Same staleness problem as source files: a selected username can outlive
+  // the hands that justified it. Pruned against the full library, not the
+  // filtered pool, so a player merely filtered OUT isn't silently untoggled.
+  useEffect(() => {
+    prunePlayers(
+      new Set(
+        hands.flatMap((h) => h.seats.filter((s) => !s.sittingOut).map((s) => playerKey(h.meta.siteId, s.playerId))),
+      ),
+    );
+  }, [hands, prunePlayers]);
 
   useEffect(() => { reset(); }, [selectedId, reset]);
   useEffect(() => { if (hand) void analyze(hand); }, [hand, analyze]);
@@ -98,6 +130,10 @@ export function App() {
         {hand && (
           <div className="flex items-baseline gap-x-2.5 gap-y-1 flex-wrap shrink-0">
             <span className="text-base font-semibold uppercase tracking-[0.08em] text-slate-200">
+              {registry.get(hand.meta.siteId)?.displayName ?? hand.meta.siteId}
+            </span>
+            <span className="text-slate-700" aria-hidden="true">/</span>
+            <span className="text-base font-semibold uppercase tracking-[0.08em] text-slate-200">
               {formatGameMode(hand.meta.gameMode)}
             </span>
             <span className="text-slate-700" aria-hidden="true">/</span>
@@ -137,7 +173,7 @@ export function App() {
             felt sizes itself from --seat-w) but is still capped by the space
             actually left over — a plain max-content track ignores the
             container and overflows it. */}
-        <div className="flex-1 lg:min-h-0 grid grid-cols-1 lg:grid-cols-[19rem_minmax(0,1fr)] lg:grid-rows-[auto_minmax(0,1fr)] xl:grid-cols-[19rem_21rem_minmax(0,1fr)] 2xl:grid-rows-1 2xl:grid-cols-[19rem_19rem_19rem_fit-content(34rem)] gap-4 md:gap-5">
+        <div className="flex-1 lg:min-h-0 grid grid-cols-1 lg:grid-cols-[19rem_minmax(0,1fr)] lg:grid-rows-[18rem_minmax(0,1fr)] xl:grid-cols-[19rem_21rem_minmax(0,1fr)] 2xl:grid-rows-1 2xl:grid-cols-[19rem_19rem_19rem_fit-content(34rem)] gap-4 md:gap-5">
           <aside className="lg:min-h-0 flex flex-col gap-4 md:gap-5">
             <div className="shrink-0 rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden">
               <div className="px-3 py-2 border-b border-slate-800 t-panel-title">
@@ -180,11 +216,13 @@ export function App() {
               onSelect={selectAction}
             />
           </div>
-          {/* w-fit sizes this column to its widest child. Only the replay
-              panel (itself sized to the felt) is allowed to be that child:
-              the analysis panel is neutralised below so its prose cannot
-              widen the column past the felt. */}
-          <div className="w-fit max-w-full min-h-0 flex flex-col gap-4 md:gap-5 lg:col-start-2 lg:row-start-2 xl:col-start-3 xl:row-start-1 xl:row-span-2 2xl:col-start-4 2xl:row-span-1">
+          {/* Below 2xl the column track itself is flexible (1fr), so the panel
+              fills it (w-full) rather than shrinking to the felt's intrinsic
+              width. At 2xl the last column is fit-content(34rem) — a
+              shrink-to-fit track — so w-fit there sizes the column to its
+              widest child (the felt); the analysis panel is neutralised below
+              so its prose cannot widen the column past the felt. */}
+          <div className="w-full 2xl:w-fit max-w-full min-h-0 lg:overflow-y-auto flex flex-col gap-4 md:gap-5 lg:col-start-2 lg:row-start-2 xl:col-start-3 xl:row-start-1 xl:row-span-2 2xl:col-start-4 2xl:row-span-1">
             <ScrollArea className="flex shrink-0 lg:min-h-0" viewportClassName="[&>div]:!flex">
               <Table hand={hand} actionIndex={actionIndex} board={current?.board ?? []}>
                 <ReplayControls
@@ -208,6 +246,8 @@ export function App() {
           </div>
         </div>
       </main>
+
+      <PlayerStatsDialog pool={playerPool} totalFiltered={visibleHands.length} />
     </div>
   );
 }

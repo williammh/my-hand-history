@@ -173,11 +173,11 @@ export function Table({ hand, actionIndex, board, children }: Props) {
   );
 
   return (
-    // The panel is only as wide as the felt needs (w-fit): the ring's width is
-    // set by --seat-w below, which scales with the viewport up to a ceiling, so
-    // wide viewports get a bigger ring without the panel stretching past it.
-    // It still cannot exceed the column it is placed in.
-    <div className="w-fit max-w-full rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden">
+    // Below 2xl the column itself is the width constraint (w-full fills it);
+    // at 2xl the column is fit-content, so w-fit sizes the panel to the felt
+    // instead of the column's 34rem ceiling. Either way the felt's own ring
+    // is capped by --seat-w and centred, so it never stretches edge to edge.
+    <div className="w-full 2xl:w-fit max-w-full rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden">
       <div className="px-3 py-2 border-b border-slate-800 t-panel-title">
         Replay
       </div>
@@ -192,86 +192,91 @@ export function Table({ hand, actionIndex, board, children }: Props) {
             the four-column layout, where the other three columns are fixed.
             The felt is capped and centered so it grows into the panel without
             stretching edge to edge. */}
-        <div className="relative mx-auto grid w-fit max-w-full [--seat-w:clamp(5rem,7vw,8.5rem)] grid-cols-[var(--seat-w)_auto_var(--seat-w)] items-stretch justify-center gap-x-1.5 sm:gap-x-2 gap-y-1.5 rounded-lg bg-black/40 p-1.5 sm:p-2">
-          {/* Felt outline: a stadium shape (rectangle with fully-rounded short
-              ends) whose border passes through the CENTRE of every seat card,
-              not around their outer edges — the oval a real table forms
-              through its seating ring.
+        {/* Felt background fills the panel's full width; the ring grid inside
+            it stays w-fit/mx-auto so the seats centre within that background
+            instead of stretching apart with it. */}
+        <div className="w-full rounded-lg bg-black/40 p-1.5 sm:p-2">
+          <div className="relative mx-auto grid w-fit max-w-full [--seat-w:clamp(5rem,7vw,8.5rem)] grid-cols-[var(--seat-w)_auto_var(--seat-w)] items-stretch justify-center gap-x-1.5 sm:gap-x-2 gap-y-1.5">
+            {/* Felt outline: a stadium shape (rectangle with fully-rounded short
+                ends) whose border passes through the CENTRE of every seat card,
+                not around their outer edges — the oval a real table forms
+                through its seating ring.
 
-              The inset on each side is therefore half a seat, measured from the
-              grid's edge:
-                - left/right: half the fixed --seat-w track, straight from CSS
-                - top/bottom: half a card's rendered height (seatH), which has
-                  to be measured since it depends on the card's content.
-              Purely decorative: behind the seats, out of the tab order. */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 z-0 col-start-1 col-end-4 row-start-1 row-end-4"
-          >
-            {seatH > 0 && (
-              <div
-                className="absolute rounded-full border border-slate-700/60 bg-black/40"
-                style={{
-                  left: 'calc(var(--seat-w) / 2)',
-                  right: 'calc(var(--seat-w) / 2)',
-                  top: `${seatH / 2}px`,
-                  bottom: `${seatH / 2}px`,
-                }}
-              />
-            )}
-          </div>
-
-          {/* Row 1: top seat, centered above the felt. The explicit width
-              matches the side columns' fixed track — this cell sits in the
-              auto-sized center column, so without it the seat would shrink to
-              its content instead of matching the others. */}
-          <div className="relative z-10 col-start-2 row-start-1 flex justify-center">
-            {hand
-              ? ring.top && <div className="w-[var(--seat-w)]">{renderSeat(ring.top)}</div>
-              : <div className="w-[var(--seat-w)]"><EmptySeat /></div>}
-          </div>
-
-          {/* Row 2: the side columns flank the board. Each side column spans the
-              felt row so its seats distribute across the ring's full height. */}
-          <div className="relative z-10 col-start-1 row-start-1 row-span-3 flex flex-col justify-around gap-1.5">
-            {hand
-              ? ring.left.map((seat) => <div key={seat.seat}>{renderSeat(seat)}</div>)
-              : EMPTY_RING.left.map((k) => <EmptySeat key={k} />)}
-          </div>
-
-          <div className="relative z-10 col-start-2 row-start-2 flex items-center justify-center py-1">
-            <div className="flex min-w-0 flex-col items-center">
-              <div className="mb-1 flex items-baseline justify-center gap-1.5 text-center">
-                <span className="t-label text-slate-400">Pot</span>
-                <span className="text-sm font-bold tabular-nums text-amber-300">
-                  {hand ? formatUnit(pot, hand.money, unit) : '—'}
-                </span>
-              </div>
-              <CommunityCards board={board} />
-              {!hand && <p className="mt-1 text-sm text-slate-500 text-center">No hand selected.</p>}
+                The inset on each side is therefore half a seat, measured from the
+                grid's edge:
+                  - left/right: half the fixed --seat-w track, straight from CSS
+                  - top/bottom: half a card's rendered height (seatH), which has
+                    to be measured since it depends on the card's content.
+                Purely decorative: behind the seats, out of the tab order. */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 z-0 col-start-1 col-end-4 row-start-1 row-end-4"
+            >
+              {seatH > 0 && (
+                <div
+                  className="absolute rounded-full border border-slate-700/60 bg-black/40"
+                  style={{
+                    left: 'calc(var(--seat-w) / 2)',
+                    right: 'calc(var(--seat-w) / 2)',
+                    top: `${seatH / 2}px`,
+                    bottom: `${seatH / 2}px`,
+                  }}
+                />
+              )}
             </div>
-          </div>
 
-          <div className="relative z-10 col-start-3 row-start-1 row-span-3 flex flex-col justify-around gap-1.5">
-            {hand
-              ? ring.right.map((seat) => <div key={seat.seat}>{renderSeat(seat)}</div>)
-              : EMPTY_RING.right.map((k) => <EmptySeat key={k} />)}
-          </div>
+            {/* Row 1: top seat, centered above the felt. The explicit width
+                matches the side columns' fixed track — this cell sits in the
+                auto-sized center column, so without it the seat would shrink to
+                its content instead of matching the others. */}
+            <div className="relative z-10 col-start-2 row-start-1 flex justify-center">
+              {hand
+                ? ring.top && <div className="w-[var(--seat-w)]">{renderSeat(ring.top)}</div>
+                : <div className="w-[var(--seat-w)]"><EmptySeat /></div>}
+            </div>
 
-          {/* Row 3: bottom seat (hero), centered below the felt. Same explicit
-              width as the top seat, for the same reason. */}
-          <div className="relative z-10 col-start-2 row-start-3 flex justify-center">
-            {hand ? (
-              ring.bottom && (
-                <div ref={measureSeat} className="w-[var(--seat-w)]">
-                  {renderSeat(ring.bottom)}
+            {/* Row 2: the side columns flank the board. Each side column spans the
+                felt row so its seats distribute across the ring's full height. */}
+            <div className="relative z-10 col-start-1 row-start-1 row-span-3 flex flex-col justify-around gap-1.5">
+              {hand
+                ? ring.left.map((seat) => <div key={seat.seat}>{renderSeat(seat)}</div>)
+                : EMPTY_RING.left.map((k) => <EmptySeat key={k} />)}
+            </div>
+
+            <div className="relative z-10 col-start-2 row-start-2 flex items-center justify-center py-1">
+              <div className="flex min-w-0 flex-col items-center">
+                <div className="mb-1 flex items-baseline justify-center gap-1.5 text-center">
+                  <span className="t-label text-slate-400">Pot</span>
+                  <span className="text-sm font-bold tabular-nums text-amber-300">
+                    {hand ? formatUnit(pot, hand.money, unit) : '—'}
+                  </span>
                 </div>
-              )
-            ) : (
-              <div ref={measureSeat} className="w-[var(--seat-w)]">
-                <EmptySeat />
+                <CommunityCards board={board} />
+                {!hand && <p className="mt-1 text-sm text-slate-500 text-center">No hand selected.</p>}
               </div>
-            )}
+            </div>
+
+            <div className="relative z-10 col-start-3 row-start-1 row-span-3 flex flex-col justify-around gap-1.5">
+              {hand
+                ? ring.right.map((seat) => <div key={seat.seat}>{renderSeat(seat)}</div>)
+                : EMPTY_RING.right.map((k) => <EmptySeat key={k} />)}
+            </div>
+
+            {/* Row 3: bottom seat (hero), centered below the felt. Same explicit
+                width as the top seat, for the same reason. */}
+            <div className="relative z-10 col-start-2 row-start-3 flex justify-center">
+              {hand ? (
+                ring.bottom && (
+                  <div ref={measureSeat} className="w-[var(--seat-w)]">
+                    {renderSeat(ring.bottom)}
+                  </div>
+                )
+              ) : (
+                <div ref={measureSeat} className="w-[var(--seat-w)]">
+                  <EmptySeat />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </ScrollArea>

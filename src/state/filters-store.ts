@@ -4,6 +4,7 @@ import { create } from 'zustand';
 import type { Position, Street } from '@/domain/position';
 import type { Severity } from '@/analysis/types';
 import type { Rank } from '@/domain/cards';
+import type { PlayerKey } from '@/stats/types';
 import {
   EMPTY_CRITERIA,
   type FilterCriteria,
@@ -42,6 +43,14 @@ interface FiltersState {
    * the player cannot see the point of. Called when the library changes.
    */
   pruneSourceFiles: (present: ReadonlySet<string>) => void;
+  /**
+   * Drops selected players the library no longer holds.
+   *
+   * Usernames share the same open-vocabulary problem as source files: they
+   * come from whatever is loaded, not a closed list, so a selection can
+   * outlive the hands that justified it.
+   */
+  prunePlayers: (present: ReadonlySet<PlayerKey>) => void;
   clearAll: () => void;
 }
 
@@ -81,16 +90,32 @@ export const useFiltersStore = create<FiltersState>((set) => ({
     set((s) => ({ criteria: { ...s.criteria, lowestRank } })),
 
   pruneSourceFiles: (present) =>
-    set((s) => {
-      const kept = [...s.criteria.sourceFiles].filter((f) => present.has(f));
-      // Same-size means nothing was stale; returning the existing criteria keeps
-      // the object identity that App's filtering memo depends on.
-      if (kept.length === s.criteria.sourceFiles.size) return s;
-      return { criteria: { ...s.criteria, sourceFiles: new Set(kept) } };
-    }),
+    set((s) => pruneAxis(s, 'sourceFiles', present)),
+
+  prunePlayers: (present) =>
+    set((s) => pruneAxis(s, 'players', present)),
 
   clearAll: () => set({ criteria: EMPTY_CRITERIA }),
 }));
 
+/**
+ * Drops values from a set-valued axis that `present` no longer holds.
+ *
+ * Same-size means nothing was stale; returning the existing state object
+ * keeps the identity App's filtering memo depends on (see App.tsx).
+ */
+function pruneAxis<K extends SetAxis>(
+  s: FiltersState,
+  axis: K,
+  present: ReadonlySet<AxisValue<K>>,
+): Pick<FiltersState, 'criteria'> | FiltersState {
+  const current = s.criteria[axis] as ReadonlySet<AxisValue<K>>;
+  const kept = [...current].filter((v) => present.has(v));
+  if (kept.length === current.size) return s;
+  return { criteria: { ...s.criteria, [axis]: new Set(kept) } };
+}
+
 // Re-exported so components import their option types from one place.
-export type { Position, Severity, LineToken, PotType, PreflopAggression, RelativePosition, StackBucket };
+export type {
+  Position, Severity, LineToken, PlayerKey, PotType, PreflopAggression, RelativePosition, StackBucket,
+};

@@ -1,10 +1,13 @@
 'use client';
 
+import type { ReactNode } from 'react';
 import type { Hand } from '@/domain/hand';
 import type { Action } from '@/domain/action';
 import type { HandAnalysis, DecisionVerdict } from '@/analysis/types';
 import { formatUnit } from '@/lib/format';
 import { useDisplayStore } from '@/state/display-store';
+import { usePlayerDialogStore } from '@/state/player-dialog-store';
+import { playerKey } from '@/stats/types';
 import { VerdictIcon } from '@/components/analysis/VerdictBadge';
 import { ScrollArea } from '@/components/ui/ScrollArea';
 import { CardView } from '@/components/replay/CardView';
@@ -49,6 +52,7 @@ function collapseAntes(actions: readonly Action[], hand: Hand): Action[] {
 interface AntePoster {
   readonly name: string;
   readonly isHero: boolean;
+  readonly seat: number;
 }
 
 /**
@@ -61,13 +65,14 @@ function antePosters(actions: readonly Action[], hand: Hand): AntePoster[] {
     .filter((a) => a.kind === 'post-ante')
     .map((a) => {
       const seat = hand.seats.find((s) => s.seat === a.seat);
-      return { name: seat?.name ?? `seat ${a.seat}`, isHero: seat?.isHero ?? false };
+      return { name: seat?.name ?? `seat ${a.seat}`, isHero: seat?.isHero ?? false, seat: a.seat };
     });
   return [...posters].sort((a, b) => Number(b.isHero) - Number(a.isHero));
 }
 
 export function ActionLog({ hand, actionIndex, analysis, pending, onSelect }: Props) {
   const unit = useDisplayStore((s) => s.unit);
+  const openPlayer = usePlayerDialogStore((s) => s.open);
 
   if (!hand) {
     return (
@@ -85,31 +90,59 @@ export function ActionLog({ hand, actionIndex, analysis, pending, onSelect }: Pr
   const verdicts = analysis?.verdicts ?? [];
   const verdictByIndex = new Map(verdicts.map((v) => [v.actionIndex, v]));
 
-  const renderVerdictRow = (a: Action, verdict: DecisionVerdict, seatName: string, position: string) => {
+  const openPlayerAt = (seat: number) => {
+    const s = hand.seats.find((x) => x.seat === seat);
+    if (s) openPlayer(playerKey(hand.meta.siteId, s.playerId));
+  };
+
+  /**
+   * Name button sits over the row's own select-action button. Both are real
+   * buttons rather than one nested in the other (invalid HTML) — the row
+   * button is stretched to fill the row via absolute positioning, and the
+   * name button sits above it with a higher stacking order and its own
+   * click handler, so a click on the name opens the player and a click
+   * anywhere else in the row selects the action.
+   */
+  const NameButton = ({ seat, children, className }: { seat: number; children: ReactNode; className?: string | undefined }) => (
+    <button
+      type="button"
+      onClick={(e) => { e.stopPropagation(); openPlayerAt(seat); }}
+      className={`relative z-10 truncate text-left outline-none hover:text-emerald-300 hover:underline ${className ?? ''}`}
+    >
+      {children}
+    </button>
+  );
+
+  const renderVerdictRow = (a: Action, verdict: DecisionVerdict, seat: NonNullable<ReturnType<typeof hand.seats.find>>) => {
     const isCurrent = a.index === actionIndex;
     return (
-      <button
+      <div
         key={a.index}
-        onClick={() => onSelect(a.index)}
-        className={`w-full text-left px-3 py-1.5 flex items-center gap-2 border-2 rounded-lg transition hover:bg-slate-800/50 ${
+        className={`relative w-full px-3 py-1.5 flex items-center gap-2 border-2 rounded-lg transition hover:bg-slate-800/50 ${
           isCurrent ? 'border-slate-300' : 'border-transparent'
         }`}
       >
-        <span className="w-9 shrink-0 flex justify-center">
+        <button
+          type="button"
+          onClick={() => onSelect(a.index)}
+          className="absolute inset-0 rounded-lg outline-none"
+          aria-label={`Select ${seat.name}'s ${a.kind} action`}
+        />
+        <span className="relative w-9 shrink-0 flex justify-center pointer-events-none">
           <span className="w-9 text-center t-chip border border-slate-600 rounded-sm bg-slate-700 px-1 py-0.5 text-slate-300">
-            {position}
+            {seat.position}
           </span>
         </span>
-        <span className="truncate text-slate-300">{seatName}</span>
-        <span className="ml-auto shrink-0 text-slate-400">
+        <NameButton seat={seat.seat} className="text-slate-300">{seat.name}</NameButton>
+        <span className="relative ml-auto shrink-0 text-slate-400 pointer-events-none">
           {a.isAllIn
             ? `all-in${a.amount > 0 ? ` ${formatUnit(a.amount, hand.money, unit)}` : ''}`
             : `${a.kind.replace('post-', '')}${a.amount > 0 ? ` ${formatUnit(a.amount, hand.money, unit)}` : ''}`}
         </span>
-        <span className="w-[18px] shrink-0 flex justify-center">
+        <span className="relative w-[18px] shrink-0 flex justify-center pointer-events-none">
           <VerdictIcon severity={verdict.severity} />
         </span>
-      </button>
+      </div>
     );
   };
 
@@ -141,18 +174,29 @@ export function ActionLog({ hand, actionIndex, analysis, pending, onSelect }: Pr
               const seat = hand.seats.find((s) => s.seat === a.seat);
               const verdict = verdictByIndex.get(a.index);
               if (verdict && seat) {
-                return renderVerdictRow(a, verdict, seat.name, seat.position);
+                return renderVerdictRow(a, verdict, seat);
               }
               const isCurrent = a.index === actionIndex;
               return (
-                <button
+                <div
                   key={a.index}
-                  onClick={() => a.seat !== -1 && onSelect(a.index)}
-                  className={`w-full text-left px-3 py-1.5 flex items-center gap-2 border-2 rounded-lg transition hover:bg-slate-800/50 ${
+                  className={`relative w-full px-3 py-1.5 flex items-center gap-2 border-2 rounded-lg transition hover:bg-slate-800/50 ${
                     isCurrent ? 'border-slate-300' : 'border-transparent'
                   }`}
                 >
-                  <span className="w-9 shrink-0 flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => a.seat !== -1 && onSelect(a.index)}
+                    className="absolute inset-0 rounded-lg outline-none"
+                    aria-label={
+                      posters
+                        ? `Select ${posters.map((p) => p.name).join(', ')} ${a.kind}`
+                        : seat
+                          ? `Select ${seat.name}'s ${a.kind} action`
+                          : `Select ${a.kind} action`
+                    }
+                  />
+                  <span className="relative w-9 shrink-0 flex justify-center pointer-events-none">
                     {seat && (
                       <span className={`w-9 text-center t-chip border border-slate-600 rounded-sm bg-slate-700 px-1 py-0.5 ${seat.isHero ? 'text-slate-100' : 'text-slate-300'}`}>
                         {seat.position}
@@ -161,24 +205,28 @@ export function ActionLog({ hand, actionIndex, analysis, pending, onSelect }: Pr
                   </span>
                   <span
                     title={posters ? posters.map((p) => p.name).join(', ') : undefined}
-                    className={`truncate ${seat?.isHero ? 'text-slate-300' : 'text-slate-400'}`}
+                    className={`truncate flex items-center gap-0 ${seat?.isHero ? 'text-slate-300' : 'text-slate-400'}`}
                   >
                     {posters
                       ? posters.map((p, i) => (
-                          <span key={p.name} className={p.isHero ? 'text-slate-300' : undefined}>
-                            {i > 0 && <span className="text-slate-400">, </span>}
-                            {p.name}
+                          <span key={p.name} className="flex items-center">
+                            {i > 0 && <span className="relative text-slate-400 pointer-events-none">,&nbsp;</span>}
+                            <NameButton seat={p.seat} className={p.isHero ? 'text-slate-300' : undefined}>
+                              {p.name}
+                            </NameButton>
                           </span>
                         ))
-                      : seat?.name}
+                      : seat
+                        ? <NameButton seat={seat.seat}>{seat.name}</NameButton>
+                        : null}
                   </span>
-                  <span className={`ml-auto shrink-0 ${a.kind === 'fold' ? 'text-slate-500' : 'text-slate-400'}`}>
+                  <span className={`relative ml-auto shrink-0 pointer-events-none ${a.kind === 'fold' ? 'text-slate-500' : 'text-slate-400'}`}>
                     {a.isAllIn
                       ? `all-in${a.amount > 0 ? ` ${formatUnit(a.amount, hand.money, unit)}` : ''}`
                       : `${a.kind.replace('post-', '')}${a.amount > 0 ? ` ${formatUnit(a.amount, hand.money, unit)}` : ''}`}
                   </span>
-                  <span className="w-[18px] shrink-0" />
-                </button>
+                  <span className="relative w-[18px] shrink-0 pointer-events-none" />
+                </div>
               );
             })}
           </li>
@@ -198,9 +246,13 @@ export function ActionLog({ hand, actionIndex, analysis, pending, onSelect }: Pr
                   </span>
                 )}
               </span>
-              <span className={`truncate ${seat?.isHero ? 'text-slate-300' : 'text-slate-400'}`}>
-                {seat?.name ?? `seat ${award.seat}`}
-              </span>
+              {seat ? (
+                <NameButton seat={seat.seat} className={seat.isHero ? 'text-slate-300' : 'text-slate-400'}>
+                  {seat.name}
+                </NameButton>
+              ) : (
+                <span className="truncate text-slate-400">{`seat ${award.seat}`}</span>
+              )}
               <span className="text-slate-400 ml-auto shrink-0">
                 win {formatUnit(award.amount, hand.money, unit)}
                 {award.potLevel > 0 && (

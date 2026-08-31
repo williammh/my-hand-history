@@ -1,6 +1,7 @@
 import type { Position, Street } from '@/domain/position';
 import type { SiteId } from '@/domain/hand';
 import type { Severity } from '@/analysis/types';
+import { type PlayerKey, playerKey } from '@/stats/types';
 import type { Connectedness, SuitTexture } from './board';
 import type {
   LineToken, PotType, PreflopAggression, RelativePosition, StackBucket,
@@ -180,4 +181,57 @@ export function sourceFileOptions(
   return [...counts.entries()]
     .map(([value, count]) => ({ value, label: value, count }))
     .sort((a, b) => a.label.localeCompare(b.label));
+}
+
+export interface PlayerOption extends SourceOption<PlayerKey> {
+  readonly siteId: SiteId;
+  readonly name: string;
+}
+
+/**
+ * Usernames present in the library, keyed per room (see PlayerKey). Sorted by
+ * count desc then name, matching `siteOptions`' "most hands first" ordering —
+ * the players you actually have a sample on should be easy to find.
+ *
+ * The label is just the username, UNLESS the same username exists on more
+ * than one room, in which case it would be ambiguous in the dropdown — those
+ * get `name (Room)` instead. The hint always carries the room, so hovering
+ * any option confirms which room it came from.
+ */
+export function playerOptions(
+  hands: readonly { meta: { siteId: SiteId }; seats: readonly { playerId: string; name: string; sittingOut: boolean }[] }[],
+  displayNames: ReadonlyMap<SiteId, string>,
+): readonly PlayerOption[] {
+  const counts = new Map<PlayerKey, { siteId: SiteId; name: string; count: number }>();
+  for (const h of hands) {
+    for (const s of h.seats) {
+      if (s.sittingOut) continue;
+      const key = playerKey(h.meta.siteId, s.playerId);
+      const entry = counts.get(key);
+      if (entry) entry.count += 1;
+      else counts.set(key, { siteId: h.meta.siteId, name: s.name, count: 1 });
+    }
+  }
+
+  const namesSeen = new Map<string, Set<SiteId>>();
+  for (const { siteId, name } of counts.values()) {
+    const set = namesSeen.get(name) ?? new Set<SiteId>();
+    set.add(siteId);
+    namesSeen.set(name, set);
+  }
+
+  return [...counts.entries()]
+    .map(([value, { siteId, name, count }]) => {
+      const ambiguous = (namesSeen.get(name)?.size ?? 0) > 1;
+      const room = displayNames.get(siteId) ?? siteId;
+      return {
+        value,
+        label: ambiguous ? `${name} (${room})` : name,
+        hint: room,
+        count,
+        siteId,
+        name,
+      };
+    })
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
 }

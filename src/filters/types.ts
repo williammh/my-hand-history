@@ -2,6 +2,7 @@ import type { Position, Street } from '@/domain/position';
 import type { SiteId } from '@/domain/hand';
 import type { Severity } from '@/analysis/types';
 import type { Rank } from '@/domain/cards';
+import type { PlayerKey } from '@/stats/types';
 import type { BoardTexture, Connectedness, SuitTexture } from './board';
 
 /**
@@ -53,6 +54,8 @@ export interface HandFacts {
   readonly siteId: SiteId;
   /** File this hand was imported from; null when it was parsed without one. */
   readonly sourceFile: string | null;
+  /** Every seated player dealt into this hand, hero included. */
+  readonly playerKeys: ReadonlySet<PlayerKey>;
   readonly potType: PotType;
   readonly heroPosition: Position | null;
   /** Positions of every opponent who voluntarily put money in preflop. */
@@ -95,6 +98,12 @@ export interface FilterCriteria {
    * a plain set membership test so a stale name simply matches nothing.
    */
   readonly sourceFiles: ReadonlySet<string>;
+  /**
+   * Players to keep, by per-room identity. A hand matches if ANY selected
+   * player was dealt into it — folded preflop or not, this is the "was this
+   * person in the hand" axis, not a "voluntarily played" one.
+   */
+  readonly players: ReadonlySet<PlayerKey>;
   readonly potTypes: ReadonlySet<PotType>;
   readonly relativePositions: ReadonlySet<RelativePosition>;
   readonly heroPositions: ReadonlySet<Position>;
@@ -123,6 +132,7 @@ export interface FilterCriteria {
 export const EMPTY_CRITERIA: FilterCriteria = {
   sites: new Set(),
   sourceFiles: new Set(),
+  players: new Set(),
   potTypes: new Set(),
   relativePositions: new Set(),
   heroPositions: new Set(),

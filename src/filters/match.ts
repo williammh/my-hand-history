@@ -17,6 +17,11 @@ export function matches(facts: HandFacts, c: FilterCriteria): boolean {
     if (facts.sourceFile === null || !c.sourceFiles.has(facts.sourceFile)) return false;
   }
 
+  // A hand matches if ANY selected player was dealt into it.
+  if (c.players.size > 0) {
+    if (![...c.players].some((p) => facts.playerKeys.has(p))) return false;
+  }
+
   if (c.potTypes.size > 0 && !c.potTypes.has(facts.potType)) return false;
 
   if (c.relativePositions.size > 0) {
@@ -90,6 +95,7 @@ export function isActive(c: FilterCriteria): boolean {
   return (
     c.sites.size > 0 ||
     c.sourceFiles.size > 0 ||
+    c.players.size > 0 ||
     c.potTypes.size > 0 ||
     c.relativePositions.size > 0 ||
     c.heroPositions.size > 0 ||
@@ -112,6 +118,7 @@ export function activeCount(c: FilterCriteria): number {
   let n = 0;
   if (c.sites.size > 0) n++;
   if (c.sourceFiles.size > 0) n++;
+  if (c.players.size > 0) n++;
   if (c.potTypes.size > 0) n++;
   if (c.relativePositions.size > 0) n++;
   if (c.heroPositions.size > 0) n++;

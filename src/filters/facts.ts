@@ -5,6 +5,7 @@ import { isVoluntary } from '@/domain/action';
 import type { Action } from '@/domain/action';
 import { heroEffectiveStackBB } from '@/domain/stacks';
 import type { HandAnalysis, Severity } from '@/analysis/types';
+import { playerKey } from '@/stats/types';
 import { boardTexture } from './board';
 import type {
   HandFacts, LineToken, PotType, PreflopAggression, RelativePosition, StackBucket,
@@ -183,6 +184,9 @@ export function deriveFacts(hand: Hand, analysis?: HandAnalysis): HandFacts {
     handId: hand.id,
     siteId: hand.meta.siteId,
     sourceFile: hand.meta.sourceFile,
+    playerKeys: new Set(
+      hand.seats.filter((s) => !s.sittingOut).map((s) => playerKey(hand.meta.siteId, s.playerId)),
+    ),
     potType: derivePotType(hand, heroSeat),
     heroPosition: heroPlayer?.position ?? null,
     opponentPositions,

@@ -10,7 +10,7 @@ import { activeCount } from '@/filters/match';
 import type { RelativePosition } from '@/filters/types';
 import {
   CONNECTEDNESS, POT_TYPES, POSITIONS, PREFLOP_AGGRESSION, RELATIVE_POSITIONS, SEVERITIES,
-  STACKS, STREETS, SUIT_TEXTURES, linesFor, siteOptions, sourceFileOptions,
+  STACKS, STREETS, SUIT_TEXTURES, linesFor, playerOptions, siteOptions, sourceFileOptions,
   type SourceOption,
 } from '@/filters/options';
 import { useHandsStore } from '@/state/hands-store';
@@ -135,6 +135,7 @@ export function FiltersPanel() {
   );
   const sites = useMemo(() => siteOptions(hands, siteNames), [hands, siteNames]);
   const files = useMemo(() => sourceFileOptions(hands), [hands]);
+  const players = useMemo(() => playerOptions(hands, siteNames), [hands, siteNames]);
 
   return (
     <div className="rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden h-full flex flex-col">
@@ -185,6 +186,17 @@ export function FiltersPanel() {
           onClear={() => clearAxis('sourceFiles')}
           counts={countsOf(files)}
           emptyLabel="No hands loaded"
+        />
+
+        <FilterMenu
+          label="Player"
+          options={players}
+          selected={criteria.players}
+          onToggle={(v) => toggle('players', v)}
+          onClear={() => clearAxis('players')}
+          counts={countsOf(players)}
+          emptyLabel="No hands loaded"
+          searchable
         />
 
         <div className="pt-1 border-t border-slate-800 space-y-3">

@@ -1,7 +1,8 @@
 'use client';
 
+import { useMemo, useState } from 'react';
 import { DropdownMenu } from 'radix-ui';
-import { IconChevronDown } from '@tabler/icons-react';
+import { IconChevronDown, IconSearch } from '@tabler/icons-react';
 import type { Option } from '@/filters/options';
 
 interface Props<T extends string | number> {
@@ -14,7 +15,16 @@ interface Props<T extends string | number> {
   counts?: ReadonlyMap<T, number> | undefined;
   /** Replaces the trigger text when there is nothing to choose from. */
   emptyLabel?: string | undefined;
+  /**
+   * Adds a text filter above the option list. Meant for open-vocabulary axes
+   * like usernames, where a library can hold hundreds of options a plain
+   * scroll can't navigate.
+   */
+  searchable?: boolean | undefined;
 }
+
+/** Options shown at once when searching — a library can hold hundreds of names. */
+const SEARCH_RESULT_CAP = 200;
 
 /**
  * The indicator holds its own fixed-width column whether or not it is checked,
@@ -45,8 +55,9 @@ const ITEM_CLASS =
  * a glance with every menu closed.
  */
 export function FilterMenu<T extends string | number>({
-  label, options, selected, onToggle, onClear, counts, emptyLabel,
+  label, options, selected, onToggle, onClear, counts, emptyLabel, searchable,
 }: Props<T>) {
+  const [query, setQuery] = useState('');
   const chosen = options.filter((o) => selected.has(o.value));
   const empty = options.length === 0;
   const summary =
@@ -54,6 +65,14 @@ export function FilterMenu<T extends string | number>({
       : chosen.length === 0 ? 'Any'
       : chosen.length <= 2 ? chosen.map((o) => o.label).join(', ')
       : `${chosen.length} selected`;
+
+  const filtered = useMemo(() => {
+    if (!searchable || query.trim() === '') return options;
+    const q = query.trim().toLowerCase();
+    return options.filter((o) => o.label.toLowerCase().includes(q));
+  }, [options, query, searchable]);
+  const shown = searchable ? filtered.slice(0, SEARCH_RESULT_CAP) : filtered;
+  const hiddenCount = filtered.length - shown.length;
 
   return (
     <div className="min-w-0">
@@ -90,7 +109,22 @@ export function FilterMenu<T extends string | number>({
             // uncapped menu would grow far past the panel it drops out of.
             className="z-50 min-w-[11rem] max-w-[min(22rem,calc(100vw-2rem))] max-h-[18rem] overflow-y-auto p-1 rounded-sm border border-slate-700 bg-slate-800 text-slate-200 shadow-lg"
           >
-            {options.map((o) => (
+            {searchable && (
+              <div className="sticky top-0 z-10 -m-1 mb-1 flex items-center gap-1.5 border-b border-slate-700 bg-slate-800 px-2 py-1.5">
+                <IconSearch size={13} className="shrink-0 text-slate-500" />
+                <input
+                  autoFocus
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  // Radix's typeahead would otherwise steal every keystroke
+                  // meant for this input.
+                  onKeyDown={(e) => e.stopPropagation()}
+                  placeholder="Search…"
+                  className="w-full bg-transparent text-sm text-slate-200 outline-none placeholder:text-slate-600"
+                />
+              </div>
+            )}
+            {shown.map((o) => (
               <DropdownMenu.CheckboxItem
                 key={String(o.value)}
                 checked={selected.has(o.value)}
@@ -112,6 +146,14 @@ export function FilterMenu<T extends string | number>({
                 )}
               </DropdownMenu.CheckboxItem>
             ))}
+            {searchable && shown.length === 0 && (
+              <p className="px-3 py-2 text-sm text-slate-500">No matches</p>
+            )}
+            {searchable && hiddenCount > 0 && (
+              <p className="px-3 py-1.5 t-micro text-slate-500">
+                …and {hiddenCount} more, keep typing
+              </p>
+            )}
           </DropdownMenu.Content>
         </DropdownMenu.Portal>
       </DropdownMenu.Root>
