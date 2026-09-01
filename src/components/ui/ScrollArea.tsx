@@ -21,8 +21,15 @@ interface Props {
  *
  * The thumb is an overlay, so it does NOT take layout width — content keeps the
  * full panel width and nothing reflows when a list grows past its container.
- * `sticky` children still work: the viewport is a plain scrolling div, not the
- * `display:table` wrapper older Radix versions used.
+ *
+ * `type="auto"` rather than the default `"hover"`: a hover scrollbar does not
+ * mount until the pointer enters the root, so its size measurement (`onResize`,
+ * which is what gives the thumb its height and scroll range) had never run on a
+ * panel scrolled by wheel without hovering it first — the thumb was missing, or
+ * appeared frozen on stale sizes. `auto` instead mounts the bar whenever the
+ * content actually overflows, measured off the viewport rather than the
+ * pointer, so every panel behaves the same and nothing shows an empty track
+ * when its content fits (which `always` would).
  */
 export function ScrollArea({
   children,
@@ -31,12 +38,16 @@ export function ScrollArea({
   orientation = 'vertical',
 }: Props) {
   return (
-    <Primitive.Root className={`overflow-hidden ${className}`} scrollHideDelay={600}>
+    <Primitive.Root type="auto" className={`overflow-hidden ${className}`}>
       <Primitive.Viewport
-        // Radix sets `display:table` on the viewport's direct child in some
-        // versions; forcing block keeps `h-full` children and sticky headers
-        // behaving like normal flow.
-        className={`h-full w-full [&>div]:!block ${viewportClassName}`}
+        // Radix wraps the children in its own `display:table` div and observes
+        // THAT div to recompute the thumb. Overriding it to `block` (as this
+        // used to) breaks the measurement: a block wrapper's height can change
+        // through margin-collapsing without the observer reporting a new box,
+        // so the thumb kept a stale height and stopped tracking the scroll.
+        // The table wrapper is left alone; `viewportClassName` can still opt a
+        // specific panel out (the felt needs flex, and has no such children).
+        className={`h-full w-full ${viewportClassName}`}
       >
         {children}
       </Primitive.Viewport>
@@ -56,7 +67,7 @@ function Bar({ orientation }: { orientation: 'vertical' | 'horizontal' }) {
       // The track itself is transparent — only the thumb below is visible —
       // sized closer to a platform scrollbar rather than a thin overlay pill
       // that only shows on hover.
-      className={`flex touch-none select-none transition-colors duration-150 data-[state=hidden]:opacity-0 ${
+      className={`flex touch-none select-none ${
         vertical ? 'w-2.5 flex-col' : 'h-2.5 flex-row'
       }`}
     >

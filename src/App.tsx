@@ -200,7 +200,7 @@ export function App() {
               widest child (the felt); the analysis panel is neutralised below
               so its prose cannot widen the column past the felt. */}
           <div className="w-full 2xl:w-fit max-w-full min-h-0 lg:overflow-y-auto flex flex-col gap-4 md:gap-5 lg:col-start-2 lg:row-start-2 xl:col-start-3 xl:row-start-1 xl:row-span-2 2xl:col-start-4 2xl:row-span-1">
-            <ScrollArea className="flex shrink-0 lg:min-h-0" viewportClassName="[&>div]:!flex">
+            <ScrollArea className="flex shrink-0 lg:min-h-0">
               <Table hand={hand} actionIndex={actionIndex} board={current?.board ?? []}>
                 <ReplayControls
                   timeline={timeline}
