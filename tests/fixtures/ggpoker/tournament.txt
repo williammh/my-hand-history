@@ -1,0 +1,23 @@
+Poker Hand #TM876543210: Tournament #12345, $10+$1 USD Hold'em No Limit - Level I (10/20) - 2026/08/31 19:00:00
+Table 'Bounty Hunters $11 - 042' 8-max Seat #5 is the button
+Seat 1: 9f8e7d6c (10000 in chips)
+Seat 2: Hero (10000 in chips)
+Seat 3: b1c2d3e4 (10000 in chips)
+Seat 4: 5a6b7c8d (10000 in chips)
+Seat 5: 3c2b1a0f (10000 in chips)
+Seat 6: e4d3c2b1 (10000 in chips)
+e4d3c2b1: posts small blind 10
+9f8e7d6c: posts big blind 20
+*** HOLE CARDS ***
+Dealt to Hero [Qc Qd]
+Hero: raises 30 to 50
+b1c2d3e4: folds
+5a6b7c8d: folds
+3c2b1a0f: folds
+e4d3c2b1: folds
+9f8e7d6c: folds
+Uncalled bet (30) returned to Hero
+Hero collected 50 from pot
+*** SUMMARY ***
+Total pot 50
+Seat 2: Hero won (50)

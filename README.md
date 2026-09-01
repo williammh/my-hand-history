@@ -10,7 +10,7 @@ ever sent to it.
 ```bash
 npm install       # installs dependencies
 npm run dev       # http://localhost:3000
-npm test          # 189 tests
+npm test          # 340 tests
 npm run build     # next build
 npm run start     # serve the production build locally
 ```
@@ -28,9 +28,13 @@ samples/     Example hand history exports.
 
 ## What it does
 
-- **Parses** Betclic.fr and Winamax tournament hand histories (multi-hand files).
-  Drop in several files at once — hands accumulate into one library, deduped on
-  hand id, so re-importing a file you already loaded changes nothing.
+- **Parses** Betclic.fr, Winamax, PokerStars, GGPoker, 888poker/PacificPoker,
+  CoinPoker and WPT Global hand histories — cash games, tournaments and Spin &
+  Gold sit & gos, multi-hand files.
+  A room that ships the PokerStars format under a name this project has never
+  heard of is parsed too, as a fallback. Drop in several files at once — each
+  file is sniffed independently, and hands accumulate into one library, deduped
+  on hand id, so re-importing a file you already loaded changes nothing.
 - **Replays** each hand action by action — stacks, pot, board, and chips in front,
   scrubbable with the slider or arrow keys.
 - **Analyzes** hero's decisions: preflop against Nash push/fold charts, postflop
@@ -81,6 +85,17 @@ handle the parts that are the same everywhere:
 The registry owns error containment, so one malformed hand never costs the user
 the rest of the file.
 
+If the room emits a format an existing parser already reads, do not copy the
+parser — there are two lighter options:
+
+- **The room names itself in the header**, as CoinPoker and WPT Global do. Add
+  the brand word to `sites/pokerstars/brands.ts` and register one more instance
+  via `createPokerStarsFamilyParser`; the shared body stamps the right `SiteId`
+  onto each hand from that hand's own header.
+- **The room does not name itself**, as GGPoker does not. Register an instance
+  with a `detectFile` hook that recognizes whatever does identify it, and a
+  `FormatFamily` if the room needs the body to behave differently anywhere.
+
 ### Swapping in a real solver
 
 `AnalysisEngine.analyze()` is async and takes a JSON-serializable `Hand`, so a
@@ -99,6 +114,87 @@ architecture change.
 
 ## Format notes
 
+### Amount semantics differ by room — and getting them wrong is silent
+
+Every room writes bet amounts in its own convention, and the difference never
+shows up as a parse error: it shows up as wrong pot-odds verdicts. Each parser
+reconciles its room's convention into `Action.amount` (always a delta) via
+`CommitmentLedger`, and the pot checksum test is what proves it.
+
+| Room | `raises` | `calls` / `bets` |
+| --- | --- | --- |
+| PokerStars family (incl. GGPoker) | `raises 5000 to 10000` — **10000 is the street total** | delta |
+| Winamax | `raises 0.05€ to 0.10€` — total | delta |
+| Betclic | `Raises to 16000` — total | delta |
+| 888poker | `raises [550]` — **a delta**, added to what is already out | delta |
+
+888 is the odd one out, and it is not a guess: all six readings of
+(raise, call) x (delta, total) were replayed against the eight hands of the
+Pacific sample and checked against each hand's printed `collected` figure.
+Delta/delta is the only reading that reconciles all eight. The nearest rival
+misses two hands by exactly one player's prior commitment — 1156 vs 1056 and
+1389 vs 1289 — which is precisely the error that would flatter every
+pot-odds call the analyzer judges.
+
+### Other per-room quirks the parsers handle
+
+- **888 prints no "uncalled bet returned" line**, though the chips are returned
+  all the same. The parser synthesizes the return from the last street's
+  commitments; without it every pot overstates by the excess.
+- **888 has no "Total pot" line and no rake line**, so the awarded chips are
+  used as the reported total — which works precisely because rake is absent.
+- **888 dates are day-first** (`02 08 2026` is 2 August) and carry no timezone.
+- **PokerStars stamps a timezone abbreviation** (`ET`) that is ambiguous by
+  date. The wall-clock time is kept as printed and the zone recorded in
+  `timezoneNote`, rather than converted with a guessed offset.
+- **`Dealt to` moves**: tournament exports print it above `*** HOLE CARDS ***`,
+  cash exports below. Both regions are scanned.
+- **A declared button seat can be empty** when a player busted. The button
+  falls back to the nearest occupied seat walking backwards, since falling back
+  to the lowest seat would rotate every position on the table.
+
+### Rooms that share the PokerStars format
+
+CoinPoker, WPT Global and GGPoker emit the PokerStars hand body verbatim, and
+other rooms license the same client. The brand word in the header is therefore
+a capture group, not a literal, and `sites/pokerstars/brands.ts` maps it to a
+room:
+
+- A **recognized** clone keeps its own `SiteId` (`coinpoker`, `wpt-global`).
+- An **unrecognized** room is still parsed, under the shared `pokerstars-like`
+  id, keeping the display name the file gave — and each hand carries a warning
+  saying the fallback was used and which room it saw.
+
+**GGPoker is the exception that is not a brand entry.** Its header brand word
+is the bare word `Poker`, which names no room at all, so it would otherwise be
+read as a room literally called "Poker" and filed under the fallback. What
+identifies it is the hand-id prefix — `RC` Rush & Cash, `SG` Spin & Gold, `TM`
+tournament, `HD` cash — so it is registered as its own parser with a
+`detectFile` hook, sharing the same body via `FormatFamily`.
+
+Three GGPoker details the shared body handles for every room, since nothing
+else in the family emits a line that collides with them:
+
+- **`Spin & Gold $5.00 ($4.65+$0.35)`** must be matched *before* the generic
+  cash header, which would otherwise read the buy-in split as the blinds — a
+  parse that looks perfectly fine and is completely wrong. It is the only
+  `sit-n-go` any parser here produces.
+- **A Spin & Gold header carries no blinds**, so they are recovered from the
+  posted small and big blind. Everything downstream is denominated in big
+  blinds, so leaving them at zero would silently disable every stack-depth and
+  sizing judgement on the hand.
+- **The winner is announced only in the summary**, as `won ($23.50)`, where
+  PokerStars writes `collected N` in the body. Both spellings are read, guarded
+  so a room printing both does not record the award twice.
+
+Filing an unknown room's hands under `pokerstars` would be worse than it looks:
+player identity is `${siteId}:${playerId}`, so it would silently pool two
+different players who happen to share a screen name. The fallback's detection
+confidence (0.55) sits below every real parser's (0.99) so it can never win a
+file another parser recognizes.
+
+### Betclic
+
 Two things about Betclic's format that the parser handles and that any new parser
 should be checked against:
 
@@ -112,7 +208,16 @@ should be checked against:
   Reading that last call as a total would make every pot-odds verdict wrong.
 
 The pot checksum test guards both: all three sample hands reconcile exactly
-(453766 / 16800 / 108800).
+(453766 / 16800 / 108800). Every room gets the same guard — the PokerStars
+sample reconciles across all 10 hands, the 888 sample across all 8, and every
+GGPoker fixture across cash, Spin & Gold and tournament.
+
+On rake, the two families reach the same place by different routes, so neither
+needs an adjustment before the checksum: PokerStars' printed `Total pot` is
+already the contested chips, and GGPoker's satisfies
+`Total pot = collected + rake` because its rake comes out of the winner's
+collect. Winamax is the one room whose printed total is net, and its parser
+adds the rake back.
 
 ## Limitations
 

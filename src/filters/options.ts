@@ -12,6 +12,8 @@ export interface Option<T> {
   readonly label: string;
   /** Shown on hover — room for the definition a two-word label cannot carry. */
   readonly hint?: string;
+  /** Path under `public/` for a small icon shown beside the label. */
+  readonly icon?: string;
 }
 
 export const POT_TYPES: readonly Option<PotType>[] = [
@@ -136,6 +138,25 @@ export interface SourceOption<T extends string> extends Option<T> {
 }
 
 /**
+ * Logo shown beside each room's label in the room filter. Keyed by SiteId
+ * rather than derived from the display name, since a file name is not
+ * guaranteed to match the label a room chooses to show ("888poker" vs.
+ * "888poker.png" is a coincidence, not a rule the label should be parsed for).
+ *
+ * `pokerstars-like` carries none: it stands for whatever unrecognized room
+ * wrote the file, so no single logo could represent it.
+ */
+const SITE_LOGOS: Readonly<Partial<Record<SiteId, string>>> = {
+  'betclic-fr': '/logo/betclic.png',
+  pokerstars: '/logo/pokerstars.png',
+  winamax: '/logo/winamax.png',
+  '888poker': '/logo/888poker.png',
+  coinpoker: '/logo/coinpoker.png',
+  'wpt-global': '/logo/wptglobal.png',
+  ggpoker: '/logo/gg-poker.png',
+};
+
+/**
  * Every supported room, labelled by the parser registry, most hands first.
  *
  * Unlike source files, rooms are a closed vocabulary known at build time — the
@@ -157,8 +178,27 @@ export function siteOptions(
   const rooms = new Set<SiteId>([...displayNames.keys(), ...counts.keys()]);
 
   return [...rooms]
-    .map((value) => ({ value, label: displayNames.get(value) ?? value, count: counts.get(value) ?? 0 }))
-    .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
+    .map((value) => {
+      const icon = SITE_LOGOS[value];
+      return {
+        value,
+        label: displayNames.get(value) ?? value,
+        count: counts.get(value) ?? 0,
+        ...(icon ? { icon } : {}),
+      };
+    })
+    // The fallback room stands for no room in particular, so at zero hands it
+    // is noise near the top of a mostly-empty list; it sorts last among empty
+    // rooms rather than by its label. Once it actually holds hands it is as
+    // real as any other room and competes on count like everyone else.
+    .sort((a, b) => {
+      if (a.count === 0 && b.count === 0) {
+        const aOther = a.value === 'pokerstars-like';
+        const bOther = b.value === 'pokerstars-like';
+        if (aOther !== bOther) return aOther ? 1 : -1;
+      }
+      return b.count - a.count || a.label.localeCompare(b.label);
+    });
 }
 
 /**

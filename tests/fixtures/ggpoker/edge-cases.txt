@@ -1,0 +1,61 @@
+Poker Hand #RC103014900: Hold'em No Limit ($0.25/$0.50) - 2026/08/31 20:00:00
+Table 'RushAndCash50' 6-max Seat #2 is the button
+Seat 1: aaa11111 ($50.00 in chips)
+Seat 2: bbb22222 ($50.00 in chips)
+Seat 3: Hero ($50.00 in chips)
+Hero: posts small blind $0.25
+aaa11111: posts big blind $0.50
+*** HOLE CARDS ***
+Dealt to Hero [Qs Qh]
+bbb22222: raises $1.00 to $1.50
+Hero: raises $4.50 to $6.00
+aaa11111: folds
+bbb22222: calls $4.50
+*** FLOP *** [2c 7d 9h]
+Hero: bets $8.00
+bbb22222: calls $8.00
+*** TURN *** [2c 7d 9h] [Qd]
+Hero: bets $36.00
+bbb22222: calls $36.00
+*** RIVER *** [2c 7d 9h Qd] [3s]
+*** SHOW DOWN ***
+Hero: shows [Qs Qh] (three of a kind, Queens)
+bbb22222: shows [Ah Kh] (high card, Ace)
+Hero collected $100.50 from pot
+*** SUMMARY ***
+Total pot $100.50 | Rake $0.00
+Board [2c 7d 9h Qd 3s]
+Seat 1: aaa11111 (big blind) folded before Flop
+Seat 2: bbb22222 (button) showed [Ah Kh] and lost with high card, Ace
+Seat 3: Hero (small blind) showed [Qs Qh] and won ($100.50) with three of a kind, Queens
+
+Poker Hand #TM876543299: Tournament #12345, $10+$1 USD Hold'em No Limit - Level III (50/100) - 2026/08/31 20:30:00
+Table 'Bounty Hunters $11 - 042' 8-max Seat #1 is the button
+Seat 1: shortstack (300 in chips)
+Seat 2: midstack (1200 in chips)
+Seat 3: Hero (5000 in chips)
+shortstack: posts the ante 20
+midstack: posts the ante 20
+Hero: posts the ante 20
+midstack: posts small blind 50
+Hero: posts big blind 100
+*** HOLE CARDS ***
+Dealt to Hero [Ac Ad]
+shortstack: raises 180 to 280 and is all-in
+midstack: raises 900 to 1180 and is all-in
+Hero: calls 1080
+*** FLOP *** [2c 7d 9h]
+*** TURN *** [2c 7d 9h] [Ts]
+*** RIVER *** [2c 7d 9h Ts] [Kc]
+*** SHOW DOWN ***
+Hero: shows [Ac Ad] (a pair of Aces)
+midstack: shows [Kh Kd] (three of a kind, Kings)
+shortstack: shows [5c 5d] (a pair of Fives)
+midstack collected 900 from main pot
+midstack collected 1800 from side pot-1
+*** SUMMARY ***
+Total pot 2700
+Board [2c 7d 9h Ts Kc]
+Seat 1: shortstack (button) showed [5c 5d] and lost with a pair of Fives
+Seat 2: midstack (small blind) showed [Kh Kd] and won (2700) with three of a kind, Kings
+Seat 3: Hero (big blind) showed [Ac Ad] and lost with a pair of Aces

@@ -1,0 +1,43 @@
+CoinPoker Hand #550000000001: Hold'em No Limit ($0.50/$1.00 USD) - 2026/08/31 14:22:10 ET
+Table 'Aludra' 6-max Seat #4 is the button
+Seat 1: Player1 ($100 in chips)
+Seat 2: Player2 ($142.50 in chips)
+Seat 3: Player3 ($65.10 in chips)
+Seat 4: Hero ($100 in chips)
+Seat 5: Player5 ($98 in chips)
+Seat 6: Player6 ($210.25 in chips)
+Player5: posts small blind $0.50
+Player6: posts big blind $1
+*** HOLE CARDS ***
+Dealt to Hero [Ah Kd]
+Player1: folds
+Player2: raises $1.50 to $2.50
+Player3: folds
+Hero: raises $5.50 to $8
+Player5: folds
+Player6: folds
+Player2: calls $5.50
+*** FLOP *** [As 7c 2d]
+Player2: checks
+Hero: bets $4
+Player2: calls $4
+*** TURN *** [As 7c 2d] [Kh]
+Player2: checks
+Hero: bets $18.50
+Player2: calls $18.50
+*** RIVER *** [As 7c 2d Kh] [3s]
+Player2: checks
+Hero: bets $69.50
+Player2: folds
+Uncalled bet ($69.50) returned to Hero
+Hero collected $60 from pot
+Hero: doesn't show hand
+*** SUMMARY ***
+Total pot $62.50 | Rake $2.50
+Board [As 7c 2d Kh 3s]
+Seat 1: Player1 folded before Flop (didn't bet)
+Seat 2: Player2 folded on the River
+Seat 3: Player3 folded before Flop (didn't bet)
+Seat 4: Hero (button) collected ($60)
+Seat 5: Player5 (small blind) folded before Flop
+Seat 6: Player6 (big blind) folded before Flop

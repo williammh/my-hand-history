@@ -65,6 +65,9 @@ export function FilterMenu<T extends string | number>({
       : chosen.length === 0 ? 'Any'
       : chosen.length <= 2 ? chosen.map((o) => o.label).join(', ')
       : `${chosen.length} selected`;
+  // Only shown when the trigger text is a single room's own label, never for
+  // "Any" or "N selected" — an icon next to a count would misattribute it.
+  const summaryIcon = chosen.length === 1 ? chosen[0]!.icon : undefined;
 
   const filtered = useMemo(() => {
     if (!searchable || query.trim() === '') return options;
@@ -97,7 +100,13 @@ export function FilterMenu<T extends string | number>({
               : 'border-slate-700 bg-slate-800/50 text-slate-400 hover:border-slate-500'
           } data-[state=open]:border-slate-500`}
         >
-          <span className="truncate">{summary}</span>
+          <span className="flex items-center gap-1.5 min-w-0">
+            {summaryIcon && (
+              // eslint-disable-next-line @next/next/no-img-element -- static logos in a client-only shell; next/image's optimizer adds nothing here.
+              <img src={summaryIcon} alt="" className="size-3.5 shrink-0 rounded-[2px] object-contain" />
+            )}
+            <span className="truncate">{summary}</span>
+          </span>
           <IconChevronDown size={14} className="shrink-0" />
         </DropdownMenu.Trigger>
 
@@ -124,6 +133,16 @@ export function FilterMenu<T extends string | number>({
                 />
               </div>
             )}
+            {!empty && (
+              <DropdownMenu.CheckboxItem
+                checked={chosen.length === 0}
+                onCheckedChange={onClear}
+                className={ITEM_CLASS}
+              >
+                <Indicator />
+                <span className="truncate">Any</span>
+              </DropdownMenu.CheckboxItem>
+            )}
             {shown.map((o) => (
               <DropdownMenu.CheckboxItem
                 key={String(o.value)}
@@ -136,6 +155,10 @@ export function FilterMenu<T extends string | number>({
                 className={ITEM_CLASS}
               >
                 <Indicator />
+                {o.icon && (
+                  // eslint-disable-next-line @next/next/no-img-element -- static logos in a client-only shell; next/image's optimizer adds nothing here.
+                  <img src={o.icon} alt="" className="size-3.5 shrink-0 rounded-[2px] object-contain" />
+                )}
                 {/* File names are long and arbitrary — the label truncates and
                     the count keeps its own column so it never gets pushed out. */}
                 <span className="truncate">{o.label}</span>

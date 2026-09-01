@@ -1,0 +1,24 @@
+Poker Hand #SG987654321: Spin & Gold $5.00 ($4.65+$0.35) - 2026/08/31 18:45:00
+Table 'SpinAndGold 3-max $5' 3-max Seat #1 is the button
+Multiplier: 2x
+Total Prize Pool: $10.00
+Seat 1: e4d3c2b1 (500 in chips)
+Seat 2: a1b2c3d4 (500 in chips)
+Seat 3: Hero (500 in chips)
+a1b2c3d4: posts small blind 10
+Hero: posts big blind 20
+*** HOLE CARDS ***
+Dealt to Hero [Ah Kd]
+e4d3c2b1: folds
+a1b2c3d4: raises 20 to 40
+Hero: calls 20
+*** FLOP *** [As 7c 2d]
+a1b2c3d4: checks
+Hero: bets 40
+a1b2c3d4: folds
+Uncalled bet (40) returned to Hero
+Hero collected 80 from pot
+*** SUMMARY ***
+Total pot 80
+Board [As 7c 2d]
+Seat 3: Hero (big blind) won (80)

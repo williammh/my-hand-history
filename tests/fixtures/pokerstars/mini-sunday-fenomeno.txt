@@ -1,0 +1,460 @@
+PokerStars Hand #261627320204: Tournament #4018426247, $9.80+$1.20 USD Hold'em No Limit - Level XVII (2500/5000) - 2026/08/02 17:31:45 ET
+Table '4018426247 100' 8-max Seat #5 is the button
+Seat 1: ballack1010 (103639 in chips) 
+Seat 2: j9goldmine (143300 in chips) 
+Seat 4: H-Colorado-K (64068 in chips) 
+Seat 5: Livino Showtime (102468 in chips) 
+Seat 6: TunicoTT (299061 in chips) 
+Seat 7: Massey_Crush (304070 in chips) 
+Seat 8: eastcoastbidder (145232 in chips) 
+ballack1010: posts the ante 700
+j9goldmine: posts the ante 700
+H-Colorado-K: posts the ante 700
+Livino Showtime: posts the ante 700
+TunicoTT: posts the ante 700
+Massey_Crush: posts the ante 700
+eastcoastbidder: posts the ante 700
+TunicoTT: posts small blind 2500
+Massey_Crush: posts big blind 5000
+*** HOLE CARDS ***
+eastcoastbidder: folds 
+ballack1010: folds 
+j9goldmine: folds 
+H-Colorado-K: folds 
+Roma140288 is disconnected 
+Livino Showtime: raises 5000 to 10000
+TunicoTT: calls 7500
+Massey_Crush: folds 
+*** FLOP *** [9s Kh 8s]
+TunicoTT: checks 
+Livino Showtime: checks 
+*** TURN *** [9s Kh 8s] [Js]
+TunicoTT: bets 9867
+Livino Showtime: calls 9867
+*** RIVER *** [9s Kh 8s Js] [Kd]
+TunicoTT: bets 12409
+Livino Showtime: folds 
+Uncalled bet (12409) returned to TunicoTT
+TunicoTT collected 49634 from pot
+TunicoTT: doesn't show hand 
+*** SUMMARY ***
+Total pot 49634 | Rake 0 
+Board [9s Kh 8s Js Kd]
+Seat 1: ballack1010 folded before Flop (didn't bet)
+Seat 2: j9goldmine folded before Flop (didn't bet)
+Seat 4: H-Colorado-K folded before Flop (didn't bet)
+Seat 5: Livino Showtime (button) folded on the River
+Seat 6: TunicoTT (small blind) collected (49634)
+Seat 7: Massey_Crush (big blind) folded before Flop
+Seat 8: eastcoastbidder folded before Flop (didn't bet)
+
+PokerStars Hand #261627336888: Tournament #4018426247, $9.80+$1.20 USD Hold'em No Limit - Level XVIII (3000/6000) - 2026/08/02 17:32:59 ET
+Table '4018426247 100' 8-max Seat #6 is the button
+Seat 1: ballack1010 (102939 in chips) 
+Seat 2: j9goldmine (142600 in chips) 
+Seat 3: Roma140288 (40492 in chips) 
+Seat 4: H-Colorado-K (63368 in chips) 
+Seat 5: Livino Showtime (81901 in chips) 
+Seat 6: TunicoTT (328128 in chips) 
+Seat 7: Massey_Crush (298370 in chips) 
+Seat 8: eastcoastbidder (144532 in chips) 
+ballack1010: posts the ante 800
+j9goldmine: posts the ante 800
+Roma140288: posts the ante 800
+H-Colorado-K: posts the ante 800
+Livino Showtime: posts the ante 800
+TunicoTT: posts the ante 800
+Massey_Crush: posts the ante 800
+eastcoastbidder: posts the ante 800
+Massey_Crush: posts small blind 3000
+eastcoastbidder: posts big blind 6000
+*** HOLE CARDS ***
+ballack1010: folds 
+j9goldmine: folds 
+Roma140288: folds 
+H-Colorado-K: folds 
+Livino Showtime: folds 
+TunicoTT: raises 6000 to 12000
+Massey_Crush: calls 9000
+eastcoastbidder: raises 131732 to 143732 and is all-in
+TunicoTT: folds 
+Massey_Crush: folds 
+Uncalled bet (131732) returned to eastcoastbidder
+eastcoastbidder collected 42400 from pot
+eastcoastbidder: doesn't show hand 
+*** SUMMARY ***
+Total pot 42400 | Rake 0 
+Seat 1: ballack1010 folded before Flop (didn't bet)
+Seat 2: j9goldmine folded before Flop (didn't bet)
+Seat 3: Roma140288 folded before Flop (didn't bet)
+Seat 4: H-Colorado-K folded before Flop (didn't bet)
+Seat 5: Livino Showtime folded before Flop (didn't bet)
+Seat 6: TunicoTT (button) folded before Flop
+Seat 7: Massey_Crush (small blind) folded before Flop
+Seat 8: eastcoastbidder (big blind) collected (42400)
+
+PokerStars Hand #261627353582: Tournament #4018426247, $9.80+$1.20 USD Hold'em No Limit - Level XVIII (3000/6000) - 2026/08/02 17:34:13 ET
+Table '4018426247 100' 8-max Seat #7 is the button
+Seat 1: ballack1010 (102139 in chips) 
+Seat 2: j9goldmine (141800 in chips) 
+Seat 3: Roma140288 (39692 in chips) 
+Seat 4: H-Colorado-K (62568 in chips) 
+Seat 5: Livino Showtime (81101 in chips) 
+Seat 6: TunicoTT (315328 in chips) 
+Seat 7: Massey_Crush (285570 in chips) 
+Seat 8: eastcoastbidder (174132 in chips) 
+ballack1010: posts the ante 800
+j9goldmine: posts the ante 800
+Roma140288: posts the ante 800
+H-Colorado-K: posts the ante 800
+Livino Showtime: posts the ante 800
+TunicoTT: posts the ante 800
+Massey_Crush: posts the ante 800
+eastcoastbidder: posts the ante 800
+eastcoastbidder: posts small blind 3000
+ballack1010: posts big blind 6000
+*** HOLE CARDS ***
+j9goldmine: folds 
+Roma140288: folds 
+H-Colorado-K: folds 
+Livino Showtime: folds 
+TunicoTT: raises 6000 to 12000
+Massey_Crush: folds 
+eastcoastbidder: folds 
+ballack1010: folds 
+Uncalled bet (6000) returned to TunicoTT
+TunicoTT collected 21400 from pot
+TunicoTT: doesn't show hand 
+*** SUMMARY ***
+Total pot 21400 | Rake 0 
+Seat 1: ballack1010 (big blind) folded before Flop
+Seat 2: j9goldmine folded before Flop (didn't bet)
+Seat 3: Roma140288 folded before Flop (didn't bet)
+Seat 4: H-Colorado-K folded before Flop (didn't bet)
+Seat 5: Livino Showtime folded before Flop (didn't bet)
+Seat 6: TunicoTT collected (21400)
+Seat 7: Massey_Crush (button) folded before Flop (didn't bet)
+Seat 8: eastcoastbidder (small blind) folded before Flop
+
+PokerStars Hand #261627362829: Tournament #4018426247, $9.80+$1.20 USD Hold'em No Limit - Level XVIII (3000/6000) - 2026/08/02 17:34:54 ET
+Table '4018426247 100' 8-max Seat #8 is the button
+Seat 1: ballack1010 (95339 in chips) 
+Seat 2: j9goldmine (141000 in chips) 
+Seat 3: Roma140288 (38892 in chips) 
+Seat 4: H-Colorado-K (61768 in chips) 
+Seat 5: Livino Showtime (80301 in chips) 
+Seat 6: TunicoTT (329928 in chips) 
+Seat 7: Massey_Crush (284770 in chips) 
+Seat 8: eastcoastbidder (170332 in chips) 
+ballack1010: posts the ante 800
+j9goldmine: posts the ante 800
+Roma140288: posts the ante 800
+H-Colorado-K: posts the ante 800
+Livino Showtime: posts the ante 800
+TunicoTT: posts the ante 800
+Massey_Crush: posts the ante 800
+eastcoastbidder: posts the ante 800
+ballack1010: posts small blind 3000
+j9goldmine: posts big blind 6000
+*** HOLE CARDS ***
+Roma140288: folds 
+H-Colorado-K: folds 
+Livino Showtime: folds 
+TunicoTT: folds 
+Massey_Crush: folds 
+eastcoastbidder: folds 
+ballack1010: calls 3000
+j9goldmine: raises 9000 to 15000
+ballack1010: calls 9000
+*** FLOP *** [5d Jd Jh]
+ballack1010: checks 
+j9goldmine: checks 
+*** TURN *** [5d Jd Jh] [6h]
+ballack1010: checks 
+j9goldmine: bets 24000
+ballack1010: folds 
+Uncalled bet (24000) returned to j9goldmine
+j9goldmine collected 36400 from pot
+j9goldmine: doesn't show hand 
+*** SUMMARY ***
+Total pot 36400 | Rake 0 
+Board [5d Jd Jh 6h]
+Seat 1: ballack1010 (small blind) folded on the Turn
+Seat 2: j9goldmine (big blind) collected (36400)
+Seat 3: Roma140288 folded before Flop (didn't bet)
+Seat 4: H-Colorado-K folded before Flop (didn't bet)
+Seat 5: Livino Showtime folded before Flop (didn't bet)
+Seat 6: TunicoTT folded before Flop (didn't bet)
+Seat 7: Massey_Crush folded before Flop (didn't bet)
+Seat 8: eastcoastbidder (button) folded before Flop (didn't bet)
+
+PokerStars Hand #261627378603: Tournament #4018426247, $9.80+$1.20 USD Hold'em No Limit - Level XVIII (3000/6000) - 2026/08/02 17:36:05 ET
+Table '4018426247 100' 8-max Seat #1 is the button
+Seat 1: ballack1010 (79539 in chips) 
+Seat 2: j9goldmine (161600 in chips) 
+Seat 3: Roma140288 (38092 in chips) 
+Seat 4: H-Colorado-K (60968 in chips) 
+Seat 5: Livino Showtime (79501 in chips) 
+Seat 6: TunicoTT (329128 in chips) 
+Seat 7: Massey_Crush (283970 in chips) 
+Seat 8: eastcoastbidder (169532 in chips) 
+ballack1010: posts the ante 800
+j9goldmine: posts the ante 800
+Roma140288: posts the ante 800
+H-Colorado-K: posts the ante 800
+Livino Showtime: posts the ante 800
+TunicoTT: posts the ante 800
+Massey_Crush: posts the ante 800
+eastcoastbidder: posts the ante 800
+j9goldmine: posts small blind 3000
+Roma140288: posts big blind 6000
+*** HOLE CARDS ***
+H-Colorado-K: folds 
+Livino Showtime: folds 
+TunicoTT: raises 6000 to 12000
+Massey_Crush: folds 
+eastcoastbidder: folds 
+ballack1010: folds 
+j9goldmine: folds 
+Roma140288: folds 
+Uncalled bet (6000) returned to TunicoTT
+TunicoTT collected 21400 from pot
+TunicoTT: doesn't show hand 
+*** SUMMARY ***
+Total pot 21400 | Rake 0 
+Seat 1: ballack1010 (button) folded before Flop (didn't bet)
+Seat 2: j9goldmine (small blind) folded before Flop
+Seat 3: Roma140288 (big blind) folded before Flop
+Seat 4: H-Colorado-K folded before Flop (didn't bet)
+Seat 5: Livino Showtime folded before Flop (didn't bet)
+Seat 6: TunicoTT collected (21400)
+Seat 7: Massey_Crush folded before Flop (didn't bet)
+Seat 8: eastcoastbidder folded before Flop (didn't bet)
+
+PokerStars Hand #261627385216: Tournament #4018426247, $9.80+$1.20 USD Hold'em No Limit - Level XVIII (3000/6000) - 2026/08/02 17:36:35 ET
+Table '4018426247 100' 8-max Seat #2 is the button
+Seat 1: ballack1010 (78739 in chips) 
+Seat 2: j9goldmine (157800 in chips) 
+Seat 3: Roma140288 (31292 in chips) 
+Seat 4: H-Colorado-K (60168 in chips) 
+Seat 5: Livino Showtime (78701 in chips) 
+Seat 6: TunicoTT (343728 in chips) 
+Seat 7: Massey_Crush (283170 in chips) 
+Seat 8: eastcoastbidder (168732 in chips) 
+ballack1010: posts the ante 800
+j9goldmine: posts the ante 800
+Roma140288: posts the ante 800
+H-Colorado-K: posts the ante 800
+Livino Showtime: posts the ante 800
+TunicoTT: posts the ante 800
+Massey_Crush: posts the ante 800
+eastcoastbidder: posts the ante 800
+Roma140288: posts small blind 3000
+H-Colorado-K: posts big blind 6000
+*** HOLE CARDS ***
+Livino Showtime: folds 
+TunicoTT: folds 
+Massey_Crush: raises 6300 to 12300
+eastcoastbidder: folds 
+ballack1010: folds 
+j9goldmine: folds 
+Roma140288: folds 
+H-Colorado-K: folds 
+Uncalled bet (6300) returned to Massey_Crush
+Massey_Crush collected 21400 from pot
+Massey_Crush: doesn't show hand 
+*** SUMMARY ***
+Total pot 21400 | Rake 0 
+Seat 1: ballack1010 folded before Flop (didn't bet)
+Seat 2: j9goldmine (button) folded before Flop (didn't bet)
+Seat 3: Roma140288 (small blind) folded before Flop
+Seat 4: H-Colorado-K (big blind) folded before Flop
+Seat 5: Livino Showtime folded before Flop (didn't bet)
+Seat 6: TunicoTT folded before Flop (didn't bet)
+Seat 7: Massey_Crush collected (21400)
+Seat 8: eastcoastbidder folded before Flop (didn't bet)
+
+PokerStars Hand #261627393386: Tournament #4018426247, $9.80+$1.20 USD Hold'em No Limit - Level XVIII (3000/6000) - 2026/08/02 17:37:13 ET
+Table '4018426247 100' 8-max Seat #3 is the button
+Seat 1: ballack1010 (77939 in chips) 
+Seat 2: j9goldmine (157000 in chips) 
+Seat 3: Roma140288 (27492 in chips) 
+Seat 4: H-Colorado-K (53368 in chips) 
+Seat 5: Livino Showtime (77901 in chips) 
+Seat 6: TunicoTT (342928 in chips) 
+Seat 7: Massey_Crush (297770 in chips) 
+Seat 8: eastcoastbidder (167932 in chips) 
+ballack1010: posts the ante 800
+j9goldmine: posts the ante 800
+Roma140288: posts the ante 800
+H-Colorado-K: posts the ante 800
+Livino Showtime: posts the ante 800
+TunicoTT: posts the ante 800
+Massey_Crush: posts the ante 800
+eastcoastbidder: posts the ante 800
+H-Colorado-K: posts small blind 3000
+Livino Showtime: posts big blind 6000
+*** HOLE CARDS ***
+TunicoTT: folds 
+Massey_Crush: folds 
+eastcoastbidder: folds 
+ballack1010: folds 
+j9goldmine: folds 
+Roma140288: raises 20692 to 26692 and is all-in
+H-Colorado-K: folds 
+Livino Showtime: calls 20692
+*** FLOP *** [5c 2c 8c]
+*** TURN *** [5c 2c 8c] [Jc]
+*** RIVER *** [5c 2c 8c Jc] [5h]
+*** SHOW DOWN ***
+Livino Showtime: shows [2h Qh] (two pair, Fives and Deuces)
+Roma140288: shows [Kh Ks] (two pair, Kings and Fives)
+Roma140288 collected 62784 from pot
+*** SUMMARY ***
+Total pot 62784 | Rake 0 
+Board [5c 2c 8c Jc 5h]
+Seat 1: ballack1010 folded before Flop (didn't bet)
+Seat 2: j9goldmine folded before Flop (didn't bet)
+Seat 3: Roma140288 (button) showed [Kh Ks] and won (62784) with two pair, Kings and Fives
+Seat 4: H-Colorado-K (small blind) folded before Flop
+Seat 5: Livino Showtime (big blind) showed [2h Qh] and lost with two pair, Fives and Deuces
+Seat 6: TunicoTT folded before Flop (didn't bet)
+Seat 7: Massey_Crush folded before Flop (didn't bet)
+Seat 8: eastcoastbidder folded before Flop (didn't bet)
+
+PokerStars Hand #261627404153: Tournament #4018426247, $9.80+$1.20 USD Hold'em No Limit - Level XVIII (3000/6000) - 2026/08/02 17:38:02 ET
+Table '4018426247 100' 8-max Seat #4 is the button
+Seat 1: ballack1010 (77139 in chips) 
+Seat 2: j9goldmine (156200 in chips) 
+Seat 3: Roma140288 (62784 in chips) 
+Seat 4: H-Colorado-K (49568 in chips) 
+Seat 5: Livino Showtime (50409 in chips) 
+Seat 6: TunicoTT (342128 in chips) 
+Seat 7: Massey_Crush (296970 in chips) 
+Seat 8: eastcoastbidder (167132 in chips) 
+ballack1010: posts the ante 800
+j9goldmine: posts the ante 800
+Roma140288: posts the ante 800
+H-Colorado-K: posts the ante 800
+Livino Showtime: posts the ante 800
+TunicoTT: posts the ante 800
+Massey_Crush: posts the ante 800
+eastcoastbidder: posts the ante 800
+Livino Showtime: posts small blind 3000
+TunicoTT: posts big blind 6000
+*** HOLE CARDS ***
+Massey_Crush: folds 
+eastcoastbidder: folds 
+ballack1010: raises 70339 to 76339 and is all-in
+j9goldmine: folds 
+Roma140288: folds 
+H-Colorado-K: folds 
+Livino Showtime: folds 
+TunicoTT: folds 
+Uncalled bet (70339) returned to ballack1010
+ballack1010 collected 21400 from pot
+ballack1010: doesn't show hand 
+*** SUMMARY ***
+Total pot 21400 | Rake 0 
+Seat 1: ballack1010 collected (21400)
+Seat 2: j9goldmine folded before Flop (didn't bet)
+Seat 3: Roma140288 folded before Flop (didn't bet)
+Seat 4: H-Colorado-K (button) folded before Flop (didn't bet)
+Seat 5: Livino Showtime (small blind) folded before Flop
+Seat 6: TunicoTT (big blind) folded before Flop
+Seat 7: Massey_Crush folded before Flop (didn't bet)
+Seat 8: eastcoastbidder folded before Flop (didn't bet)
+
+PokerStars Hand #261627412949: Tournament #4018426247, $9.80+$1.20 USD Hold'em No Limit - Level XVIII (3000/6000) - 2026/08/02 17:38:42 ET
+Table '4018426247 100' 8-max Seat #5 is the button
+Seat 1: ballack1010 (91739 in chips) 
+Seat 2: j9goldmine (155400 in chips) 
+Seat 3: Roma140288 (61984 in chips) 
+Seat 4: H-Colorado-K (48768 in chips) 
+Seat 5: Livino Showtime (46609 in chips) 
+Seat 6: TunicoTT (335328 in chips) 
+Seat 7: Massey_Crush (296170 in chips) 
+Seat 8: eastcoastbidder (166332 in chips) 
+ballack1010: posts the ante 800
+j9goldmine: posts the ante 800
+Roma140288: posts the ante 800
+H-Colorado-K: posts the ante 800
+Livino Showtime: posts the ante 800
+TunicoTT: posts the ante 800
+Massey_Crush: posts the ante 800
+eastcoastbidder: posts the ante 800
+TunicoTT: posts small blind 3000
+Massey_Crush: posts big blind 6000
+*** HOLE CARDS ***
+eastcoastbidder: folds 
+ballack1010: folds 
+j9goldmine: folds 
+Roma140288: folds 
+H-Colorado-K: folds 
+Livino Showtime: folds 
+TunicoTT: folds 
+Uncalled bet (3000) returned to Massey_Crush
+Massey_Crush collected 12400 from pot
+Massey_Crush: doesn't show hand 
+*** SUMMARY ***
+Total pot 12400 | Rake 0 
+Seat 1: ballack1010 folded before Flop (didn't bet)
+Seat 2: j9goldmine folded before Flop (didn't bet)
+Seat 3: Roma140288 folded before Flop (didn't bet)
+Seat 4: H-Colorado-K folded before Flop (didn't bet)
+Seat 5: Livino Showtime (button) folded before Flop (didn't bet)
+Seat 6: TunicoTT (small blind) folded before Flop
+Seat 7: Massey_Crush (big blind) collected (12400)
+Seat 8: eastcoastbidder folded before Flop (didn't bet)
+
+PokerStars Hand #261627420655: Tournament #4018426247, $9.80+$1.20 USD Hold'em No Limit - Level XVIII (3000/6000) - 2026/08/02 17:39:17 ET
+Table '4018426247 100' 8-max Seat #6 is the button
+Seat 1: ballack1010 (90939 in chips) 
+Seat 2: j9goldmine (154600 in chips) 
+Seat 3: Roma140288 (61184 in chips) 
+Seat 4: H-Colorado-K (47968 in chips) 
+Seat 5: Livino Showtime (45809 in chips) 
+Seat 6: TunicoTT (331528 in chips) 
+Seat 7: Massey_Crush (304770 in chips) 
+Seat 8: eastcoastbidder (165532 in chips) 
+ballack1010: posts the ante 800
+j9goldmine: posts the ante 800
+Roma140288: posts the ante 800
+H-Colorado-K: posts the ante 800
+Livino Showtime: posts the ante 800
+TunicoTT: posts the ante 800
+Massey_Crush: posts the ante 800
+eastcoastbidder: posts the ante 800
+Massey_Crush: posts small blind 3000
+eastcoastbidder: posts big blind 6000
+*** HOLE CARDS ***
+ballack1010: folds 
+j9goldmine: folds 
+Roma140288: folds 
+H-Colorado-K: folds 
+Livino Showtime: folds 
+TunicoTT: raises 6000 to 12000
+Massey_Crush: folds 
+eastcoastbidder: calls 6000
+*** FLOP *** [Ah 3h 8d]
+eastcoastbidder: checks 
+TunicoTT: bets 11022
+eastcoastbidder: calls 11022
+*** TURN *** [Ah 3h 8d] [5s]
+eastcoastbidder: checks 
+TunicoTT: bets 54000
+eastcoastbidder: folds 
+Uncalled bet (54000) returned to TunicoTT
+TunicoTT collected 55444 from pot
+TunicoTT: doesn't show hand 
+*** SUMMARY ***
+Total pot 55444 | Rake 0 
+Board [Ah 3h 8d 5s]
+Seat 1: ballack1010 folded before Flop (didn't bet)
+Seat 2: j9goldmine folded before Flop (didn't bet)
+Seat 3: Roma140288 folded before Flop (didn't bet)
+Seat 4: H-Colorado-K folded before Flop (didn't bet)
+Seat 5: Livino Showtime folded before Flop (didn't bet)
+Seat 6: TunicoTT (button) collected (55444)
+Seat 7: Massey_Crush (small blind) folded before Flop
+Seat 8: eastcoastbidder (big blind) folded on the Turn

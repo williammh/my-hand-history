@@ -1,0 +1,29 @@
+#Game No : 900000000001
+***** 888poker Hand History for Game 900000000001 *****
+50/100 Blinds No Limit Holdem - *** 02 08 2026 10:00:00
+Tournament #500001 $20 + $2 - Table #7 6 Max (Real Money)
+Seat 4 is the button
+Total number of players : 4
+Seat 1: Shorty ( 310 )
+Seat 2: Bigstack ( 9000 )
+Seat 4: Button ( 4000 )
+Seat 6: Blind ( 4000 )
+Shorty posts ante [10]
+Bigstack posts ante [10]
+Button posts ante [10]
+Blind posts ante [10]
+Bigstack posts small blind [50]
+Blind posts big blind [100]
+** Dealing down cards **
+Dealt to Button [ Qs, Qd ]
+Button raises [300]
+Shorty calls [300]
+Bigstack folds
+Blind folds
+** Dealing flop ** [ 2c, 7d, Ah ]
+** Dealing turn ** [ Kh ]
+** Dealing river ** [ 3s ]
+** Summary **
+Shorty shows [ Ac, Kc ]
+Button shows [ Qs, Qd ]
+Shorty collected [ 790 ]

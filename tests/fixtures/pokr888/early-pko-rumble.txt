@@ -1,0 +1,313 @@
+#Game No : 778482528
+***** 888poker Hand History for Game 778482528 *****
+25/50 Blinds No Limit Holdem - *** 02 08 2026 09:01:09
+Tournament #293965397 $5 + $1 - Table #1 8 Max (Real Money)
+Seat 8 is the button
+Total number of players : 8
+Seat 1: xinfinity88 ( 5000 )
+Seat 2: skorohod1310 ( 5000 )
+Seat 3: cal1205 ( 5000 )
+Seat 5: Perchik_15 ( 5000 )
+Seat 6: IpokerBoiiy ( 5000 )
+Seat 7: Varadisityu ( 5000 )
+Seat 8: Artolya ( 5000 )
+Seat 10: Noname057 ( 5000 )
+IpokerBoiiy posts ante [8]
+Varadisityu posts ante [8]
+Perchik_15 posts ante [8]
+Artolya posts ante [8]
+Noname057 posts ante [8]
+xinfinity88 posts ante [8]
+skorohod1310 posts ante [8]
+cal1205 posts ante [8]
+Noname057 posts small blind [25]
+xinfinity88 posts big blind [50]
+** Dealing down cards **
+skorohod1310 folds
+cal1205 folds
+Perchik_15 raises [100]
+IpokerBoiiy folds
+Varadisityu calls [100]
+Artolya calls [100]
+Noname057 folds
+xinfinity88 calls [50]
+** Dealing flop ** [ 4c, 4h, Qh ]
+xinfinity88 checks
+Perchik_15 checks
+Varadisityu checks
+Artolya checks
+** Dealing turn ** [ 5c ]
+xinfinity88 checks
+Perchik_15 checks
+Varadisityu checks
+Artolya bets [311]
+xinfinity88 folds
+Perchik_15 folds
+Varadisityu folds
+** Summary **
+Artolya collected [ 489 ]
+
+#Game No : 778483081
+***** 888poker Hand History for Game 778483081 *****
+25/50 Blinds No Limit Holdem - *** 02 08 2026 09:04:37
+Tournament #293965397 $5 + $1 - Table #1 8 Max (Real Money)
+Seat 10 is the button
+Total number of players : 7
+Seat 1: xinfinity88 ( 4892 )
+Seat 3: cal1205 ( 4992 )
+Seat 5: Perchik_15 ( 4892 )
+Seat 6: h1karo666 ( 5000 )
+Seat 7: Varadisityu ( 4892 )
+Seat 8: Artolya ( 5381 )
+Seat 10: Noname057 ( 4967 )
+Varadisityu posts ante [8]
+Perchik_15 posts ante [8]
+Artolya posts ante [8]
+Noname057 posts ante [8]
+xinfinity88 posts ante [8]
+cal1205 posts ante [8]
+h1karo666 posts ante [8]
+xinfinity88 posts small blind [25]
+cal1205 posts big blind [50]
+** Dealing down cards **
+Perchik_15 folds
+h1karo666 folds
+Varadisityu folds
+Artolya folds
+Noname057 raises [4959]
+xinfinity88 folds
+cal1205 folds
+** Summary **
+Noname057 collected [ 181 ]
+
+#Game No : 778483160
+***** 888poker Hand History for Game 778483160 *****
+25/50 Blinds No Limit Holdem - *** 02 08 2026 09:05:26
+Tournament #293965397 $5 + $1 - Table #1 8 Max (Real Money)
+Seat 1 is the button
+Total number of players : 7
+Seat 1: xinfinity88 ( 4859 )
+Seat 3: cal1205 ( 4934 )
+Seat 5: Perchik_15 ( 4884 )
+Seat 6: h1karo666 ( 4992 )
+Seat 7: Varadisityu ( 4884 )
+Seat 8: Artolya ( 5373 )
+Seat 10: Noname057 ( 5090 )
+Varadisityu posts ante [8]
+Perchik_15 posts ante [8]
+Artolya posts ante [8]
+Noname057 posts ante [8]
+xinfinity88 posts ante [8]
+cal1205 posts ante [8]
+h1karo666 posts ante [8]
+cal1205 posts small blind [25]
+Perchik_15 posts big blind [50]
+** Dealing down cards **
+h1karo666 folds
+Varadisityu folds
+Artolya folds
+Noname057 folds
+xinfinity88 raises [100]
+cal1205 calls [75]
+Perchik_15 raises [450]
+xinfinity88 raises [4751]
+cal1205 folds
+Perchik_15 folds
+** Summary **
+xinfinity88 collected [ 1156 ]
+
+#Game No : 778483258
+***** 888poker Hand History for Game 778483258 *****
+25/50 Blinds No Limit Holdem - *** 02 08 2026 09:06:19
+Tournament #293965397 $5 + $1 - Table #1 8 Max (Real Money)
+Seat 3 is the button
+Total number of players : 8
+Seat 1: xinfinity88 ( 5507 )
+Seat 2: Pestana90 ( 5000 )
+Seat 3: cal1205 ( 4826 )
+Seat 5: Perchik_15 ( 4376 )
+Seat 6: h1karo666 ( 4984 )
+Seat 7: Varadisityu ( 4876 )
+Seat 8: Artolya ( 5365 )
+Seat 10: Noname057 ( 5082 )
+Varadisityu posts ante [8]
+Perchik_15 posts ante [8]
+Artolya posts ante [8]
+Noname057 posts ante [8]
+xinfinity88 posts ante [8]
+cal1205 posts ante [8]
+h1karo666 posts ante [8]
+Pestana90 posts ante [8]
+Perchik_15 posts small blind [25]
+h1karo666 posts big blind [50]
+** Dealing down cards **
+Varadisityu folds
+Artolya folds
+Noname057 folds
+xinfinity88 raises [100]
+Pestana90 folds
+cal1205 calls [100]
+Perchik_15 folds
+h1karo666 raises [550]
+xinfinity88 raises [5399]
+cal1205 folds
+h1karo666 folds
+** Summary **
+xinfinity88 collected [ 1389 ]
+
+#Game No : 778483343
+***** 888poker Hand History for Game 778483343 *****
+25/50 Blinds No Limit Holdem - *** 02 08 2026 09:07:09
+Tournament #293965397 $5 + $1 - Table #1 8 Max (Real Money)
+Seat 5 is the button
+Total number of players : 8
+Seat 1: xinfinity88 ( 6288 )
+Seat 2: Pestana90 ( 4992 )
+Seat 3: cal1205 ( 4718 )
+Seat 5: Perchik_15 ( 4343 )
+Seat 6: h1karo666 ( 4376 )
+Seat 7: Varadisityu ( 4868 )
+Seat 8: Artolya ( 5357 )
+Seat 10: Noname057 ( 5074 )
+Varadisityu posts ante [8]
+Perchik_15 posts ante [8]
+Artolya posts ante [8]
+Noname057 posts ante [8]
+xinfinity88 posts ante [8]
+cal1205 posts ante [8]
+h1karo666 posts ante [8]
+Pestana90 posts ante [8]
+h1karo666 posts small blind [25]
+Varadisityu posts big blind [50]
+** Dealing down cards **
+Artolya folds
+Noname057 folds
+xinfinity88 folds
+Pestana90 folds
+cal1205 raises [150]
+Perchik_15 folds
+h1karo666 folds
+Varadisityu folds
+** Summary **
+cal1205 collected [ 189 ]
+
+#Game No : 778483450
+***** 888poker Hand History for Game 778483450 *****
+25/50 Blinds No Limit Holdem - *** 02 08 2026 09:08:08
+Tournament #293965397 $5 + $1 - Table #1 8 Max (Real Money)
+Seat 6 is the button
+Total number of players : 8
+Seat 1: xinfinity88 ( 6280 )
+Seat 2: Pestana90 ( 4984 )
+Seat 3: cal1205 ( 4849 )
+Seat 5: Perchik_15 ( 4335 )
+Seat 6: h1karo666 ( 4343 )
+Seat 7: Varadisityu ( 4810 )
+Seat 8: Artolya ( 5349 )
+Seat 10: Noname057 ( 5066 )
+Varadisityu posts ante [8]
+Perchik_15 posts ante [8]
+Artolya posts ante [8]
+Noname057 posts ante [8]
+xinfinity88 posts ante [8]
+cal1205 posts ante [8]
+h1karo666 posts ante [8]
+Pestana90 posts ante [8]
+Varadisityu posts small blind [25]
+Artolya posts big blind [50]
+** Dealing down cards **
+Noname057 raises [100]
+xinfinity88 raises [200]
+Pestana90 folds
+cal1205 folds
+Perchik_15 folds
+h1karo666 folds
+Varadisityu folds
+Artolya folds
+Noname057 calls [100]
+** Dealing flop ** [ 6s, Ah, 8h ]
+Noname057 checks
+xinfinity88 bets [100]
+Noname057 calls [100]
+** Dealing turn ** [ Tc ]
+Noname057 bets [250]
+xinfinity88 calls [250]
+** Dealing river ** [ 2h ]
+Noname057 bets [450]
+xinfinity88 calls [450]
+** Summary **
+Noname057 shows [ As, 5h ]
+xinfinity88 shows [ Ac, Qh ]
+xinfinity88 collected [ 2139 ]
+
+#Game No : 778483624
+***** 888poker Hand History for Game 778483624 *****
+25/50 Blinds No Limit Holdem - *** 02 08 2026 09:09:38
+Tournament #293965397 $5 + $1 - Table #1 8 Max (Real Money)
+Seat 7 is the button
+Total number of players : 8
+Seat 1: xinfinity88 ( 7411 )
+Seat 2: Pestana90 ( 4976 )
+Seat 3: cal1205 ( 4841 )
+Seat 5: Perchik_15 ( 4327 )
+Seat 6: h1karo666 ( 4335 )
+Seat 7: Varadisityu ( 4777 )
+Seat 8: Artolya ( 5291 )
+Seat 10: Noname057 ( 4058 )
+Varadisityu posts ante [8]
+Perchik_15 posts ante [8]
+Artolya posts ante [8]
+Noname057 posts ante [8]
+xinfinity88 posts ante [8]
+cal1205 posts ante [8]
+h1karo666 posts ante [8]
+Pestana90 posts ante [8]
+Artolya posts small blind [25]
+Noname057 posts big blind [50]
+** Dealing down cards **
+xinfinity88 folds
+Pestana90 folds
+cal1205 folds
+Perchik_15 raises [100]
+h1karo666 folds
+Varadisityu folds
+Artolya folds
+Noname057 folds
+** Summary **
+Perchik_15 collected [ 189 ]
+
+#Game No : 778483679
+***** 888poker Hand History for Game 778483679 *****
+25/50 Blinds No Limit Holdem - *** 02 08 2026 09:10:08
+Tournament #293965397 $5 + $1 - Table #1 8 Max (Real Money)
+Seat 8 is the button
+Total number of players : 8
+Seat 1: xinfinity88 ( 7403 )
+Seat 2: Pestana90 ( 4968 )
+Seat 3: cal1205 ( 4833 )
+Seat 5: Perchik_15 ( 4458 )
+Seat 6: h1karo666 ( 4327 )
+Seat 7: Varadisityu ( 4769 )
+Seat 8: Artolya ( 5258 )
+Seat 10: Noname057 ( 4000 )
+Varadisityu posts ante [8]
+Perchik_15 posts ante [8]
+Artolya posts ante [8]
+Noname057 posts ante [8]
+xinfinity88 posts ante [8]
+cal1205 posts ante [8]
+h1karo666 posts ante [8]
+Pestana90 posts ante [8]
+Noname057 posts small blind [25]
+xinfinity88 posts big blind [50]
+** Dealing down cards **
+Pestana90 folds
+cal1205 folds
+Perchik_15 folds
+h1karo666 folds
+Varadisityu folds
+Artolya raises [100]
+Noname057 folds
+xinfinity88 folds
+** Summary **
+Artolya collected [ 189 ]

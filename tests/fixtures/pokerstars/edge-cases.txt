@@ -1,0 +1,98 @@
+PokerStars Hand #100000000001: Tournament #900001, $10+$1 USD Hold'em No Limit - Level V (100/200) - 2026/08/02 12:00:00 ET
+Table '900001 5' 6-max Seat #2 is the button
+Seat 1: Shorty (450 in chips)
+Seat 2: Chipleader (12000 in chips)
+Seat 3: Middler (2200 in chips)
+Seat 4: Caller (5000 in chips)
+Shorty: posts the ante 25
+Chipleader: posts the ante 25
+Middler: posts the ante 25
+Caller: posts the ante 25
+Middler: posts small blind 100
+Caller: posts big blind 200
+*** HOLE CARDS ***
+Dealt to Caller [Ac Ad]
+Shorty: raises 225 to 425 and is all-in
+Chipleader: calls 425
+Middler: raises 1775 to 2175 and is all-in
+Caller: calls 1975
+Chipleader: folds
+*** FLOP *** [2c 7d 9h]
+*** TURN *** [2c 7d 9h] [Ts]
+*** RIVER *** [2c 7d 9h Ts] [Kc]
+*** SHOW DOWN ***
+Middler: shows [Kh Kd] (three of a kind, Kings)
+Caller: shows [Ac Ad] (two pair, Aces and Kings)
+Shorty: shows [5c 5d] (two pair, Kings and Fives)
+Middler collected 1800 from main pot
+Middler collected 3500 from side pot-1
+*** SUMMARY ***
+Total pot 5300 | Rake 0
+Board [2c 7d 9h Ts Kc]
+Seat 1: Shorty showed [5c 5d] and lost with two pair, Kings and Fives
+Seat 2: Chipleader (button) folded before Flop
+Seat 3: Middler (small blind) showed [Kh Kd] and won (5300) with three of a kind, Kings
+Seat 4: Caller (big blind) showed [Ac Ad] and lost with two pair, Aces and Kings
+
+PokerStars Hand #100000000002: Hold'em No Limit ($1/$2 USD) - 2026/08/02 13:00:00 ET
+Table 'Heads Up' 2-max Seat #1 is the button
+Seat 1: Alice ($200 in chips)
+Seat 2: Bob ($200 in chips)
+Alice: posts small blind $1
+Bob: posts big blind $2
+*** HOLE CARDS ***
+Dealt to Alice [Kh Ks]
+Alice: raises $4 to $6
+Bob: calls $4
+*** FLOP *** [2h 3h 4h]
+Bob: checks
+Alice: bets $8
+Bob: raises $22 to $30
+Alice: calls $22
+*** TURN *** [2h 3h 4h] [Kd]
+Bob: bets $40
+Alice: calls $40
+*** RIVER *** [2h 3h 4h Kd] [7s]
+Bob: checks
+Alice: checks
+*** SHOW DOWN ***
+Bob: shows [Ah 5h] (a flush, Ace high)
+Alice: shows [Kh Ks] (three of a kind, Kings)
+Bob collected $151 from pot
+*** SUMMARY ***
+Total pot $152 | Rake $1
+Board [2h 3h 4h Kd 7s]
+Seat 1: Alice (button) (small blind) showed [Kh Ks] and lost with three of a kind, Kings
+Seat 2: Bob (big blind) showed [Ah 5h] and won ($151) with a flush, Ace high
+
+PokerStars Hand #100000000003: Hold'em No Limit ($0.25/$0.50 USD) - 2026/08/02 14:00:00 ET
+Table 'Split' 3-max Seat #1 is the button
+Seat 1: Dealer ($50 in chips)
+Seat 2: Twin1 ($50 in chips)
+Seat 3: Twin2 ($50 in chips)
+Twin1: posts small blind $0.25
+Twin2: posts big blind $0.50
+*** HOLE CARDS ***
+Dealer: folds
+Twin1: calls $0.25
+Twin2: checks
+*** FLOP *** [As Ks Qs]
+Twin1: checks
+Twin2: checks
+*** TURN *** [As Ks Qs] [Js]
+Twin1: checks
+Twin2: checks
+*** RIVER *** [As Ks Qs Js] [Ts]
+Twin1: checks
+Twin2: checks
+*** SHOW DOWN ***
+Twin1: shows [2c 3c] (a royal flush)
+Twin2: shows [4d 5d] (a royal flush)
+Twin1 collected $0.50 from pot
+Twin2 collected $0.50 from pot
+*** SUMMARY ***
+Total pot $1 | Rake $0
+Board [As Ks Qs Js Ts]
+Seat 1: Dealer (button) folded before Flop (didn't bet)
+Seat 2: Twin1 (small blind) showed [2c 3c] and won ($0.50) with a royal flush
+Seat 3: Twin2 (big blind) showed [4d 5d] and won ($0.50) with a royal flush

@@ -1,0 +1,31 @@
+Poker Hand #RC103014874: Hold'em No Limit ($0.50/$1.00) - 2026/08/31 18:22:10
+Table 'RushAndCash100' 6-max Seat #1 is the button
+Seat 1: e4d3c2b1 ($100.00 in chips)
+Seat 2: a1b2c3d4 ($142.50 in chips)
+Seat 3: Hero ($100.00 in chips)
+Seat 4: f5e6d7c8 ($65.10 in chips)
+Seat 5: 9a8b7c6d ($98.00 in chips)
+Seat 6: 1234abcd ($210.25 in chips)
+a1b2c3d4: posts small blind $0.50
+Hero: posts big blind $1.00
+*** HOLE CARDS ***
+Dealt to Hero [Ah Kd]
+f5e6d7c8: folds
+9a8b7c6d: raises $1.50 to $2.50
+1234abcd: folds
+e4d3c2b1: folds
+a1b2c3d4: folds
+Hero: raises $5.50 to $8.00
+9a8b7c6d: calls $5.50
+*** FLOP *** [As 7c 2d]
+Hero: bets $4.00
+9a8b7c6d: calls $4.00
+*** TURN *** [As 7c 2d] [Kh]
+Hero: bets $18.50
+9a8b7c6d: folds
+Uncalled bet ($18.50) returned to Hero
+Hero collected $23.00 from pot
+*** SUMMARY ***
+Total pot $24.50 | Rake $1.50
+Board [As 7c 2d Kh]
+Seat 3: Hero (big blind) won ($23.00)

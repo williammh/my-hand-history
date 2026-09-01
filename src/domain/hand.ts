@@ -4,7 +4,23 @@ import type { Position, Street } from './position';
 import type { Action } from './action';
 import type { PotState, PotAward } from './pot';
 
-export type SiteId = 'betclic-fr' | 'pokerstars' | 'ggpoker' | 'winamax';
+/**
+ * `pokerstars-like` is the fallback identity for a room that emits the
+ * PokerStars text format under its own brand name. Those hands are still
+ * parsed, but they are kept under their own id rather than being filed as
+ * PokerStars: player identity is scoped per room (`stats/types.ts`), so
+ * pooling an unrecognized room into PokerStars would silently merge two
+ * different people who happen to share a screen name.
+ */
+export type SiteId =
+  | 'betclic-fr'
+  | 'pokerstars'
+  | 'ggpoker'
+  | 'winamax'
+  | '888poker'
+  | 'coinpoker'
+  | 'wpt-global'
+  | 'pokerstars-like';
 export type GameMode = 'tournament' | 'cash' | 'sit-n-go';
 export type GameVariant = 'nlhe' | 'plo' | 'plo5' | 'limit-holdem' | 'unknown';
 export type ParseSeverity = 'warning' | 'error';

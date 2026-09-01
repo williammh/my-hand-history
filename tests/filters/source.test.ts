@@ -78,6 +78,44 @@ describe('derived source options', () => {
     expect(siteOptions(winamax, new Map())[0]!.label).toBe('winamax');
   });
 
+  it('attaches each room\'s logo, keyed by SiteId rather than its label', () => {
+    const byValue = new Map(siteOptions(all, SITE_NAMES).map((o) => [o.value, o]));
+    expect(byValue.get('betclic-fr')!.icon).toBe('/logo/betclic.png');
+    expect(byValue.get('winamax')!.icon).toBe('/logo/winamax.png');
+  });
+
+  it('omits the icon for a room with no logo, rather than a broken image path', () => {
+    const opts = siteOptions([], new Map([['pokerstars-like', 'Other'] as const]));
+    expect(opts[0]!.icon).toBeUndefined();
+  });
+
+  it('sorts the no-fixed-identity fallback room last among empty rooms, not by its label', () => {
+    // "Other" alphabetizes between GGPoker and PokerStars, which would land it
+    // in the middle of an otherwise-empty room list — noise at the top for a
+    // room that does not even stand for anything specific yet.
+    const names = new Map<SiteId, string>([
+      ['pokerstars-like', 'Other'],
+      ['pokerstars', 'PokerStars'],
+      ['ggpoker', 'GGPoker'],
+    ]);
+    const opts = siteOptions([], names);
+    expect(opts.map((o) => o.value)).toEqual(['ggpoker', 'pokerstars', 'pokerstars-like']);
+  });
+
+  it('still ranks the fallback room by count once it actually holds hands', () => {
+    const names = new Map<SiteId, string>([
+      ['pokerstars-like', 'Other'],
+      ['pokerstars', 'PokerStars'],
+    ]);
+    const hands = [
+      { meta: { siteId: 'pokerstars-like' as const } },
+      { meta: { siteId: 'pokerstars-like' as const } },
+    ];
+    const opts = siteOptions(hands, names);
+    // Two loaded hands outrank PokerStars' zero, same as any other room would.
+    expect(opts[0]!.value).toBe('pokerstars-like');
+  });
+
   it('lists every file present, counted, by name', () => {
     const opts = sourceFileOptions(all);
     expect(opts.map((o) => o.value)).toEqual([BETCLIC_FILE, BETCLIC_FILE_B, WINAMAX_FILE]);
