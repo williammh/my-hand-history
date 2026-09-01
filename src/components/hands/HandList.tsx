@@ -52,6 +52,17 @@ export function HandList({ hands, selectedId, onSelect }: Props) {
                   h.id === selectedId ? 'border-slate-300' : 'border-transparent'
                 }`}
               >
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <span className="truncate text-sm text-slate-500">
+                    {registry.get(h.meta.siteId)?.displayName ?? h.meta.siteId}
+                  </span>
+                  <span aria-hidden="true" className="text-slate-500">·</span>
+                  <span className="truncate text-sm text-slate-500">{HAND_LIST_GAME_MODE_LABELS[h.meta.gameMode]}</span>
+                  <span aria-hidden="true" className="text-slate-500">·</span>
+                  <span className="truncate text-sm text-slate-500">
+                    {h.meta.tournament?.name ?? h.meta.tableName ?? 'Unnamed game'}
+                  </span>
+                </div>
                 <div className="flex items-center gap-2 mt-1">
                   <div className="flex gap-0.5">
                     <CardView card={hero?.holeCards?.[0] ?? null} size="sm" />
@@ -77,13 +88,7 @@ export function HandList({ hands, selectedId, onSelect }: Props) {
                     </span>
                   </div>
                 </div>
-                <div className="text-sm text-slate-500 mt-1 flex items-center gap-1.5 min-w-0">
-                  <span className="truncate">
-                    {registry.get(h.meta.siteId)?.displayName ?? h.meta.siteId}
-                  </span>
-                  <span aria-hidden="true">·</span>
-                  <span className="truncate">{HAND_LIST_GAME_MODE_LABELS[h.meta.gameMode]}</span>
-                  <span aria-hidden="true">·</span>
+                <div className="text-sm text-slate-500 mt-1 flex items-center justify-end min-w-0">
                   <span className="truncate">
                     {formatDateTime(h.meta.playedAt, timezone)}
                   </span>

@@ -16,12 +16,9 @@ import { FiltersPanel } from '@/components/filters/FiltersPanel';
 import { PlayerStatsDialog } from '@/components/players/PlayerStatsDialog';
 import { ScrollArea } from '@/components/ui/ScrollArea';
 import { replayTimeline } from '@/domain/stacks';
-import { formatDateTime, formatGameMode } from '@/lib/format';
-import { useDisplayStore } from '@/state/display-store';
 import { useFiltersStore } from '@/state/filters-store';
 import { deriveFacts } from '@/filters/facts';
 import { matches } from '@/filters/match';
-import { registry } from '@/parsers/index';
 import { playerHandFacts } from '@/stats/player-facts';
 import { aggregatePlayers } from '@/stats/aggregate';
 import { playerKey } from '@/stats/types';
@@ -31,7 +28,6 @@ export function App() {
     useHandsStore();
   const { stepIndex, playing, setIndex, reset, setPlaying } = useReplayStore();
   const { byHandId, pending, engineError, analyze } = useAnalysisStore();
-  const timezone = useDisplayStore((s) => s.timezone);
 
   const criteria = useFiltersStore((s) => s.criteria);
   const pruneSourceFiles = useFiltersStore((s) => s.pruneSourceFiles);
@@ -127,33 +123,14 @@ export function App() {
       </header>
 
       <main className="flex-1 lg:min-h-0 w-full max-w-[96rem] mx-auto px-4 py-4 sm:px-6 md:px-8 md:py-6 flex flex-col gap-4 md:gap-5">
-        {hand && (
+        {hand && hand.warnings.length > 0 && (
           <div className="flex items-baseline gap-x-2.5 gap-y-1 flex-wrap shrink-0">
-            <span className="text-base font-semibold uppercase tracking-[0.08em] text-slate-200">
-              {registry.get(hand.meta.siteId)?.displayName ?? hand.meta.siteId}
+            <span
+              className="t-micro font-medium text-amber-400"
+              title={hand.warnings.map((w) => w.message).join('\n')}
+            >
+              {hand.warnings.length} parse warning(s)
             </span>
-            <span className="text-slate-700" aria-hidden="true">/</span>
-            <span className="text-base font-semibold uppercase tracking-[0.08em] text-slate-200">
-              {formatGameMode(hand.meta.gameMode)}
-            </span>
-            <span className="text-slate-700" aria-hidden="true">/</span>
-            <h2 className="text-base font-normal tracking-tight text-slate-300">
-              {hand.meta.tournament?.name ?? hand.meta.tableName ?? 'Unnamed game'}
-            </h2>
-            <span className="t-micro text-slate-500">
-              {formatDateTime(hand.meta.playedAt, timezone)} · blinds{' '}
-              {hand.money.smallBlind.toLocaleString('en-US')}/
-              {hand.money.bigBlind.toLocaleString('en-US')}
-              {hand.money.ante > 0 && ` · ante ${hand.money.ante.toLocaleString('en-US')}`}
-            </span>
-            {hand.warnings.length > 0 && (
-              <span
-                className="t-micro font-medium text-amber-400"
-                title={hand.warnings.map((w) => w.message).join('\n')}
-              >
-                {hand.warnings.length} parse warning(s)
-              </span>
-            )}
           </div>
         )}
 

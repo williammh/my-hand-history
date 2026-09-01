@@ -13,6 +13,12 @@ interface Props<T extends string | number> {
   onClear: () => void;
   /** Per-option tally, shown right-aligned. Only the library-derived axes pass it. */
   counts?: ReadonlyMap<T, number> | undefined;
+  /**
+   * Count shown next to "Any" — the library size with no filter on this axis
+   * applied. Required whenever `counts` is, so "Any" carries a tally like
+   * every other option instead of standing out as the one row without one.
+   */
+  totalCount?: number | undefined;
   /** Replaces the trigger text when there is nothing to choose from. */
   emptyLabel?: string | undefined;
   /**
@@ -55,7 +61,7 @@ const ITEM_CLASS =
  * a glance with every menu closed.
  */
 export function FilterMenu<T extends string | number>({
-  label, options, selected, onToggle, onClear, counts, emptyLabel, searchable,
+  label, options, selected, onToggle, onClear, counts, totalCount, emptyLabel, searchable,
 }: Props<T>) {
   const [query, setQuery] = useState('');
   const chosen = options.filter((o) => selected.has(o.value));
@@ -141,6 +147,11 @@ export function FilterMenu<T extends string | number>({
               >
                 <Indicator />
                 <span className="truncate">Any</span>
+                {counts && (
+                  <span className="ml-auto shrink-0 t-micro tabular-nums text-slate-500">
+                    {totalCount}
+                  </span>
+                )}
               </DropdownMenu.CheckboxItem>
             )}
             {shown.map((o) => (

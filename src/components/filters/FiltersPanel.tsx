@@ -177,6 +177,7 @@ export function FiltersPanel() {
           onToggle={(v) => toggle('sourceFiles', v)}
           onClear={() => clearAxis('sourceFiles')}
           counts={countsOf(files)}
+          totalCount={hands.length}
           emptyLabel="No hands loaded"
         />
 
@@ -187,6 +188,7 @@ export function FiltersPanel() {
           onToggle={(v) => toggle('sites', v)}
           onClear={() => clearAxis('sites')}
           counts={countsOf(sites)}
+          totalCount={hands.length}
         />
 
         <FilterMenu
@@ -196,6 +198,7 @@ export function FiltersPanel() {
           onToggle={(v) => toggle('gameModes', v)}
           onClear={() => clearAxis('gameModes')}
           counts={countsOf(modes)}
+          totalCount={hands.length}
         />
 
         <FilterMenu
@@ -205,6 +208,7 @@ export function FiltersPanel() {
           onToggle={(v) => toggle('players', v)}
           onClear={() => clearAxis('players')}
           counts={countsOf(players)}
+          totalCount={hands.length}
           emptyLabel="No hands loaded"
           searchable
         />

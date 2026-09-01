@@ -231,18 +231,28 @@ export function gameModeOptions(
  * so alphabetical puts a player's sessions in chronological order — which is
  * how they think about them. Hands with no file name are left out entirely,
  * since there is no name to offer as a choice.
+ *
+ * Each file carries the logo of the room its hands came from — an upload is a
+ * single export from a single room, so the first hand seen for a file speaks
+ * for all of them.
  */
 export function sourceFileOptions(
-  hands: readonly { meta: { sourceFile: string | null } }[],
+  hands: readonly { meta: { sourceFile: string | null; siteId: SiteId } }[],
 ): readonly SourceOption<string>[] {
   const counts = new Map<string, number>();
+  const siteIds = new Map<string, SiteId>();
   for (const h of hands) {
     const f = h.meta.sourceFile;
-    if (f !== null) counts.set(f, (counts.get(f) ?? 0) + 1);
+    if (f === null) continue;
+    counts.set(f, (counts.get(f) ?? 0) + 1);
+    if (!siteIds.has(f)) siteIds.set(f, h.meta.siteId);
   }
 
   return [...counts.entries()]
-    .map(([value, count]) => ({ value, label: value, count }))
+    .map(([value, count]) => {
+      const icon = SITE_LOGOS[siteIds.get(value)!];
+      return { value, label: value, count, ...(icon ? { icon } : {}) };
+    })
     .sort((a, b) => a.label.localeCompare(b.label));
 }
 
