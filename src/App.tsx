@@ -14,7 +14,6 @@ import { ActionLog } from '@/components/replay/ActionLog';
 import { AnalysisPanel } from '@/components/analysis/AnalysisPanel';
 import { FiltersPanel } from '@/components/filters/FiltersPanel';
 import { PlayerStatsDialog } from '@/components/players/PlayerStatsDialog';
-import { ScrollArea } from '@/components/ui/ScrollArea';
 import { replayTimeline } from '@/domain/stacks';
 import { useFiltersStore } from '@/state/filters-store';
 import { deriveFacts } from '@/filters/facts';
@@ -200,7 +199,7 @@ export function App() {
               widest child (the felt); the analysis panel is neutralised below
               so its prose cannot widen the column past the felt. */}
           <div className="w-full 2xl:w-fit max-w-full min-h-0 lg:overflow-y-auto flex flex-col gap-4 md:gap-5 lg:col-start-2 lg:row-start-2 xl:col-start-3 xl:row-start-1 xl:row-span-2 2xl:col-start-4 2xl:row-span-1">
-            <ScrollArea className="flex shrink-0 lg:min-h-0">
+            <div className="flex shrink-0 lg:min-h-0 overflow-hidden">
               <Table hand={hand} actionIndex={actionIndex} board={current?.board ?? []}>
                 <ReplayControls
                   timeline={timeline}
@@ -210,7 +209,7 @@ export function App() {
                   onPlaying={setPlaying}
                 />
               </Table>
-            </ScrollArea>
+            </div>
             {/* w-0 min-w-full: w-0 drops this out of the w-fit column's
                 max-content sizing so a long explanation cannot stretch the
                 column wider than the felt; min-w-full then pulls it back
