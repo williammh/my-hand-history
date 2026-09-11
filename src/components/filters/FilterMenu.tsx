@@ -122,7 +122,7 @@ export function FilterMenu<T extends string | number>({
             sideOffset={4}
             // Capped as well as floored: file names are arbitrarily long, and an
             // uncapped menu would grow far past the panel it drops out of.
-            className="z-50 min-w-[11rem] max-w-[min(22rem,calc(100vw-2rem))] max-h-[18rem] overflow-y-auto p-1 rounded-sm border border-slate-700 bg-slate-800 text-slate-200 shadow-lg"
+            className="z-50 min-w-[11rem] max-w-[min(22rem,calc(100vw-2rem))] max-h-[18rem] overflow-y-auto scroll-thin p-1 rounded-sm border border-slate-700 bg-slate-800 text-slate-200 shadow-lg"
           >
             {searchable && (
               <div className="sticky top-0 z-10 -m-1 mb-1 flex items-center gap-1.5 border-b border-slate-700 bg-slate-800 px-2 py-1.5">

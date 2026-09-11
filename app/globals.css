@@ -105,4 +105,13 @@ body { margin: 0; background: #0b1220; }
   .scroll-thin::-webkit-scrollbar-corner { background: transparent; }
   .scroll-thin::-webkit-scrollbar-thumb { background: var(--color-slate-700); border-radius: 2px; }
   .scroll-thin::-webkit-scrollbar-thumb:hover { background: var(--color-slate-600); }
+  [data-radix-select-viewport].scroll-thin::-webkit-scrollbar { display: block; }
 }
+
+/*
+ * Radix Select hides its viewport's scrollbar with a <style> it injects at
+ * runtime — unlayered, so it beats the layered .scroll-thin above whatever the
+ * specificity. This override is unlayered too, and outranks Radix's lone
+ * attribute selector, so select menus show the same bar as everything else.
+ */
+[data-radix-select-viewport].scroll-thin { scrollbar-width: thin; }

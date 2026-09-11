@@ -102,7 +102,7 @@ export function ParseReport({ report, onClear }: Props) {
       </div>
 
       {multiple && (
-        <div className="mt-2 pt-2 border-t border-slate-100/10 space-y-2 max-h-48 overflow-y-auto">
+        <div className="mt-2 pt-2 border-t border-slate-100/10 space-y-2 max-h-48 overflow-y-auto scroll-thin">
           {report.files.map((f) => (
             <FileRow key={f.fileName} file={f} />
           ))}

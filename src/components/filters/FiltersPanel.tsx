@@ -81,8 +81,17 @@ function RankSelect({
           <Select.Icon><IconChevronDown size={14} /></Select.Icon>
         </Select.Trigger>
         <Select.Portal>
-          <Select.Content className="z-50 overflow-hidden rounded-sm border border-slate-700 bg-slate-800 text-slate-200 text-sm shadow-lg">
-            <Select.Viewport className="p-1 max-h-[16rem]">
+          {/* Popper, not Radix's default item-aligned mode: item-aligned grows
+              the menu as you scroll it (rewriting scrollTop to compensate), so
+              a visible scrollbar thumb would jump rather than follow the wheel.
+              Popper keeps a fixed height that scrolls natively, and drops down
+              from the trigger like the other filter menus. */}
+          <Select.Content
+            position="popper"
+            sideOffset={4}
+            className="z-50 min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-sm border border-slate-700 bg-slate-800 text-slate-200 text-sm shadow-lg"
+          >
+            <Select.Viewport className="scroll-thin p-1 max-h-[min(16rem,var(--radix-select-content-available-height))]">
               <Select.Item value="any" className={SELECT_ITEM}>
                 <Select.ItemText>Any</Select.ItemText>
               </Select.Item>
