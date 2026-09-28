@@ -18,6 +18,7 @@ import { replayTimeline } from '@/domain/stacks';
 import { useFiltersStore } from '@/state/filters-store';
 import { deriveFacts } from '@/filters/facts';
 import { matches } from '@/filters/match';
+import { gameKey } from '@/domain/game';
 import { playerHandFacts } from '@/stats/player-facts';
 import { aggregatePlayers } from '@/stats/aggregate';
 import { playerKey } from '@/stats/types';
@@ -31,6 +32,7 @@ export function App() {
   const criteria = useFiltersStore((s) => s.criteria);
   const pruneSourceFiles = useFiltersStore((s) => s.pruneSourceFiles);
   const prunePlayers = useFiltersStore((s) => s.prunePlayers);
+  const pruneGames = useFiltersStore((s) => s.pruneGames);
 
   // Facts are derived per hand and memoised on the library, not on the
   // criteria: changing a filter must not re-walk every hand's action list.
@@ -73,6 +75,10 @@ export function App() {
       new Set(hands.map((h) => h.meta.sourceFile).filter((f): f is string => f !== null)),
     );
   }, [hands, pruneSourceFiles]);
+
+  useEffect(() => {
+    pruneGames(new Set(hands.map(gameKey).filter((k): k is string => k !== null)));
+  }, [hands, pruneGames]);
 
   // Same staleness problem as source files: a selected username can outlive
   // the hands that justified it. Pruned against the full library, not the

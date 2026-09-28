@@ -1,5 +1,6 @@
 import type { Position, Street } from '@/domain/position';
-import type { GameMode, SiteId } from '@/domain/hand';
+import type { GameMode, Hand, SiteId } from '@/domain/hand';
+import { gameKey, gameLabel } from '@/domain/game';
 import type { Severity } from '@/analysis/types';
 import { type PlayerKey, playerKey } from '@/stats/types';
 import type { Connectedness, SuitTexture } from './board';
@@ -254,6 +255,50 @@ export function sourceFileOptions(
       return { value, label: value, count, ...(icon ? { icon } : {}) };
     })
     .sort((a, b) => a.label.localeCompare(b.label));
+}
+
+/**
+ * Games (tournaments and cash tables) present in the library, most recently
+ * played first — the one a player just multitabled is the one they want.
+ *
+ * Labels that collide (the same table name in two rooms, say) gain the room in
+ * parentheses; the hint always carries room and mode.
+ */
+export function gameOptions(
+  hands: readonly Pick<Hand, 'meta'>[],
+  displayNames: ReadonlyMap<SiteId, string>,
+): readonly SourceOption<string>[] {
+  const games = new Map<string, { label: string; siteId: SiteId; mode: GameMode; count: number; last: string }>();
+  for (const h of hands) {
+    const key = gameKey(h);
+    if (key === null) continue;
+    const g = games.get(key);
+    if (g) {
+      g.count += 1;
+      if (h.meta.playedAt > g.last) g.last = h.meta.playedAt;
+    } else {
+      games.set(key, {
+        label: gameLabel(h), siteId: h.meta.siteId, mode: h.meta.gameMode, count: 1, last: h.meta.playedAt,
+      });
+    }
+  }
+
+  const labelUses = new Map<string, number>();
+  for (const g of games.values()) labelUses.set(g.label, (labelUses.get(g.label) ?? 0) + 1);
+
+  return [...games.entries()]
+    .sort((a, b) => b[1].last.localeCompare(a[1].last) || a[1].label.localeCompare(b[1].label))
+    .map(([value, g]) => {
+      const room = displayNames.get(g.siteId) ?? g.siteId;
+      const icon = SITE_LOGOS[g.siteId];
+      return {
+        value,
+        label: (labelUses.get(g.label) ?? 0) > 1 ? `${g.label} (${room})` : g.label,
+        hint: `${room} · ${GAME_MODE_LABELS[g.mode]}`,
+        count: g.count,
+        ...(icon ? { icon } : {}),
+      };
+    });
 }
 
 export interface PlayerOption extends SourceOption<PlayerKey> {

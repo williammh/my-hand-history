@@ -17,6 +17,12 @@ export function matches(facts: HandFacts, c: FilterCriteria): boolean {
     if (facts.sourceFile === null || !c.sourceFiles.has(facts.sourceFile)) return false;
   }
 
+  // Same rule as source files: a hand with no identifiable game can't be
+  // attributed to a selected one.
+  if (c.games.size > 0) {
+    if (facts.gameKey === null || !c.games.has(facts.gameKey)) return false;
+  }
+
   if (c.gameModes.size > 0 && !c.gameModes.has(facts.gameMode)) return false;
 
   // A hand matches if ANY selected player was dealt into it.
@@ -97,6 +103,7 @@ export function isActive(c: FilterCriteria): boolean {
   return (
     c.sites.size > 0 ||
     c.sourceFiles.size > 0 ||
+    c.games.size > 0 ||
     c.gameModes.size > 0 ||
     c.players.size > 0 ||
     c.potTypes.size > 0 ||
@@ -121,6 +128,7 @@ export function activeCount(c: FilterCriteria): number {
   let n = 0;
   if (c.sites.size > 0) n++;
   if (c.sourceFiles.size > 0) n++;
+  if (c.games.size > 0) n++;
   if (c.gameModes.size > 0) n++;
   if (c.players.size > 0) n++;
   if (c.potTypes.size > 0) n++;

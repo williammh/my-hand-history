@@ -43,6 +43,8 @@ interface FiltersState {
    * the player cannot see the point of. Called when the library changes.
    */
   pruneSourceFiles: (present: ReadonlySet<string>) => void;
+  /** Drops selected games the library no longer holds; same reasoning as source files. */
+  pruneGames: (present: ReadonlySet<string>) => void;
   /**
    * Drops selected players the library no longer holds.
    *
@@ -91,6 +93,9 @@ export const useFiltersStore = create<FiltersState>((set) => ({
 
   pruneSourceFiles: (present) =>
     set((s) => pruneAxis(s, 'sourceFiles', present)),
+
+  pruneGames: (present) =>
+    set((s) => pruneAxis(s, 'games', present)),
 
   prunePlayers: (present) =>
     set((s) => pruneAxis(s, 'players', present)),
