@@ -10,8 +10,11 @@ export const BETCLIC = {
 
   HEADER_FIELD: /^([A-Za-z&' ]+):\s*(.*)$/,
 
-  /** "Seat 5: SIMBAROI (56394) [BTN Hero]" — the bracket is optional. */
-  SEAT: /^Seat (\d+):\s+(.+?)\s+\((\d+)\)(?:\s*\[([^\]]*)\])?\s*$/,
+  /**
+   * "Seat 5: SIMBAROI (56394) [BTN Hero]" — the bracket is optional.
+   * Knockout exports add a bounty: "Seat 1: portosjr (148247, €12.00 bounty)".
+   */
+  SEAT: /^Seat (\d+):\s+(.+?)\s+\((\d+)(?:,\s*[^)]*\bbounty)?\)(?:\s*\[([^\]]*)\])?\s*$/,
 
   /** "SIMBAROI: [9s 2c]" */
   HOLE_CARDS: /^(.+?):\s*\[([^\]]+)\]\s*$/,

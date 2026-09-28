@@ -2,7 +2,6 @@ import { asAmount, type Amount, type MoneyContext, type AnteType, type CurrencyC
 import { parseCard, parseCardList, type Card, type HoleCards } from '@/domain/cards';
 import { derivePositions, STREET_ORDER, type Position, type Street } from '@/domain/position';
 import type { Action, ActionKind } from '@/domain/action';
-import { CHIP_MOVING } from '@/domain/action';
 import { computePots } from '@/domain/pot';
 import type {
   GameMode, Hand, HandMeta, ParseWarning, PlayerSeat, Showdown, StreetState, TournamentInfo,
@@ -385,25 +384,28 @@ export const betclicParser: SiteParser = {
         streetActions.push(action);
       }
 
-      // Betclic sometimes omits the "Returns uncalled bet" line when an all-in
-      // raise exceeds every remaining live opponent's stack (no one left who
-      // could ever call it) — verified on hand 472 of the 2025-07-16 sample,
-      // where a 540 all-in against a 530 stack leaves 10 chips unreturned and
-      // unprinted. Infer and synthesize the return so the pot checksum holds.
+      // Betclic never prints "Returns uncalled bet". It splits pots at the
+      // all-in levels of players still in the hand and silently drops the top
+      // layer when only one player contributed to it:
+      //   - hand 472 of the 2025-07-16 sample: a 540 shove over a 530 all-in
+      //     leaves 10 chips out of the reported total;
+      //   - 2026-09-24 hand 01M3AMYKYP723QASFHHKNRNTHY: a lone river bet over a
+      //     flop all-in is dropped even though a folder could have called.
+      // When folders also paid into that top layer it stays in the pot as a
+      // side pot (01M3AHYZATBE3PT6GZCD28ACCP), just as a plain fold-out keeps
+      // the uncalled bet. Synthesize the return only in the dropped case.
       const alreadyReturned = streetActions.some((a) => a.kind === 'uncalled-return');
       if (!alreadyReturned) {
-        const live = streetActions
-          .filter((a) => CHIP_MOVING.has(a.kind) && !folded.has(a.seat))
-          .reduce((acc, a) => {
-            acc.set(a.seat, ledger.committedThisStreet(a.seat));
-            return acc;
-          }, new Map<number, number>());
-        if (live.size >= 1) {
-          const committedDesc = [...live.entries()].sort((a, b) => b[1] - a[1]);
-          const [topSeat, topAmount] = committedDesc[0]!;
-          const nextAmount = committedDesc[1]?.[1] ?? 0;
-          const excess = topAmount - Math.max(nextAmount, 0);
-          if (excess > 0 && nextAmount < topAmount && live.size > 1) {
+        const totals = seats.map((s) => [s.seat, ledger.committedTotal(s.seat) as number] as const);
+        const [topSeat, topTotal] = [...totals].sort((a, b) => b[1] - a[1])[0]!;
+        const allInLevels = totals
+          .filter(([s]) => s !== topSeat && !folded.has(s) && ledger.stack(s) <= 0)
+          .map(([, t]) => t);
+        if (allInLevels.length > 0 && !folded.has(topSeat)) {
+          const level = Math.max(...allInLevels);
+          const contributorsAbove = totals.filter(([, t]) => t > level).length;
+          const excess = Math.min(topTotal - level, ledger.committedThisStreet(topSeat));
+          if (contributorsAbove === 1 && excess > 0) {
             const returnAction: Action = {
               index: actionIndex++,
               street: block.street,
@@ -411,7 +413,7 @@ export const betclicParser: SiteParser = {
               playerId: seats.find((s) => s.seat === topSeat)!.playerId,
               kind: 'uncalled-return',
               amount: asAmount(excess),
-              totalCommitted: asAmount(topAmount - excess),
+              totalCommitted: asAmount(ledger.committedThisStreet(topSeat) - excess),
               isAllIn: false,
               timestamp: null,
               raw: '(inferred: uncalled bet, unprinted by site)',
