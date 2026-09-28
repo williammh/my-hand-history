@@ -55,6 +55,8 @@ export interface HandFacts {
   readonly gameMode: GameMode;
   /** File this hand was imported from; null when it was parsed without one. */
   readonly sourceFile: string | null;
+  /** Tournament or cash table this hand belongs to; see `gameKey`. */
+  readonly gameKey: string | null;
   /** Every seated player dealt into this hand, hero included. */
   readonly playerKeys: ReadonlySet<PlayerKey>;
   readonly potType: PotType;
@@ -99,6 +101,12 @@ export interface FilterCriteria {
    * a plain set membership test so a stale name simply matches nothing.
    */
   readonly sourceFiles: ReadonlySet<string>;
+  /**
+   * Games to keep — a single tournament or cash table, by `gameKey`. Lets a
+   * player follow one table out of a file that interleaves several. Open
+   * vocabulary like source files, so it is pruned against the library too.
+   */
+  readonly games: ReadonlySet<string>;
   /** Game modes to keep — cash, tournament, sit & go. Empty means every mode. */
   readonly gameModes: ReadonlySet<GameMode>;
   /**
@@ -135,6 +143,7 @@ export interface FilterCriteria {
 export const EMPTY_CRITERIA: FilterCriteria = {
   sites: new Set(),
   sourceFiles: new Set(),
+  games: new Set(),
   gameModes: new Set(),
   players: new Set(),
   potTypes: new Set(),

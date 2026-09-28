@@ -5,6 +5,7 @@ import { isVoluntary } from '@/domain/action';
 import type { Action } from '@/domain/action';
 import { heroEffectiveStackBB } from '@/domain/stacks';
 import type { HandAnalysis, Severity } from '@/analysis/types';
+import { gameKey } from '@/domain/game';
 import { playerKey } from '@/stats/types';
 import { boardTexture } from './board';
 import type {
@@ -185,6 +186,7 @@ export function deriveFacts(hand: Hand, analysis?: HandAnalysis): HandFacts {
     siteId: hand.meta.siteId,
     gameMode: hand.meta.gameMode,
     sourceFile: hand.meta.sourceFile,
+    gameKey: gameKey(hand),
     playerKeys: new Set(
       hand.seats.filter((s) => !s.sittingOut).map((s) => playerKey(hand.meta.siteId, s.playerId)),
     ),

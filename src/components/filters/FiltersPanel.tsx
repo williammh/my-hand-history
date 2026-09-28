@@ -10,7 +10,7 @@ import { activeCount } from '@/filters/match';
 import type { RelativePosition } from '@/filters/types';
 import {
   CONNECTEDNESS, POT_TYPES, POSITIONS, PREFLOP_AGGRESSION, RELATIVE_POSITIONS, SEVERITIES,
-  STACKS, STREETS, SUIT_TEXTURES, gameModeOptions, linesFor, playerOptions, siteOptions,
+  STACKS, STREETS, SUIT_TEXTURES, gameModeOptions, gameOptions, linesFor, playerOptions, siteOptions,
   sourceFileOptions, type SourceOption,
 } from '@/filters/options';
 import { useHandsStore } from '@/state/hands-store';
@@ -144,6 +144,7 @@ export function FiltersPanel() {
   );
   const sites = useMemo(() => siteOptions(hands, siteNames), [hands, siteNames]);
   const files = useMemo(() => sourceFileOptions(hands), [hands]);
+  const games = useMemo(() => gameOptions(hands, siteNames), [hands, siteNames]);
   const modes = useMemo(() => gameModeOptions(hands), [hands]);
   const players = useMemo(() => playerOptions(hands, siteNames), [hands, siteNames]);
 
@@ -208,6 +209,18 @@ export function FiltersPanel() {
           onClear={() => clearAxis('gameModes')}
           counts={countsOf(modes)}
           totalCount={hands.length}
+        />
+
+        <FilterMenu
+          label="Game / tournament"
+          options={games}
+          selected={criteria.games}
+          onToggle={(v) => toggle('games', v)}
+          onClear={() => clearAxis('games')}
+          counts={countsOf(games)}
+          totalCount={hands.length}
+          emptyLabel="No hands loaded"
+          searchable
         />
 
         <FilterMenu
