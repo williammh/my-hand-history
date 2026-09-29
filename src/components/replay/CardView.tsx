@@ -29,8 +29,8 @@ export function CardView({ card, size = 'md', hidden = false, dim = false }: Pro
 
   if (hidden || !card) {
     return (
-      <div className={`${box} border bg-gradient-to-br from-sky-900 to-slate-800 border-slate-600`}>
-        <span className="text-slate-500 text-xs">?</span>
+      <div className={`${box} border bg-gradient-to-br from-rose-900 to-red-950 border-red-800`}>
+        <span className="text-red-300 text-xs">?</span>
       </div>
     );
   }
