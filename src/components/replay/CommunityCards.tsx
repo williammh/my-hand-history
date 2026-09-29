@@ -15,30 +15,37 @@ const LABEL = 'text-center text-[9px] font-semibold uppercase leading-none track
 /**
  * Board split into Flop / Turn / River groups, revealed as streets arrive.
  *
- * Both rows share ONE 5-column grid (one column per card slot, w-7 = 1.75rem)
- * with a single gap, so every card is equidistant from its neighbours no matter
- * which street it belongs to — the flop→turn and turn→river boundaries get the
- * same gap as any other pair. Each label spans the columns of its own street and
- * centres within them, so alignment holds without hard-coding label widths.
- *
- * The grid reserves all 5 columns AND both rows up front (the card row is
- * pinned to the sm CardView height, 2.5rem) so the panel doesn't jump as the
+ * Each street gets its own bordered container with a fixed-width grid (one
+ * column per card slot, w-7 = 1.75rem) so the panel doesn't jump as the
  * replay advances — undealt cards simply aren't rendered yet, leaving blank
  * space rather than a card-back placeholder, and the row doesn't collapse to
  * 0 height before any cards exist.
  */
+const STREETS = [
+  { label: 'Flop', start: 0, count: 3 },
+  { label: 'Turn', start: 3, count: 1 },
+  { label: 'River', start: 4, count: 1 },
+] as const;
+
 export function CommunityCards({ board }: { board: Board }) {
   return (
-    <div className="w-fit shrink-0 rounded border border-slate-700/60 bg-black/25 px-1.5 py-1">
-      <div className="grid grid-cols-[repeat(5,1.75rem)] grid-rows-[auto_2.5rem] gap-x-1.5 gap-y-1">
-        <div className={`col-span-3 ${LABEL}`}>Flop</div>
-        <div className={`col-span-1 ${LABEL}`}>Turn</div>
-        <div className={`col-span-1 ${LABEL}`}>River</div>
-
-        {board.map((card, i) => (
-          <CardView key={i} card={card} size="sm" />
-        ))}
-      </div>
+    <div className="flex shrink-0 gap-1.5">
+      {STREETS.map(({ label, start, count }) => (
+        <div
+          key={label}
+          className="w-fit rounded border border-slate-700/60 bg-black/25 px-1.5 py-1"
+        >
+          <div
+            className="grid gap-x-1.5 gap-y-1 grid-rows-[auto_2.5rem]"
+            style={{ gridTemplateColumns: `repeat(${count}, 1.75rem)` }}
+          >
+            <div className={`col-span-full ${LABEL}`}>{label}</div>
+            {board.slice(start, start + count).map((card, i) => (
+              <CardView key={start + i} card={card} size="sm" />
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
