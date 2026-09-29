@@ -150,6 +150,10 @@ export interface ReplayStep {
   readonly board: Board;
   /** Set on a card-only step: the street whose cards were just dealt. */
   readonly dealt: Street | null;
+  /** The final step, after every action: the pot is pushed to the winners. */
+  readonly award: boolean;
+  /** Every ante of the street, posted together on this one step. */
+  readonly antes?: boolean;
 }
 
 /**
@@ -160,9 +164,12 @@ export interface ReplayStep {
  * arrive without any action of its own, then a step per action. That makes an
  * all-in run-out scrub flop → turn → river one card group at a time, exactly as
  * a hand with live postflop betting already does.
+ *
+ * A hand with awards ends on one more step that pushes the pot to the
+ * winners, so the result gets its own beat rather than being implied.
  */
 export function replayTimeline(hand: Hand): ReplayStep[] {
-  const steps: ReplayStep[] = [{ actionIndex: -1, board: [], dealt: null }];
+  const steps: ReplayStep[] = [{ actionIndex: -1, board: [], dealt: null, award: false }];
 
   for (const street of hand.streets) {
     // The cards land before anyone acts on them. A street with actions gets its
@@ -174,12 +181,29 @@ export function replayTimeline(hand: Hand): ReplayStep[] {
         actionIndex: steps[steps.length - 1]!.actionIndex,
         board: street.board,
         dealt: street.street,
+        award: false,
       });
     }
     for (const action of street.actions) {
-      steps.push({ actionIndex: action.index, board: street.board, dealt: null });
+      // Antes are posted simultaneously, not in turn, and the action log
+      // collapses them into a single row — so the whole run of them is one
+      // stop, landing on the last ante's index. Stepping seat by seat would
+      // walk the table for a deal nobody acts on.
+      if (action.kind === 'post-ante') {
+        const prev = steps[steps.length - 1]!;
+        if (prev.antes) {
+          steps[steps.length - 1] = { ...prev, actionIndex: action.index };
+          continue;
+        }
+        steps.push({ actionIndex: action.index, board: street.board, dealt: null, award: false, antes: true });
+        continue;
+      }
+      steps.push({ actionIndex: action.index, board: street.board, dealt: null, award: false });
     }
   }
+
+  const last = steps[steps.length - 1]!;
+  if (hand.awards.length > 0) steps.push({ ...last, dealt: null, award: true });
 
   return steps;
 }

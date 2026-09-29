@@ -1,17 +1,37 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { Hand, PlayerSeat } from '@/domain/hand';
 import type { Board } from '@/domain/cards';
 import { stacksAtAction } from '@/domain/stacks';
 import { potAtAction } from '@/domain/pot';
-import { CHIP_MOVING } from '@/domain/action';
+import { CHIP_MOVING, shortActionLabel, type Action } from '@/domain/action';
 import { asAmount } from '@/domain/money';
+import { STREET_BOARD_LENGTH, STREET_ORDER } from '@/domain/position';
 import { formatUnit } from '@/lib/format';
 import { useDisplayStore } from '@/state/display-store';
 import { CommunityCards } from './CommunityCards';
-import { Seat, EmptySeat } from './Seat';
+import { ChipStack } from './ChipStack';
+import { Seat, EmptySeat, type ChipGhost, type GhostKind, type SeatSide, type Vector } from './Seat';
 import { ScrollArea } from '@/components/ui/ScrollArea';
+
+/** One seat's chips crossing the felt on this step. */
+type Crossing = { readonly seat: number; readonly kind: GhostKind; readonly amount: number };
+
+/**
+ * How chips should move on this render. Only a single step forward animates;
+ * scrubbing or stepping back snaps straight to the new state.
+ */
+type ChipMotion =
+  | { readonly kind: 'none' }
+  | { readonly kind: 'step' }
+  | { readonly kind: 'cross'; readonly crossings: readonly Crossing[] };
+
+const NO_MOTION: ChipMotion = { kind: 'none' };
+const NO_GHOSTS: readonly ChipGhost[] = [];
+
+const center = (r: DOMRect): Vector => ({ x: r.left + r.width / 2, y: r.top + r.height / 2 });
+const offset = (to: Vector, from: Vector): Vector => ({ x: to.x - from.x, y: to.y - from.y });
 
 /** Ring shape to show when no hand is loaded — a plain 6-max layout of blanks. */
 const EMPTY_RING = {
@@ -31,23 +51,12 @@ interface Props {
    * actionIndex alone — the step carries the information Table needs.
    */
   board: Board;
+  /** The closing step: the pot is pushed to the winners. */
+  awarding: boolean;
+  /** This step posts every ante of the street at once. */
+  antes: boolean;
   /** Replay controls, rendered inside the panel below the board. */
   children?: ReactNode;
-}
-
-/** Human-readable label for the chip badge under a seat. */
-function actionLabel(kind: string): string {
-  switch (kind) {
-    case 'fold': return 'fold';
-    case 'check': return 'check';
-    case 'call': return 'call';
-    case 'bet': return 'bet';
-    case 'raise': return 'raise';
-    case 'post-sb': return 'small blind';
-    case 'post-bb': return 'big blind';
-    case 'post-ante': return 'ante';
-    default: return kind;
-  }
 }
 
 /**
@@ -95,7 +104,7 @@ function ringColumns(seats: readonly PlayerSeat[]): {
   return { bottom, top, left: left.reverse(), right };
 }
 
-export function Table({ hand, actionIndex, board, children }: Props) {
+export function Table({ hand, actionIndex, board, awarding, antes, children }: Props) {
   const unit = useDisplayStore((s) => s.unit);
   const snapshot = useMemo(
     () => (hand ? stacksAtAction(hand, actionIndex) : { stacks: new Map(), folded: new Set<number>() }),
@@ -103,38 +112,134 @@ export function Table({ hand, actionIndex, board, children }: Props) {
   );
   const pot = useMemo(() => (hand ? potAtAction(hand.actions, actionIndex) : asAmount(0)), [hand, actionIndex]);
 
-  // Per-seat chip badge: the amount of the player's most recent bet/call/raise
-  // on the current street, matching what the action log shows for that action
-  // — not a running total of everything they've put in this street.
-  const committed = useMemo(() => {
-    const map = new Map<number, number>();
-    if (!hand) return map;
-    const currentStreet =
-      actionIndex < 0 ? 'preflop' : hand.actions[Math.min(actionIndex, hand.actions.length - 1)]!.street;
-    for (let i = 0; i <= actionIndex && i < hand.actions.length; i++) {
-      const a = hand.actions[i]!;
-      if (a.street !== currentStreet || a.kind === 'post-ante') continue;
-      if (CHIP_MOVING.has(a.kind)) map.set(a.seat, a.amount);
-    }
-    return map;
-  }, [hand, actionIndex]);
-
+  // Per-seat badge: the player's most recent action on the current street.
+  // Label and amount come from that one action, so they always agree — an
+  // ante reads "ante 80" until the blind post replaces it whole. The amount
+  // is that action's own, matching the action log, not a street total.
   const lastActionBySeat = useMemo(() => {
-    const map = new Map<number, string>();
+    const map = new Map<number, Action>();
     if (!hand) return map;
     const currentStreet =
       actionIndex < 0 ? 'preflop' : hand.actions[Math.min(actionIndex, hand.actions.length - 1)]!.street;
-    for (let i = 0; i <= actionIndex && i < hand.actions.length; i++) {
-      const a = hand.actions[i]!;
-      if (a.street !== currentStreet || a.kind.startsWith('post-')) continue;
-      map.set(a.seat, actionLabel(a.kind));
+    for (const a of hand.actions.slice(0, actionIndex + 1)) {
+      if (a.street === currentStreet) map.set(a.seat, a);
     }
     return map;
   }, [hand, actionIndex]);
 
-  const actingSeat = hand && actionIndex >= 0 && actionIndex < hand.actions.length
-    ? hand.actions[actionIndex]!.seat
+  const wonBySeat = useMemo(() => {
+    const map = new Map<number, number>();
+    for (const { seat, amount } of hand?.awards ?? []) map.set(seat, (map.get(seat) ?? 0) + amount);
+    return map;
+  }, [hand]);
+
+  const actingAction = hand && actionIndex >= 0 && actionIndex < hand.actions.length
+    ? hand.actions[actionIndex]!
     : null;
+  const actingSeat = actingAction?.seat ?? null;
+
+  // Street is read off the board rather than the action: an all-in run-out
+  // deals streets with no actions, and the bets should still be swept then.
+  const streetIdx = STREET_ORDER.filter((s) => STREET_BOARD_LENGTH[s] <= board.length).length - 1;
+
+  // Chips physically in front of each seat: everything put in on this street,
+  // net of an uncalled return. Antes go straight to the pot, and once the pot
+  // is awarded nothing is left in front of anyone.
+  const bets = useMemo(() => {
+    const map = new Map<number, number>();
+    if (!hand || awarding) return map;
+    const street = STREET_ORDER[streetIdx];
+    for (const a of hand.actions.slice(0, actionIndex + 1)) {
+      if (a.street !== street || a.kind === 'post-ante') continue;
+      if (CHIP_MOVING.has(a.kind)) map.set(a.seat, (map.get(a.seat) ?? 0) + a.amount);
+      else if (a.kind === 'uncalled-return') map.set(a.seat, (map.get(a.seat) ?? 0) - a.amount);
+    }
+    return map;
+  }, [hand, actionIndex, streetIdx, awarding]);
+
+  // Chips sitting in the middle: once awarded, they have all gone to the winners.
+  const collected = awarding ? 0 : pot - [...bets.values()].reduce((sum, b) => sum + b, 0);
+
+  // Previous step, kept in state so the step change can be classified during
+  // render (React's "adjust state on prop change" pattern) rather than in an
+  // effect that would paint one un-animated frame first.
+  const [track, setTrack] = useState({
+    hand, actionIndex, streetIdx, awarding, bets, collected, prevCollected: collected, motion: NO_MOTION,
+  });
+  if (
+    track.hand !== hand || track.actionIndex !== actionIndex
+    || track.streetIdx !== streetIdx || track.awarding !== awarding
+  ) {
+    const newStreet = streetIdx === track.streetIdx + 1;
+    const newAward = awarding && !track.awarding;
+    // The antes of a street arrive on ONE step, so a forward move can cover
+    // several action indices at once — hence a range rather than a +1.
+    const advanced = actionIndex > track.actionIndex;
+    const forward = track.hand === hand && (
+      advanced
+        ? streetIdx >= track.streetIdx && (antes || actionIndex === track.actionIndex + 1)
+        : actionIndex === track.actionIndex && (newStreet || (streetIdx === track.streetIdx && newAward))
+    );
+    const crossings: Crossing[] = [];
+    if (forward) {
+      if (antes && advanced) {
+        for (const a of hand?.actions.slice(track.actionIndex + 1, actionIndex + 1) ?? []) {
+          if (a.kind === 'post-ante' && a.amount > 0) {
+            crossings.push({ seat: a.seat, kind: 'ante', amount: a.amount });
+          }
+        }
+      }
+      // Whatever is left in front of the players goes in when the street
+      // ends, or when the hand ends and the pot is pushed.
+      if (newStreet || newAward) {
+        for (const [seat, amount] of track.bets) if (amount > 0) crossings.push({ seat, kind: 'sweep', amount });
+      }
+      if (newAward) {
+        for (const [seat, amount] of wonBySeat) crossings.push({ seat, kind: 'win', amount });
+      }
+    }
+    const motion: ChipMotion = !forward
+      ? NO_MOTION
+      : crossings.length > 0 ? { kind: 'cross', crossings } : { kind: 'step' };
+    setTrack({ hand, actionIndex, streetIdx, awarding, bets, collected, prevCollected: track.collected, motion });
+  }
+  const { motion } = track;
+
+  // Travel offsets can only be measured once the crossing stacks are in the
+  // DOM. Measuring in a layout effect and re-rendering before paint means the
+  // first painted frame already has the animations running.
+  const gridRef = useRef<HTMLDivElement | null>(null);
+  const potAnchorRef = useRef<HTMLDivElement | null>(null);
+  const [ghostPaths, setGhostPaths] = useState<{
+    motion: ChipMotion;
+    paths: ReadonlyMap<string, NonNullable<ChipGhost['path']>>;
+  } | null>(null);
+  useLayoutEffect(() => {
+    const grid = gridRef.current;
+    const anchor = potAnchorRef.current;
+    if (motion.kind !== 'cross' || !grid || !anchor) return;
+    const pot = center(anchor.getBoundingClientRect());
+    const paths = new Map<string, NonNullable<ChipGhost['path']>>();
+    for (const el of grid.querySelectorAll<HTMLElement>('[data-chip-ghost]')) {
+      const from = center(el.getBoundingClientRect());
+      const seatCard = el.closest('[data-seat]');
+      const seat = seatCard ? center(seatCard.getBoundingClientRect()) : from;
+      paths.set(el.dataset.chipGhost ?? '', { toPot: offset(pot, from), toSeat: offset(seat, from) });
+    }
+    setGhostPaths({ motion, paths });
+  }, [motion]);
+  const paths = ghostPaths?.motion === motion ? ghostPaths.paths : null;
+
+  const crossings = motion.kind === 'cross' ? motion.crossings : [];
+  const betMoved = motion.kind !== 'none' && actingAction !== null && CHIP_MOVING.has(actingAction.kind);
+  // The new pot stack pops in as the incoming chips land; until then the
+  // previous stack stays put, so the pot never blinks out mid-animation. On
+  // the award step the outgoing win stack stands in for the pot instead.
+  const potLand = crossings.some((c) => c.kind === 'ante')
+    ? 'chip-land-ante'
+    : crossings.some((c) => c.kind === 'sweep') ? 'chip-land-sweep' : '';
+  const potChanging = motion.kind !== 'none' && track.prevCollected !== collected;
+  const holdPrevPot = potChanging && !awarding;
 
   const ring = useMemo(() => ringColumns(hand?.seats ?? []), [hand]);
 
@@ -160,22 +265,36 @@ export function Table({ hand, actionIndex, board, children }: Props) {
 
   // Only ever invoked with seats drawn from `ring`, which is empty when there
   // is no hand — so `hand` is always present here despite the nullable prop.
-  const renderSeat = (seat: PlayerSeat) => (
-    <Seat
-      seat={seat}
-      money={hand!.money}
-      stack={snapshot.stacks.get(seat.seat) ?? seat.startingStack}
-      committed={asAmount(committed.get(seat.seat) ?? 0)}
-      folded={snapshot.folded.has(seat.seat)}
-      isActing={actingSeat === seat.seat}
-      lastAction={lastActionBySeat.get(seat.seat) ?? null}
-    />
-  );
+  const renderSeat = (seat: PlayerSeat, side: SeatSide) => {
+    const won = awarding ? wonBySeat.get(seat.seat) ?? 0 : 0;
+    const last = lastActionBySeat.get(seat.seat);
+    const mine = crossings.filter((c) => c.seat === seat.seat);
+    const ghosts = mine.length === 0
+      ? NO_GHOSTS
+      : mine.map(({ kind, amount }) => ({ kind, amount, path: paths?.get(`${seat.seat}:${kind}`) ?? null }));
+    return (
+      <Seat
+        seat={seat}
+        money={hand!.money}
+        stack={asAmount((snapshot.stacks.get(seat.seat) ?? seat.startingStack) + won)}
+        committed={asAmount(won > 0 ? won : last?.amount ?? 0)}
+        folded={snapshot.folded.has(seat.seat)}
+        // Antes are posted by everyone at once, so no one seat is "acting" —
+        // highlighting the last one to post would single it out arbitrarily.
+        isActing={awarding ? won > 0 : !antes && actingSeat === seat.seat}
+        lastAction={won > 0 ? 'win' : last ? shortActionLabel(last.kind) : null}
+        side={side}
+        bet={bets.get(seat.seat) ?? 0}
+        animateBet={betMoved && actingSeat === seat.seat}
+        ghosts={ghosts}
+      />
+    );
+  };
 
   return (
     // Below 2xl the column itself is the width constraint (w-full fills it);
-    // at 2xl the column is fit-content, so w-fit sizes the panel to the felt
-    // instead of the column's 34rem ceiling. Either way the felt's own ring
+    // at 2xl the column is an auto track sized to the felt, so w-fit makes the
+    // panel exactly that wide. Either way the felt's own ring
     // is capped by --seat-w and centred, so it never stretches edge to edge.
     <div className="w-full 2xl:w-fit max-w-full rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden">
       <div className="px-3 py-2 border-b border-slate-800 t-panel-title">
@@ -188,15 +307,15 @@ export function Table({ hand, actionIndex, board, children }: Props) {
             clamped at both ends: never below 5rem (the seat card's text-sm
             content needs it), never above 8.5rem
             (very wide displays, where a larger ring stops being more readable).
-            The 7vw slope keeps the felt inside its column at the narrow end of
-            the four-column layout, where the other three columns are fixed.
+            At 2xl the replay column is sized to fit the felt, so a wider ring
+            takes space from the list columns rather than overflowing.
             The felt is capped and centered so it grows into the panel without
             stretching edge to edge. */}
         {/* Felt background fills the panel's full width; the ring grid inside
             it stays w-fit/mx-auto so the seats centre within that background
             instead of stretching apart with it. */}
         <div className="w-full rounded-lg bg-black/40 p-1.5 sm:p-2">
-          <div className="relative mx-auto grid w-fit max-w-full [--seat-w:clamp(5rem,7vw,8.5rem)] grid-cols-[var(--seat-w)_auto_var(--seat-w)] items-stretch justify-center gap-x-1.5 sm:gap-x-2 gap-y-1.5">
+          <div ref={gridRef} className="relative mx-auto grid w-fit max-w-full [--seat-w:clamp(5rem,7vw,8.5rem)] grid-cols-[var(--seat-w)_auto_var(--seat-w)] items-stretch justify-center gap-x-1.5 sm:gap-x-2 gap-y-1.5">
             {/* Felt outline: a stadium shape (rectangle with fully-rounded short
                 ends) whose border passes through the CENTRE of every seat card,
                 not around their outer edges — the oval a real table forms
@@ -231,7 +350,7 @@ export function Table({ hand, actionIndex, board, children }: Props) {
                 its content instead of matching the others. */}
             <div className="relative z-10 col-start-2 row-start-1 flex justify-center">
               {hand
-                ? ring.top && <div className="w-[var(--seat-w)]">{renderSeat(ring.top)}</div>
+                ? ring.top && <div className="w-[var(--seat-w)]">{renderSeat(ring.top, 'top')}</div>
                 : <div className="w-[var(--seat-w)]"><EmptySeat /></div>}
             </div>
 
@@ -239,13 +358,33 @@ export function Table({ hand, actionIndex, board, children }: Props) {
                 felt row so its seats distribute across the ring's full height. */}
             <div className="relative z-10 col-start-1 row-start-1 row-span-3 flex flex-col justify-around gap-1.5">
               {hand
-                ? ring.left.map((seat) => <div key={seat.seat}>{renderSeat(seat)}</div>)
+                ? ring.left.map((seat) => <div key={seat.seat}>{renderSeat(seat, 'left')}</div>)
                 : EMPTY_RING.left.map((k) => <EmptySeat key={k} />)}
             </div>
 
-            <div className="relative z-10 col-start-2 row-start-2 flex items-center justify-center py-1">
+            {/* Padding leaves room for the bet stacks of the seats around the board. */}
+            <div className="relative z-10 col-start-2 row-start-2 flex items-center justify-center px-4 py-6">
               <div className="flex min-w-0 flex-col items-center">
-                <div className="mb-1 flex items-baseline justify-center gap-1.5 text-center">
+                <div className="relative mb-1 flex items-baseline justify-center gap-1.5 text-center">
+                  {/* Fixed-size and absolutely placed so the label never shifts
+                      as chips come and go; also the sweep's target. */}
+                  <div
+                    ref={potAnchorRef}
+                    className={`absolute bottom-0 right-full mr-1.5 grid h-7 w-9 items-end justify-items-end ${potLand}`}
+                  >
+                    {holdPrevPot && (
+                      <ChipStack
+                        key={`prev-${track.prevCollected}`}
+                        amount={track.prevCollected}
+                        className="col-start-1 row-start-1 chip-hide"
+                      />
+                    )}
+                    <ChipStack
+                      key={collected}
+                      amount={collected}
+                      className={`col-start-1 row-start-1 ${potChanging ? 'chip-pop' : ''}`}
+                    />
+                  </div>
                   <span className="t-label text-slate-400">Pot</span>
                   <span className="text-sm font-bold tabular-nums text-amber-300">
                     {hand ? formatUnit(pot, hand.money, unit) : '—'}
@@ -258,7 +397,7 @@ export function Table({ hand, actionIndex, board, children }: Props) {
 
             <div className="relative z-10 col-start-3 row-start-1 row-span-3 flex flex-col justify-around gap-1.5">
               {hand
-                ? ring.right.map((seat) => <div key={seat.seat}>{renderSeat(seat)}</div>)
+                ? ring.right.map((seat) => <div key={seat.seat}>{renderSeat(seat, 'right')}</div>)
                 : EMPTY_RING.right.map((k) => <EmptySeat key={k} />)}
             </div>
 
@@ -268,7 +407,7 @@ export function Table({ hand, actionIndex, board, children }: Props) {
               {hand ? (
                 ring.bottom && (
                   <div ref={measureSeat} className="w-[var(--seat-w)]">
-                    {renderSeat(ring.bottom)}
+                    {renderSeat(ring.bottom, 'bottom')}
                   </div>
                 )
               ) : (

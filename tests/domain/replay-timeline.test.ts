@@ -64,6 +64,30 @@ describe('replayTimeline — all-in preflop run-out', () => {
     expect(ordinary).toBeDefined();
     const timeline = replayTimeline(ordinary!);
     expect(timeline.filter((s) => s.dealt !== null)).toHaveLength(0);
-    expect(timeline).toHaveLength(ordinary!.actions.length + 1);
+    // The pre-action step, one per action, and the closing award step —
+    // except that a street's antes all share a single step.
+    const antes = ordinary!.actions.filter((a) => a.kind === 'post-ante').length;
+    const collapsed = antes > 0 ? antes - 1 : 0;
+    expect(timeline).toHaveLength(ordinary!.actions.length - collapsed + 2);
+  });
+
+  it('posts every ante of a street on one step, landing on the last ante', () => {
+    const anteSteps = replayTimeline(hand!).filter((s) => s.antes);
+    expect(anteSteps).toHaveLength(1);
+    const antes = hand!.actions.filter((a) => a.kind === 'post-ante');
+    expect(antes.length).toBeGreaterThan(1);
+    expect(anteSteps[0]!.actionIndex).toBe(antes.at(-1)!.index);
+  });
+
+  it('ends on a single award step that repeats the final action index and board', () => {
+    const timeline = replayTimeline(hand!);
+    const awardSteps = timeline.filter((s) => s.award);
+    expect(awardSteps).toHaveLength(1);
+    const [award] = awardSteps;
+    const beforeAward = timeline.at(-2)!;
+    expect(timeline.at(-1)).toBe(award);
+    expect(award!.actionIndex).toBe(beforeAward.actionIndex);
+    expect(award!.board).toEqual(beforeAward.board);
+    expect(award!.dealt).toBeNull();
   });
 });

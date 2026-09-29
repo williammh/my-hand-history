@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react';
 import type { Hand } from '@/domain/hand';
-import type { Action } from '@/domain/action';
+import { actionLabel, type Action } from '@/domain/action';
 import type { HandAnalysis, DecisionVerdict } from '@/analysis/types';
 import { formatUnit } from '@/lib/format';
 import { useDisplayStore } from '@/state/display-store';
@@ -15,6 +15,8 @@ import { CardView } from '@/components/replay/CardView';
 interface Props {
   hand: Hand | null;
   actionIndex: number;
+  /** On the closing award step the win rows are current, not the last action. */
+  awarding: boolean;
   analysis: HandAnalysis | undefined;
   pending: boolean;
   onSelect: (i: number) => void;
@@ -49,10 +51,18 @@ function collapseAntes(actions: readonly Action[], hand: Hand): Action[] {
   return [summary, ...rest];
 }
 
+/** "raise 2,400" / "all-in 916" / "uncalled bet 209,497". */
+function describeAction(a: Action, hand: Hand, unit: 'chips' | 'bb'): string {
+  const label = a.isAllIn ? 'all-in' : actionLabel(a.kind);
+  return a.amount > 0 ? `${label} ${formatUnit(a.amount, hand.money, unit)}` : label;
+}
+
 interface AntePoster {
   readonly name: string;
   readonly isHero: boolean;
   readonly seat: number;
+  /** The poster's own action index, so the summary row can follow the replay. */
+  readonly index: number;
 }
 
 /**
@@ -65,12 +75,12 @@ function antePosters(actions: readonly Action[], hand: Hand): AntePoster[] {
     .filter((a) => a.kind === 'post-ante')
     .map((a) => {
       const seat = hand.seats.find((s) => s.seat === a.seat);
-      return { name: seat?.name ?? `seat ${a.seat}`, isHero: seat?.isHero ?? false, seat: a.seat };
+      return { name: seat?.name ?? `seat ${a.seat}`, isHero: seat?.isHero ?? false, seat: a.seat, index: a.index };
     });
   return [...posters].sort((a, b) => Number(b.isHero) - Number(a.isHero));
 }
 
-export function ActionLog({ hand, actionIndex, analysis, pending, onSelect }: Props) {
+export function ActionLog({ hand, actionIndex, awarding, analysis, pending, onSelect }: Props) {
   const unit = useDisplayStore((s) => s.unit);
   const openPlayer = usePlayerDialogStore((s) => s.open);
 
@@ -86,6 +96,8 @@ export function ActionLog({ hand, actionIndex, analysis, pending, onSelect }: Pr
       </div>
     );
   }
+
+  const isCurrentAction = (index: number) => !awarding && index === actionIndex;
 
   const verdicts = analysis?.verdicts ?? [];
   const verdictByIndex = new Map(verdicts.map((v) => [v.actionIndex, v]));
@@ -114,7 +126,7 @@ export function ActionLog({ hand, actionIndex, analysis, pending, onSelect }: Pr
   );
 
   const renderVerdictRow = (a: Action, verdict: DecisionVerdict, seat: NonNullable<ReturnType<typeof hand.seats.find>>) => {
-    const isCurrent = a.index === actionIndex;
+    const isCurrent = isCurrentAction(a.index);
     return (
       <div
         key={a.index}
@@ -135,9 +147,7 @@ export function ActionLog({ hand, actionIndex, analysis, pending, onSelect }: Pr
         </span>
         <NameButton seat={seat.seat} className="text-slate-300">{seat.name}</NameButton>
         <span className="relative ml-auto shrink-0 text-slate-400 pointer-events-none">
-          {a.isAllIn
-            ? `all-in${a.amount > 0 ? ` ${formatUnit(a.amount, hand.money, unit)}` : ''}`
-            : `${a.kind.replace('post-', '')}${a.amount > 0 ? ` ${formatUnit(a.amount, hand.money, unit)}` : ''}`}
+          {describeAction(a, hand, unit)}
         </span>
         <span className="relative w-[18px] shrink-0 flex justify-center pointer-events-none">
           <VerdictIcon severity={verdict.severity} />
@@ -176,7 +186,9 @@ export function ActionLog({ hand, actionIndex, analysis, pending, onSelect }: Pr
               if (verdict && seat) {
                 return renderVerdictRow(a, verdict, seat);
               }
-              const isCurrent = a.index === actionIndex;
+              // The summary row stands in for every ante, so it stays lit while
+              // the replay walks the table posting them one by one.
+              const isCurrent = posters ? posters.some((p) => isCurrentAction(p.index)) : isCurrentAction(a.index);
               return (
                 <div
                   key={a.index}
@@ -205,13 +217,21 @@ export function ActionLog({ hand, actionIndex, analysis, pending, onSelect }: Pr
                   </span>
                   <span
                     title={posters ? posters.map((p) => p.name).join(', ') : undefined}
-                    className={`truncate flex items-center gap-0 ${seat?.isHero ? 'text-slate-300' : 'text-slate-400'}`}
+                    className={`truncate flex items-center gap-0 ${posters ? 'ante-posters' : ''} ${seat?.isHero ? 'text-slate-300' : 'text-slate-400'}`}
                   >
                     {posters
                       ? posters.map((p, i) => (
-                          <span key={p.name} className="flex items-center">
+                          // Each name keeps its natural width and the ROW
+                          // truncates: letting the names shrink instead
+                          // divides the space six ways and reduces every one
+                          // to an initial ("S…, B., M.") rather than dropping
+                          // the ones that do not fit.
+                          <span key={p.name} className="flex shrink-0 items-center">
                             {i > 0 && <span className="relative text-slate-400 pointer-events-none">,&nbsp;</span>}
-                            <NameButton seat={p.seat} className={p.isHero ? 'text-slate-300' : undefined}>
+                            <NameButton
+                              seat={p.seat}
+                              className={isCurrentAction(p.index) ? 'text-slate-50' : p.isHero ? 'text-slate-300' : undefined}
+                            >
                               {p.name}
                             </NameButton>
                           </span>
@@ -221,9 +241,7 @@ export function ActionLog({ hand, actionIndex, analysis, pending, onSelect }: Pr
                         : null}
                   </span>
                   <span className={`relative ml-auto shrink-0 pointer-events-none ${a.kind === 'fold' ? 'text-slate-500' : 'text-slate-400'}`}>
-                    {a.isAllIn
-                      ? `all-in${a.amount > 0 ? ` ${formatUnit(a.amount, hand.money, unit)}` : ''}`
-                      : `${a.kind.replace('post-', '')}${a.amount > 0 ? ` ${formatUnit(a.amount, hand.money, unit)}` : ''}`}
+                    {describeAction(a, hand, unit)}
                   </span>
                   <span className="relative w-[18px] shrink-0 pointer-events-none" />
                 </div>
@@ -237,7 +255,9 @@ export function ActionLog({ hand, actionIndex, analysis, pending, onSelect }: Pr
           return (
             <div
               key={`win-${award.seat}-${award.potLevel}-${i}`}
-              className="w-full text-left px-3 py-1.5 flex items-center gap-2 border-2 border-transparent"
+              className={`w-full text-left px-3 py-1.5 flex items-center gap-2 border-2 rounded-lg ${
+                awarding ? 'border-slate-300' : 'border-transparent'
+              }`}
             >
               <span className="w-9 shrink-0 flex justify-center">
                 {seat && (

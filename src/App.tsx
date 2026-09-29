@@ -105,10 +105,10 @@ export function App() {
   // ActionLog and AnalysisPanel select by ACTION index (they don't know about
   // run-out deal steps), so clicking a row needs to land on the timeline step
   // that plays that action — the last step carrying that actionIndex, since a
-  // deal step for the FOLLOWING street can share it too.
+  // deal step for the FOLLOWING street (or the closing award step) can share it too.
   const stepOfAction = useMemo(() => {
     const map = new Map<number, number>();
-    timeline.forEach((s, i) => { if (s.dealt === null) map.set(s.actionIndex, i); });
+    timeline.forEach((s, i) => { if (s.dealt === null && !s.award) map.set(s.actionIndex, i); });
     return map;
   }, [timeline]);
   const selectAction = (i: number) => setIndex(stepOfAction.get(i) ?? 0);
@@ -149,13 +149,14 @@ export function App() {
             than its own contents. So xl keeps hands stacked under source in a
             three-column layout, and below lg everything is a single stack.
 
-            The first three tracks are pinned to the same 19rem so source,
-            hands, and action log line up as equal-width columns. The replay
-            track is fit-content, so it takes only what the felt needs (the
-            felt sizes itself from --seat-w) but is still capped by the space
-            actually left over — a plain max-content track ignores the
-            container and overflows it. */}
-        <div className="flex-1 lg:min-h-0 grid grid-cols-1 lg:grid-cols-[19rem_minmax(0,1fr)] lg:grid-rows-[18rem_minmax(0,1fr)] xl:grid-cols-[19rem_21rem_minmax(0,1fr)] 2xl:grid-rows-1 2xl:grid-cols-[19rem_19rem_19rem_fit-content(34rem)] gap-4 md:gap-5">
+            The replay track is auto, so it is exactly as wide as the felt
+            needs (the felt sizes itself from --seat-w, which grows with the
+            viewport) and the felt never overflows its column. The first
+            three tracks are equal fr tracks that share whatever is left, so
+            source, hands, and action log still line up as equal-width
+            columns; flexible tracks are sized after auto ones, which is what
+            gives the felt priority. Their 15rem floor keeps them usable. */}
+        <div className="flex-1 lg:min-h-0 grid grid-cols-1 lg:grid-cols-[19rem_minmax(0,1fr)] lg:grid-rows-[18rem_minmax(0,1fr)] xl:grid-cols-[19rem_21rem_minmax(0,1fr)] 2xl:grid-rows-1 2xl:grid-cols-[minmax(15rem,1fr)_minmax(15rem,1fr)_minmax(15rem,1fr)_auto] gap-4 md:gap-5">
           <aside className="lg:min-h-0 flex flex-col gap-4 md:gap-5">
             <div className="shrink-0 rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden">
               <div className="px-3 py-2 border-b border-slate-800 t-panel-title">
@@ -193,6 +194,7 @@ export function App() {
             <ActionLog
               hand={hand}
               actionIndex={actionIndex}
+              awarding={current?.award ?? false}
               analysis={analysis}
               pending={Boolean(hand && pending[hand.id])}
               onSelect={selectAction}
@@ -200,13 +202,13 @@ export function App() {
           </div>
           {/* Below 2xl the column track itself is flexible (1fr), so the panel
               fills it (w-full) rather than shrinking to the felt's intrinsic
-              width. At 2xl the last column is fit-content(34rem) — a
-              shrink-to-fit track — so w-fit there sizes the column to its
-              widest child (the felt); the analysis panel is neutralised below
-              so its prose cannot widen the column past the felt. */}
+              width. At 2xl the last column is an auto track, so w-fit there
+              sizes the column to its widest child (the felt); the analysis
+              panel is neutralised below so its prose cannot widen the column
+              past the felt. */}
           <div className="w-full 2xl:w-fit max-w-full min-h-0 lg:overflow-y-auto scroll-thin flex flex-col gap-4 md:gap-5 lg:col-start-2 lg:row-start-2 xl:col-start-3 xl:row-start-1 xl:row-span-2 2xl:col-start-4 2xl:row-span-1">
             <div className="flex shrink-0 lg:min-h-0 overflow-hidden">
-              <Table hand={hand} actionIndex={actionIndex} board={current?.board ?? []}>
+              <Table hand={hand} actionIndex={actionIndex} board={current?.board ?? []} awarding={current?.award ?? false} antes={current?.antes ?? false}>
                 <ReplayControls
                   timeline={timeline}
                   stepIndex={stepIndex}
