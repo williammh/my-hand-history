@@ -32,6 +32,14 @@ interface HandsState {
   hands: Hand[];
   selectedId: string | null;
   importing: boolean;
+  /**
+   * True from mount until the first hydrate() settles. Distinct from "the
+   * library is empty": until IndexedDB has answered, the UI knows nothing
+   * about how many hands there are, and rendering the empty state during
+   * that window shows "No hands loaded yet" to a player who has hundreds.
+   * Panels render skeletons while this is true.
+   */
+  hydrating: boolean;
   report: ImportReport | null;
 
   importFiles: (files: readonly { text: string; fileName: string }[]) => Promise<void>;
@@ -49,6 +57,7 @@ export const useHandsStore = create<HandsState>((set, get) => ({
   hands: [],
   selectedId: null,
   importing: false,
+  hydrating: true,
   report: null,
 
   /**
@@ -135,10 +144,16 @@ export const useHandsStore = create<HandsState>((set, get) => ({
   },
 
   hydrate: async () => {
-    const summaries = await repository.listHands();
-    const loaded = await Promise.all(summaries.map((s) => repository.getHand(s.id)));
-    const hands = loaded.filter((h): h is Hand => Boolean(h));
-    set({ hands, selectedId: hands[0]?.id ?? null });
+    try {
+      const summaries = await repository.listHands();
+      const loaded = await Promise.all(summaries.map((s) => repository.getHand(s.id)));
+      const hands = loaded.filter((h): h is Hand => Boolean(h));
+      set({ hands, selectedId: hands[0]?.id ?? null });
+    } finally {
+      // Settled either way: a failed read must not leave the whole UI
+      // pinned to skeletons forever.
+      set({ hydrating: false });
+    }
   },
 }));
 

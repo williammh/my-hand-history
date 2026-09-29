@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { Hand, PlayerSeat } from '@/domain/hand';
 import type { Board } from '@/domain/cards';
 import { stacksAtAction } from '@/domain/stacks';
@@ -13,6 +13,7 @@ import { useDisplayStore } from '@/state/display-store';
 import { CommunityCards } from './CommunityCards';
 import { ChipStack } from './ChipStack';
 import { Seat, EmptySeat, type ChipGhost, type GhostKind, type SeatSide, type Vector } from './Seat';
+import { TableSkeleton } from './TableSkeleton';
 import { ScrollArea } from '@/components/ui/ScrollArea';
 
 /** One seat's chips crossing the felt on this step. */
@@ -55,6 +56,12 @@ interface Props {
   awarding: boolean;
   /** This step posts every ante of the street at once. */
   antes: boolean;
+  /**
+   * A newly selected hand is still being prepared — the felt is replaced by a
+   * placeholder ring. The controls below stay mounted so their keyboard
+   * bindings and scrub position are not torn down between hands.
+   */
+  loading?: boolean;
   /** Replay controls, rendered inside the panel below the board. */
   children?: ReactNode;
 }
@@ -104,7 +111,7 @@ function ringColumns(seats: readonly PlayerSeat[]): {
   return { bottom, top, left: left.reverse(), right };
 }
 
-export function Table({ hand, actionIndex, board, awarding, antes, children }: Props) {
+function TableImpl({ hand, actionIndex, board, awarding, antes, loading = false, children }: Props) {
   const unit = useDisplayStore((s) => s.unit);
   const snapshot = useMemo(
     () => (hand ? stacksAtAction(hand, actionIndex) : { stacks: new Map(), folded: new Set<number>() }),
@@ -314,6 +321,10 @@ export function Table({ hand, actionIndex, board, awarding, antes, children }: P
         {/* Felt background fills the panel's full width; the ring grid inside
             it stays w-fit/mx-auto so the seats centre within that background
             instead of stretching apart with it. */}
+        {/* Skeleton and felt render exclusively rather than one being hidden:
+            the felt oval sizes itself from a measured seat height, and a
+            display:none seat measures 0. */}
+        {loading ? <TableSkeleton /> : (
         <div className="w-full rounded-lg bg-black/40 p-1.5 sm:p-2">
           <div ref={gridRef} className="relative mx-auto grid w-fit max-w-full [--seat-w:clamp(5rem,7vw,8.5rem)] grid-cols-[var(--seat-w)_auto_var(--seat-w)] items-stretch justify-center gap-x-1.5 sm:gap-x-2 gap-y-1.5">
             {/* Felt outline: a stadium shape (rectangle with fully-rounded short
@@ -418,9 +429,18 @@ export function Table({ hand, actionIndex, board, awarding, antes, children }: P
             </div>
           </div>
         </div>
+        )}
       </ScrollArea>
 
       <div className="px-2.5 pb-2.5 sm:px-3 sm:pb-3">{children}</div>
     </div>
   );
 }
+
+/**
+ * Memoised: rebuilding the ring means a stack snapshot, a pot walk and a seat
+ * card per player, and it re-measures the felt on top. `children` (the replay
+ * controls) is a fresh element on every App render, so this only actually
+ * skips work when App memoises that element too — see App.tsx.
+ */
+export const Table = memo(TableImpl);

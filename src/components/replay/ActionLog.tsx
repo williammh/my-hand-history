@@ -1,6 +1,6 @@
 'use client';
 
-import type { ReactNode } from 'react';
+import { memo, type ReactNode } from 'react';
 import type { Hand } from '@/domain/hand';
 import { actionLabel, type Action } from '@/domain/action';
 import type { HandAnalysis, DecisionVerdict } from '@/analysis/types';
@@ -11,6 +11,7 @@ import { playerKey } from '@/stats/types';
 import { VerdictIcon } from '@/components/analysis/VerdictBadge';
 import { ScrollArea } from '@/components/ui/ScrollArea';
 import { CardView } from '@/components/replay/CardView';
+import { ActionLogSkeleton } from './ActionLogSkeleton';
 
 interface Props {
   hand: Hand | null;
@@ -19,6 +20,12 @@ interface Props {
   awarding: boolean;
   analysis: HandAnalysis | undefined;
   pending: boolean;
+  /**
+   * A newly selected hand is still being prepared. Takes precedence over the
+   * empty state: the panel shows placeholder rows rather than "No hand
+   * selected", which would otherwise flash between two hands.
+   */
+  loading?: boolean;
   onSelect: (i: number) => void;
 }
 
@@ -80,9 +87,22 @@ function antePosters(actions: readonly Action[], hand: Hand): AntePoster[] {
   return [...posters].sort((a, b) => Number(b.isHero) - Number(a.isHero));
 }
 
-export function ActionLog({ hand, actionIndex, awarding, analysis, pending, onSelect }: Props) {
+function ActionLogImpl({ hand, actionIndex, awarding, analysis, pending, loading = false, onSelect }: Props) {
   const unit = useDisplayStore((s) => s.unit);
   const openPlayer = usePlayerDialogStore((s) => s.open);
+
+  if (loading) {
+    return (
+      <div className="rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden h-full flex flex-col">
+        <div className="px-3 py-2 border-b border-slate-800 flex items-center justify-between gap-2">
+          <span className="t-panel-title">Action</span>
+        </div>
+        <ScrollArea className="flex-1 min-h-0">
+          <ActionLogSkeleton />
+        </ScrollArea>
+      </div>
+    );
+  }
 
   if (!hand) {
     return (
@@ -288,3 +308,12 @@ export function ActionLog({ hand, actionIndex, awarding, analysis, pending, onSe
     </div>
   );
 }
+
+/**
+ * Memoised: the log rebuilds a row per action with a verdict lookup each, and
+ * App re-renders on every store change (filters, display settings, an analysis
+ * landing for some other hand). Without this the list was rebuilt on renders
+ * that changed none of its inputs — including the selection click, which has
+ * to commit before the new hand's skeletons can paint.
+ */
+export const ActionLog = memo(ActionLogImpl);

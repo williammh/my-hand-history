@@ -49,8 +49,11 @@ export function ReplayControls({ timeline, stepIndex, playing, onIndex, onPlayin
 
   return (
     <div className="mt-3 space-y-2">
-      <div className="flex justify-end">
-        <span className="text-xs text-slate-500 tabular-nums">
+      {/* Fixed height, not glyph height: the counter's own digits change every
+          step, and their sub-pixel height differences otherwise ripple out
+          into the whole panel's height as the replay advances. */}
+      <div className="flex h-4 items-center justify-end">
+        <span className="text-xs leading-none text-slate-500 tabular-nums">
           {empty ? '0/0' : `${stepIndex + 1}/${max + 1}`}
         </span>
       </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useHandsStore } from '@/state/hands-store';
 import { useReplayStore } from '@/state/replay-store';
 import { useAnalysisStore } from '@/state/analysis-store';
@@ -15,6 +15,8 @@ import { AnalysisPanel } from '@/components/analysis/AnalysisPanel';
 import { FiltersPanel } from '@/components/filters/FiltersPanel';
 import { PlayerStatsDialog } from '@/components/players/PlayerStatsDialog';
 import { replayTimeline } from '@/domain/stacks';
+import type { Board } from '@/domain/cards';
+import { useHandLoading } from '@/state/use-hand-loading';
 import { useFiltersStore } from '@/state/filters-store';
 import { deriveFacts } from '@/filters/facts';
 import { matches } from '@/filters/match';
@@ -23,8 +25,11 @@ import { playerHandFacts } from '@/stats/player-facts';
 import { aggregatePlayers } from '@/stats/aggregate';
 import { playerKey } from '@/stats/types';
 
+/** Stable empty board, so Table's memo isn't defeated by a fresh [] each render. */
+const NO_BOARD: Board = [];
+
 export function App() {
-  const { hands, selectedId, importing, report, importFiles, select, hydrate, clearAll } =
+  const { hands, selectedId, importing, hydrating, report, importFiles, select, hydrate, clearAll } =
     useHandsStore();
   const { stepIndex, playing, setIndex, reset, setPlaying } = useReplayStore();
   const { byHandId, pending, engineError, analyze } = useAnalysisStore();
@@ -63,7 +68,21 @@ export function App() {
     [visibleIndices, playerFacts],
   );
 
-  const hand = useMemo(() => hands.find((h) => h.id === selectedId) ?? null, [hands, selectedId]);
+  const selectedHand = useMemo(
+    () => hands.find((h) => h.id === selectedId) ?? null,
+    [hands, selectedId],
+  );
+
+  // The list highlights `selectedId` the instant it changes; the replay panels
+  // follow one transition later, showing skeletons until then. Rebuilding the
+  // timeline, the seat ring and every action row in the same commit as the
+  // click is what used to make the selection itself feel slow to appear.
+  const { hand, loading: handLoading } = useHandLoading(selectedHand);
+
+  // Hydration and import replace the library wholesale, so the replay is
+  // between hands too, not just the list.
+  const libraryLoading = hydrating || importing;
+  const replayLoading = libraryLoading || handLoading;
 
   useEffect(() => { void hydrate(); }, [hydrate]);
 
@@ -111,7 +130,27 @@ export function App() {
     timeline.forEach((s, i) => { if (s.dealt === null && !s.award) map.set(s.actionIndex, i); });
     return map;
   }, [timeline]);
-  const selectAction = (i: number) => setIndex(stepOfAction.get(i) ?? 0);
+  // Stable identity so the memoised ActionLog isn't re-rendered by a new
+  // callback on every App render.
+  const selectAction = useCallback(
+    (i: number) => setIndex(stepOfAction.get(i) ?? 0),
+    [stepOfAction, setIndex],
+  );
+
+  // Table takes the controls as children, and a fresh element there would make
+  // its memo a no-op — children is just another prop by identity.
+  const replayControls = useMemo(
+    () => (
+      <ReplayControls
+        timeline={timeline}
+        stepIndex={stepIndex}
+        playing={playing}
+        onIndex={setIndex}
+        onPlaying={setPlaying}
+      />
+    ),
+    [timeline, stepIndex, playing, setIndex, setPlaying],
+  );
 
   return (
     <div className="min-h-screen lg:h-screen lg:overflow-hidden bg-slate-950 text-slate-100 flex flex-col">
@@ -187,7 +226,12 @@ export function App() {
               Source in the first column, where it needs an explicit height
               because the page is not a fixed-height grid there. */}
           <div className="lg:min-h-0 h-[22rem] lg:h-auto lg:col-start-1 lg:row-start-2 2xl:col-start-2 2xl:row-start-1">
-            <HandList hands={visibleHands} selectedId={selectedId} onSelect={select} />
+            <HandList
+              hands={visibleHands}
+              selectedId={selectedId}
+              loading={libraryLoading}
+              onSelect={select}
+            />
           </div>
 
           <div className="min-h-0 max-h-[24rem] lg:max-h-72 xl:max-h-none flex flex-col lg:col-start-2 lg:row-start-1 xl:col-start-2 xl:row-start-1 xl:row-span-2 2xl:col-start-3 2xl:row-span-1">
@@ -197,6 +241,7 @@ export function App() {
               awarding={current?.award ?? false}
               analysis={analysis}
               pending={Boolean(hand && pending[hand.id])}
+              loading={replayLoading}
               onSelect={selectAction}
             />
           </div>
@@ -208,14 +253,8 @@ export function App() {
               past the felt. */}
           <div className="w-full 2xl:w-fit max-w-full min-h-0 lg:overflow-y-auto scroll-thin flex flex-col gap-4 md:gap-5 lg:col-start-2 lg:row-start-2 xl:col-start-3 xl:row-start-1 xl:row-span-2 2xl:col-start-4 2xl:row-span-1">
             <div className="flex shrink-0 lg:min-h-0 overflow-hidden">
-              <Table hand={hand} actionIndex={actionIndex} board={current?.board ?? []} awarding={current?.award ?? false} antes={current?.antes ?? false}>
-                <ReplayControls
-                  timeline={timeline}
-                  stepIndex={stepIndex}
-                  playing={playing}
-                  onIndex={setIndex}
-                  onPlaying={setPlaying}
-                />
+              <Table hand={hand} actionIndex={actionIndex} board={current?.board ?? NO_BOARD} awarding={current?.award ?? false} antes={current?.antes ?? false} loading={replayLoading}>
+                {replayControls}
               </Table>
             </div>
             {/* w-0 min-w-full: w-0 drops this out of the w-fit column's
