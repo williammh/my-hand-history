@@ -182,21 +182,17 @@ export function App() {
           <p className="t-micro text-amber-400 shrink-0">{engineError}</p>
         )}
 
-        {/* Four columns — source, hands, action log, replay — but only at 2xl.
-            Four needs 19rem + 19rem + 19rem + a felt wide enough to read,
-            which does not fit until ~1536px; at xl the felt ends up narrower
-            than its own contents. So xl keeps hands stacked under source in a
-            three-column layout, and below lg everything is a single stack.
-
-            The replay track is auto, so it is exactly as wide as the felt
-            needs (the felt sizes itself from --seat-w, which grows with the
-            viewport) and the felt never overflows its column. The first
-            three tracks are equal fr tracks that share whatever is left, so
-            source, hands, and action log still line up as equal-width
-            columns; flexible tracks are sized after auto ones, which is what
-            gives the felt priority. Their 15rem floor keeps them usable. */}
-        <div className="flex-1 lg:min-h-0 grid grid-cols-1 lg:grid-cols-[19rem_minmax(0,1fr)] lg:grid-rows-[18rem_minmax(0,1fr)] xl:grid-cols-[19rem_21rem_minmax(0,1fr)] 2xl:grid-rows-1 2xl:grid-cols-[minmax(15rem,1fr)_minmax(15rem,1fr)_minmax(15rem,1fr)_auto] gap-4 md:gap-5">
-          <aside className="lg:min-h-0 flex flex-col gap-4 md:gap-5">
+        {/* Source, filters and hands share one left column: only the scoping
+            filters are inline (the rest are behind "All filters"), so the hands
+            list takes the height that used to belong to the full filter panel.
+            From xl the action log is a fixed 21rem and the replay takes all the
+            remaining width; the felt centres itself in its column and scrolls
+            horizontally rather than overflowing if the column is ever narrower
+            than it.
+            At lg the log sits above the replay in the second column, and below
+            lg everything is a single stack. */}
+        <div className="flex-1 lg:min-h-0 grid grid-cols-1 lg:grid-cols-[19rem_minmax(0,1fr)] lg:grid-rows-[18rem_minmax(0,1fr)] xl:grid-cols-[20rem_21rem_minmax(0,1fr)] xl:grid-rows-1 gap-4 md:gap-5">
+          <aside className="lg:min-h-0 lg:row-span-2 xl:row-span-1 flex flex-col gap-4 md:gap-5 lg:overflow-y-auto scroll-thin">
             <div className="shrink-0 rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden">
               <div className="px-3 py-2 border-b border-slate-800 t-panel-title">
                 Source
@@ -210,31 +206,27 @@ export function App() {
               </div>
             </div>
 
-            {/* Filters panel is always visible, even with an empty library —
-                its controls just have nothing to act on yet. The panel is
-                tall — it scrolls within the column rather than pushing
-                Source off the top. */}
-            {/* The panel scrolls internally under its own pinned header, so
-                it takes the column's leftover height rather than being wrapped
-                in a scroller here. */}
-            <div className="lg:min-h-0 lg:flex-1 h-[28rem] lg:h-auto">
+            {/* Always visible, even with an empty library — its controls just
+                have nothing to act on yet. */}
+            <div className="shrink-0">
               <FiltersPanel />
+            </div>
+
+            {/* Below lg the page is not a fixed-height grid, so the list needs
+                an explicit height; from lg it takes whatever the column has
+                left, with a floor so a short window scrolls the column instead
+                of squeezing the list to nothing. */}
+            <div className="h-[22rem] lg:h-auto lg:flex-1 lg:min-h-[14rem]">
+              <HandList
+                hands={visibleHands}
+                selectedId={selectedId}
+                loading={libraryLoading}
+                onSelect={select}
+              />
             </div>
           </aside>
 
-          {/* Hands gets its own column at 2xl; below that it stacks under
-              Source in the first column, where it needs an explicit height
-              because the page is not a fixed-height grid there. */}
-          <div className="lg:min-h-0 h-[22rem] lg:h-auto lg:col-start-1 lg:row-start-2 2xl:col-start-2 2xl:row-start-1">
-            <HandList
-              hands={visibleHands}
-              selectedId={selectedId}
-              loading={libraryLoading}
-              onSelect={select}
-            />
-          </div>
-
-          <div className="min-h-0 max-h-[24rem] lg:max-h-72 xl:max-h-none flex flex-col lg:col-start-2 lg:row-start-1 xl:col-start-2 xl:row-start-1 xl:row-span-2 2xl:col-start-3 2xl:row-span-1">
+          <div className="min-h-0 max-h-[24rem] lg:max-h-72 xl:max-h-none flex flex-col lg:col-start-2 lg:row-start-1 xl:col-start-2">
             <ActionLog
               hand={hand}
               actionIndex={actionIndex}
@@ -245,25 +237,15 @@ export function App() {
               onSelect={selectAction}
             />
           </div>
-          {/* Below 2xl the column track itself is flexible (1fr), so the panel
-              fills it (w-full) rather than shrinking to the felt's intrinsic
-              width. At 2xl the last column is an auto track, so w-fit there
-              sizes the column to its widest child (the felt); the analysis
-              panel is neutralised below so its prose cannot widen the column
-              past the felt. */}
-          <div className="w-full 2xl:w-fit max-w-full min-h-0 lg:overflow-y-auto scroll-thin flex flex-col gap-4 md:gap-5 lg:col-start-2 lg:row-start-2 xl:col-start-3 xl:row-start-1 xl:row-span-2 2xl:col-start-4 2xl:row-span-1">
+          <div className="w-full max-w-full min-h-0 lg:overflow-y-auto scroll-thin flex flex-col gap-4 md:gap-5 lg:col-start-2 lg:row-start-2 xl:col-start-3 xl:row-start-1">
             <div className="flex shrink-0 lg:min-h-0 overflow-hidden">
               <Table hand={hand} actionIndex={actionIndex} board={current?.board ?? NO_BOARD} awarding={current?.award ?? false} antes={current?.antes ?? false} loading={replayLoading}>
                 {replayControls}
               </Table>
             </div>
-            {/* w-0 min-w-full: w-0 drops this out of the w-fit column's
-                max-content sizing so a long explanation cannot stretch the
-                column wider than the felt; min-w-full then pulls it back
-                out to the column width the replay panel established.
-                flex-1 lets it claim the vertical space the felt doesn't
-                use, matching ActionLog's height in the column beside it. */}
-            <div className="w-0 min-w-full flex-1 min-h-0">
+            {/* flex-1 lets it claim the vertical space the felt doesn't use,
+                matching ActionLog's height in the column beside it. */}
+            <div className="w-full flex-1 min-h-0">
               <AnalysisPanel hand={hand} actionIndex={actionIndex} analysis={analysis} />
             </div>
           </div>

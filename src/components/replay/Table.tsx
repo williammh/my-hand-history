@@ -299,11 +299,10 @@ function TableImpl({ hand, actionIndex, board, awarding, antes, loading = false,
   };
 
   return (
-    // Below 2xl the column itself is the width constraint (w-full fills it);
-    // at 2xl the column is an auto track sized to the felt, so w-fit makes the
-    // panel exactly that wide. Either way the felt's own ring
-    // is capped by --seat-w and centred, so it never stretches edge to edge.
-    <div className="w-full 2xl:w-fit max-w-full rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden">
+    // The column is a flexible track, so the panel fills it (w-full); the
+    // felt's own ring is capped by --seat-w and centred, so it never stretches
+    // edge to edge.
+    <div className="w-full max-w-full rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden">
       <div className="px-3 py-2 border-b border-slate-800 t-panel-title">
         Replay
       </div>
@@ -314,8 +313,6 @@ function TableImpl({ hand, actionIndex, board, awarding, antes, loading = false,
             clamped at both ends: never below 5rem (the seat card's text-sm
             content needs it), never above 8.5rem
             (very wide displays, where a larger ring stops being more readable).
-            At 2xl the replay column is sized to fit the felt, so a wider ring
-            takes space from the list columns rather than overflowing.
             The felt is capped and centered so it grows into the panel without
             stretching edge to edge. */}
         {/* Felt background fills the panel's full width; the ring grid inside

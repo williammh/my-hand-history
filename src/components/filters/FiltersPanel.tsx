@@ -1,7 +1,7 @@
 'use client';
 
-import { useMemo } from 'react';
-import { IconChevronDown, IconX } from '@tabler/icons-react';
+import { useMemo, useState } from 'react';
+import { IconAdjustmentsHorizontal, IconChevronDown, IconX } from '@tabler/icons-react';
 import { Select } from 'radix-ui';
 import type { Street } from '@/domain/position';
 import type { Rank } from '@/domain/cards';
@@ -18,7 +18,7 @@ import { registry } from '@/parsers/index';
 import type { SiteId } from '@/domain/hand';
 import { RANK_OPTIONS } from '@/filters/board';
 import { FilterMenu } from './FilterMenu';
-import { ScrollArea } from '@/components/ui/ScrollArea';
+import { Dialog } from '@/components/ui/Dialog';
 
 const SEGMENT_BASE =
   'flex-1 px-2 py-1 text-center text-sm rounded-sm transition outline-none';
@@ -134,6 +134,13 @@ export function FiltersPanel() {
   } = useFiltersStore();
   const hands = useHandsStore((s) => s.hands);
   const active = activeCount(criteria);
+  const [allOpen, setAllOpen] = useState(false);
+  // The count on "All filters" covers only what the dialog holds — the axes
+  // above it already report themselves on their own triggers.
+  const advancedActive =
+    active
+    - [criteria.sourceFiles, criteria.sites, criteria.gameModes, criteria.games, criteria.players]
+      .filter((axis) => axis.size > 0).length;
 
   // Room and file options are whatever the library holds, so they are derived
   // from the hands rather than declared. Both are cheap counts over the hand
@@ -149,10 +156,7 @@ export function FiltersPanel() {
   const players = useMemo(() => playerOptions(hands, siteNames), [hands, siteNames]);
 
   return (
-    <div className="rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden h-full flex flex-col">
-      {/* Pinned while the axes scroll beneath it, matching the hands panel —
-          which matters most for "Clear all", the one control you want reachable
-          without scrolling back up. */}
+    <div className="rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden flex flex-col">
       <div className="px-3 py-2 border-b border-slate-800 flex items-center gap-2 shrink-0">
         <span className="t-panel-title">Filters</span>
         {active > 0 && (
@@ -173,9 +177,10 @@ export function FiltersPanel() {
         </button>
       </div>
 
-      <ScrollArea className="flex-1 min-h-0">
-      <div className="p-3 space-y-3">
-        {/* Source axes first: they scope WHICH hands the axes below describe.
+      <div className="p-3 space-y-2.5">
+        {/* Only the axes that scope WHICH hands are loaded live here; the
+            rest sit behind "All filters" so the hands list keeps the height.
+            Source axes first: they scope WHICH hands the axes below describe.
             Poker room is a closed vocabulary — every supported room is always
             offered, counts included, even before anything is loaded. Source
             file's vocabulary comes from the library instead, so it sits
@@ -191,6 +196,7 @@ export function FiltersPanel() {
           emptyLabel="No hands loaded"
         />
 
+        <div className="grid grid-cols-2 gap-2.5">
         <FilterMenu
           label="Poker room"
           options={sites}
@@ -202,7 +208,7 @@ export function FiltersPanel() {
         />
 
         <FilterMenu
-          label="Game mode"
+          label="Format"
           options={modes}
           selected={criteria.gameModes}
           onToggle={(v) => toggle('gameModes', v)}
@@ -210,9 +216,10 @@ export function FiltersPanel() {
           counts={countsOf(modes)}
           totalCount={hands.length}
         />
+        </div>
 
         <FilterMenu
-          label="Game / tournament"
+          label="Game"
           options={games}
           selected={criteria.games}
           onToggle={(v) => toggle('games', v)}
@@ -235,7 +242,29 @@ export function FiltersPanel() {
           searchable
         />
 
-        <div className="pt-1 border-t border-slate-800 space-y-3">
+        <button
+          onClick={() => setAllOpen(true)}
+          className="flex w-full items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-sm border border-slate-700 bg-slate-800/50 text-sm text-slate-300 outline-none transition hover:border-slate-500 hover:text-slate-100"
+        >
+          <IconAdjustmentsHorizontal size={14} />
+          All filters
+          {advancedActive > 0 && (
+            <span className="t-micro px-1.5 py-0.5 rounded-sm bg-emerald-400/10 text-emerald-300">
+              {advancedActive}
+            </span>
+          )}
+        </button>
+      </div>
+
+      <Dialog
+        open={allOpen}
+        onOpenChange={setAllOpen}
+        title={<span className="flex items-center gap-2">All filters{active > 0 && <span className="t-micro px-1.5 py-0.5 rounded-sm bg-emerald-400/10 text-emerald-300">{active}</span>}</span>}
+        description="Every hand filter: pot, position, stack, street, line and board texture."
+        className="w-[min(96vw,36rem)]!"
+      >
+        <div className="space-y-4">
+        <div className="space-y-3">
         <FilterMenu
           label="Pot type"
           options={POT_TYPES}
@@ -372,8 +401,18 @@ export function FiltersPanel() {
             <RankSelect label="Lowest card" value={criteria.lowestRank} onChange={setLowestRank} />
           </div>
         </div>
-      </div>
-      </ScrollArea>
+        </div>
+        <div className="mt-4 flex justify-end">
+          <button
+            onClick={clearAll}
+            disabled={active === 0}
+            className="inline-flex items-center gap-1 t-label transition text-slate-500 hover:text-slate-200 disabled:text-slate-700 disabled:hover:text-slate-700 disabled:cursor-default"
+          >
+            <IconX size={12} />
+            Clear all
+          </button>
+        </div>
+      </Dialog>
     </div>
   );
 }
