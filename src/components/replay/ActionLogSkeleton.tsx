@@ -3,61 +3,54 @@
 import { Skeleton } from '@/components/ui/skeleton';
 
 /**
- * A street header plus its action rows.
- *
- * Every box here is sized by the same class the real row uses rather than by
- * an eyeballed h-*: a street header is t-label (or a size="sm" card when the
- * street deals one), and an action row's height comes from its text-sm spans
- * and its w-9 t-chip badge. Sizing the placeholders by hand made the rows
- * shorter than the real ones and shifted the log on every swap.
+ * Boxes are sized by the classes the real strip uses rather than eyeballed:
+ * an action card is two h-5 lines with a gap-1 between them, inside py-1.5
+ * and a 2px border. Matching them keeps the felt below from shifting when the
+ * real strip swaps in.
  */
-function StreetBlock({ actions, cards }: { actions: number; cards: number }) {
+function ActionCard() {
   return (
-    <li>
-      <div className="px-3 py-1.5 bg-slate-800/60 t-label sticky top-0 flex items-center gap-2">
-        {/* t-label's line box: 0.6875rem × 1.2 = 0.825rem. */}
-        <Skeleton className="h-[0.825rem] w-14 rounded-sm" />
-        {cards > 0 && (
-          <span className="flex gap-1">
-            {Array.from({ length: cards }, (_, i) => (
-              // CardView size="sm".
-              <Skeleton key={i} className="h-10 w-7 rounded-sm" />
-            ))}
-          </span>
-        )}
+    <li className="w-[7.5rem] shrink-0 px-2 py-1.5 flex flex-col gap-1 border-2 border-transparent rounded-lg">
+      <div className="h-5 flex items-center gap-1.5">
+        {/* The position badge: t-chip line plus py-0.5 and its border. */}
+        <Skeleton className="w-9 h-[calc(0.825rem+0.25rem+2px)] rounded-sm" />
+        <Skeleton className="h-4 w-14 rounded-sm" />
       </div>
-      {Array.from({ length: actions }, (_, i) => (
-        <div
-          key={i}
-          className="px-3 py-1.5 flex items-center gap-2 border-2 border-transparent rounded-lg text-sm"
-        >
-          <span className="w-9 shrink-0 flex justify-center">
-            {/* The position badge's box: t-chip line (0.6875rem × 1.2) plus
-                py-0.5 and a 1px border on each side. */}
-            <Skeleton className="w-9 h-[calc(0.825rem+0.25rem+2px)] rounded-sm" />
-          </span>
-          {/* text-sm's line box is 1.25rem — the height a real row's spans give it. */}
-          <Skeleton className="h-5 w-20 rounded-sm" />
-          <Skeleton className="ml-auto h-5 w-16 rounded-sm shrink-0" />
-          {/* Reserves the verdict icon's column, as the real rows do. */}
-          <span className="w-[18px] shrink-0" />
-        </div>
-      ))}
+      <div className="h-5 flex items-center">
+        <Skeleton className="h-4 w-16 rounded-sm" />
+      </div>
+    </li>
+  );
+}
+
+/** A board card: the street label above its size="sm" cards. */
+function DealCard({ cards }: { cards: number }) {
+  return (
+    <li className="shrink-0 px-2 py-1.5 flex flex-col items-center justify-center gap-1 border-2 border-transparent rounded-lg bg-slate-800/60">
+      {/* t-label's line box: 0.6875rem × 1.2 = 0.825rem. */}
+      <Skeleton className="h-[0.825rem] w-8 rounded-sm" />
+      <span className="flex gap-0.5">
+        {Array.from({ length: cards }, (_, i) => (
+          <Skeleton key={i} className="h-10 w-7 rounded-sm" />
+        ))}
+      </span>
     </li>
   );
 }
 
 /**
- * Placeholder for the action log. Shows a plausible preflop/flop shape rather
- * than a flat list of bars, so the panel reads as an action log while the
+ * Placeholder for the action strip. Shows a plausible preflop/flop shape rather
+ * than a flat row of bars, so the panel reads as an action log while the
  * hand's actions and analysis resolve.
  */
 export function ActionLogSkeleton() {
   return (
-    <ol className="text-sm" aria-hidden="true">
-      <StreetBlock actions={4} cards={0} />
-      <StreetBlock actions={3} cards={3} />
-      <StreetBlock actions={2} cards={1} />
+    <ol className="flex w-max gap-1 p-1.5 text-sm" aria-hidden="true">
+      {Array.from({ length: 4 }, (_, i) => <ActionCard key={`p${i}`} />)}
+      <DealCard cards={3} />
+      {Array.from({ length: 3 }, (_, i) => <ActionCard key={`f${i}`} />)}
+      <DealCard cards={1} />
+      {Array.from({ length: 2 }, (_, i) => <ActionCard key={`t${i}`} />)}
     </ol>
   );
 }

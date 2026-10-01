@@ -72,15 +72,17 @@ const HandRow = memo(function HandRow({ hand: h, selected, unit, timezone, onSel
             <CardView card={hero?.holeCards?.[1] ?? null} size="sm" />
           </div>
           <div className="flex flex-col items-start gap-0.5 leading-tight min-w-0">
-            <span className="w-9 text-center t-chip border border-slate-600 rounded-sm bg-slate-700 px-1 py-0.5 text-slate-100">
-              {hero?.position}
+            <div className="flex items-center gap-1.5 min-w-0 max-w-full">
+              <span className="w-9 shrink-0 text-center t-chip border border-slate-600 rounded-sm bg-slate-700 px-1 py-0.5 text-slate-100">
+                {hero?.position}
+              </span>
+              <span className="text-sm font-medium text-slate-200 truncate">{hero?.name}</span>
+            </div>
+            <span className="text-sm text-slate-500 truncate max-w-full">
+              {formatDateTime(h.meta.playedAt, timezone)}
             </span>
-            <span className="text-sm font-medium text-slate-200 truncate max-w-full">{hero?.name}</span>
           </div>
           <div className="ml-auto flex flex-col items-end leading-tight">
-            <span className="text-sm tabular-nums text-slate-500" title="Total pot">
-              {formatUnit(h.pots.total, h.money, unit)}
-            </span>
             <span
               className={`text-sm font-semibold tabular-nums ${
                 net === null ? 'text-slate-600' : net > 0 ? 'text-emerald-400' : net < 0 ? 'text-rose-400' : 'text-slate-500'
@@ -89,12 +91,10 @@ const HandRow = memo(function HandRow({ hand: h, selected, unit, timezone, onSel
             >
               {net === null ? '—' : formatSignedUnit(net, h.money, unit)}
             </span>
+            <span className="text-sm tabular-nums text-slate-500" title="Total pot">
+              {formatUnit(h.pots.total, h.money, unit)}
+            </span>
           </div>
-        </div>
-        <div className="text-sm text-slate-500 mt-1 flex items-center justify-end min-w-0">
-          <span className="truncate">
-            {formatDateTime(h.meta.playedAt, timezone)}
-          </span>
         </div>
       </button>
     </li>

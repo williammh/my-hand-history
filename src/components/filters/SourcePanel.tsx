@@ -14,6 +14,8 @@ import {
   sourceFileOptions, type SourceOption,
 } from '@/filters/options';
 import { useHandsStore } from '@/state/hands-store';
+import { FileDropzone } from '@/components/upload/FileDropzone';
+import { ParseReport } from '@/components/upload/ParseReport';
 import { registry } from '@/parsers/index';
 import type { SiteId } from '@/domain/hand';
 import { RANK_OPTIONS } from '@/filters/board';
@@ -119,20 +121,24 @@ const SELECT_ITEM =
   'data-[state=checked]:text-emerald-200';
 
 /**
- * Filters the hand list. Sits under Source because it acts on the same library
- * the source panel loads into.
+ * Where hands come from, and which of them the list shows: the upload button
+ * and import report, then the filters that scope the loaded library.
  *
  * The reference design lays every axis out as an always-open column of
  * checkboxes; this column is 19rem wide, so each axis collapses into a
  * multi-select dropdown that reports its own selection on the trigger. The
  * filtering capability is the same.
  */
-export function FiltersPanel() {
+export function SourcePanel() {
   const {
     criteria, toggle, clearAxis, setStreet, setHeroStreetPosition, setSawFlopOnly,
     setHighestRank, setLowestRank, clearAll,
   } = useFiltersStore();
   const hands = useHandsStore((s) => s.hands);
+  const importing = useHandsStore((s) => s.importing);
+  const report = useHandsStore((s) => s.report);
+  const importFiles = useHandsStore((s) => s.importFiles);
+  const clearLibrary = useHandsStore((s) => s.clearAll);
   const active = activeCount(criteria);
   const [allOpen, setAllOpen] = useState(false);
   // The count on "All filters" covers only what the dialog holds — the axes
@@ -158,7 +164,7 @@ export function FiltersPanel() {
   return (
     <div className="rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden flex flex-col">
       <div className="px-3 py-2 border-b border-slate-800 flex items-center gap-2 shrink-0">
-        <span className="t-panel-title">Filters</span>
+        <span className="t-panel-title">Source</span>
         {active > 0 && (
           <span className="t-micro px-1.5 py-0.5 rounded-sm bg-emerald-400/10 text-emerald-300">
             {active}
@@ -178,6 +184,12 @@ export function FiltersPanel() {
       </div>
 
       <div className="p-3 space-y-2.5">
+        <FileDropzone onFiles={(files) => void importFiles(files)} busy={importing} />
+        <ParseReport
+          report={report}
+          onClear={hands.length > 0 ? () => void clearLibrary() : undefined}
+        />
+
         {/* Only the axes that scope WHICH hands are loaded live here; the
             rest sit behind "All filters" so the hands list keeps the height.
             Source axes first: they scope WHICH hands the axes below describe.
@@ -186,7 +198,7 @@ export function FiltersPanel() {
             file's vocabulary comes from the library instead, so it sits
             disabled until something is loaded. */}
         <FilterMenu
-          label="Source file"
+          label="File"
           options={files}
           selected={criteria.sourceFiles}
           onToggle={(v) => toggle('sourceFiles', v)}

@@ -48,50 +48,31 @@ export function ReplayControls({ timeline, stepIndex, playing, onIndex, onPlayin
   const btn = 'px-3 py-1.5 rounded-sm border border-slate-700 bg-slate-800 text-slate-200 text-sm hover:border-slate-500 disabled:opacity-40 disabled:hover:border-slate-700';
 
   return (
-    <div className="mt-3 space-y-2">
-      {/* Fixed height, not glyph height: the counter's own digits change every
-          step, and their sub-pixel height differences otherwise ripple out
-          into the whole panel's height as the replay advances. */}
-      <div className="flex h-4 items-center justify-end">
-        <span className="text-xs leading-none text-slate-500 tabular-nums">
-          {empty ? '0/0' : `${stepIndex + 1}/${max + 1}`}
-        </span>
-      </div>
-      <input
-        type="range"
-        min={0}
-        max={max}
-        value={empty ? 0 : stepIndex}
-        onChange={(e) => onIndex(Number(e.target.value))}
-        disabled={empty}
-        className="w-full accent-slate-200 disabled:opacity-40"
-      />
-
-      <div className="grid grid-cols-5 gap-2">
-        <button className={btn} onClick={() => onIndex(0)} disabled={empty || stepIndex <= 0}>
-          <IconPlayerTrackPrevFilled size={16} className="mx-auto" />
-        </button>
-        <button className={btn} onClick={() => onIndex(Math.max(0, stepIndex - 1))} disabled={empty || stepIndex <= 0}>
-          <IconPlayerSkipBackFilled size={16} className="mx-auto" />
-        </button>
-        <button
-          className={btn}
-          onClick={() => onPlaying(!playing)}
-          disabled={empty || stepIndex >= max}
-        >
-          {playing ? (
-            <IconPlayerPauseFilled size={16} className="mx-auto" />
-          ) : (
-            <IconPlayerPlayFilled size={16} className="mx-auto" />
-          )}
-        </button>
-        <button className={btn} onClick={() => onIndex(Math.min(max, stepIndex + 1))} disabled={empty || stepIndex >= max}>
-          <IconPlayerSkipForwardFilled size={16} className="mx-auto" />
-        </button>
-        <button className={btn} onClick={() => onIndex(max)} disabled={empty || stepIndex >= max}>
-          <IconPlayerTrackNextFilled size={16} className="mx-auto" />
-        </button>
-      </div>
+    <div className="mt-3 grid grid-cols-5 gap-2">
+      <button className={btn} aria-label="First step" onClick={() => onIndex(0)} disabled={empty || stepIndex <= 0}>
+        <IconPlayerTrackPrevFilled size={16} className="mx-auto" />
+      </button>
+      <button className={btn} aria-label="Previous step" onClick={() => onIndex(Math.max(0, stepIndex - 1))} disabled={empty || stepIndex <= 0}>
+        <IconPlayerSkipBackFilled size={16} className="mx-auto" />
+      </button>
+      <button
+        className={btn}
+        aria-label={playing ? 'Pause' : 'Play'}
+        onClick={() => onPlaying(!playing)}
+        disabled={empty || stepIndex >= max}
+      >
+        {playing ? (
+          <IconPlayerPauseFilled size={16} className="mx-auto" />
+        ) : (
+          <IconPlayerPlayFilled size={16} className="mx-auto" />
+        )}
+      </button>
+      <button className={btn} aria-label="Next step" onClick={() => onIndex(Math.min(max, stepIndex + 1))} disabled={empty || stepIndex >= max}>
+        <IconPlayerSkipForwardFilled size={16} className="mx-auto" />
+      </button>
+      <button className={btn} aria-label="Last step" onClick={() => onIndex(max)} disabled={empty || stepIndex >= max}>
+        <IconPlayerTrackNextFilled size={16} className="mx-auto" />
+      </button>
     </div>
   );
 }

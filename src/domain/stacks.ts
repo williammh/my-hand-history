@@ -154,6 +154,12 @@ export interface ReplayStep {
   readonly award: boolean;
   /** Every ante of the street, posted together on this one step. */
   readonly antes?: boolean;
+  /**
+   * A showdown step: index into Hand.showdown of the player showing (or
+   * mucking) on this step. Like a deal step it repeats the last action's index,
+   * since no chips move.
+   */
+  readonly showdown?: number;
 }
 
 /**
@@ -185,6 +191,9 @@ export function replayTimeline(hand: Hand): ReplayStep[] {
       });
     }
     for (const action of street.actions) {
+      // Shows and mucks (Betclic prints them as actions) are replayed from
+      // hand.showdown below, so they are not a second stop for the same event.
+      if (action.kind === 'show' || action.kind === 'muck') continue;
       // Antes are posted simultaneously, not in turn, and the action log
       // collapses them into a single row — so the whole run of them is one
       // stop, landing on the last ante's index. Stepping seat by seat would
@@ -202,8 +211,35 @@ export function replayTimeline(hand: Hand): ReplayStep[] {
     }
   }
 
+  // Each player's show or muck is its own stop, after the last action and
+  // before the pot is pushed, in the order the hand history lists them.
+  hand.showdown.forEach((_, i) => {
+    const prev = steps[steps.length - 1]!;
+    steps.push({ actionIndex: prev.actionIndex, board: prev.board, dealt: null, award: false, showdown: i });
+  });
+
   const last = steps[steps.length - 1]!;
-  if (hand.awards.length > 0) steps.push({ ...last, dealt: null, award: true });
+  if (hand.awards.length > 0) {
+    steps.push({ actionIndex: last.actionIndex, board: last.board, dealt: null, award: true });
+  }
 
   return steps;
+}
+
+/**
+ * Seats whose hole cards have been turned face up by `stepIndex`: everyone who
+ * showed (not mucked) on a showdown step at or before it.
+ */
+export function revealedSeats(
+  hand: Hand,
+  timeline: readonly ReplayStep[],
+  stepIndex: number,
+): ReadonlySet<number> {
+  const seats = new Set<number>();
+  for (const step of timeline.slice(0, stepIndex + 1)) {
+    if (step.showdown === undefined) continue;
+    const sd = hand.showdown[step.showdown];
+    if (sd && sd.holeCards && !sd.mucked) seats.add(sd.seat);
+  }
+  return seats;
 }

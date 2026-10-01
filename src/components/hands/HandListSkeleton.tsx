@@ -30,18 +30,18 @@ export function HandListSkeleton({ rows = 7 }: { rows?: number }) {
                 <Skeleton className="h-10 w-7 rounded-sm" />
               </div>
               <div className="flex flex-col items-start gap-0.5 leading-tight min-w-0">
-                {/* Position badge: t-chip line + py-0.5 + 1px border each side. */}
-                <Skeleton className="w-9 h-[calc(0.825rem+0.25rem+2px)] rounded-sm" />
-                {/* text-sm with leading-tight: 0.875rem × 1.25. */}
-                <Skeleton className="h-[1.09375rem] w-16 rounded-sm" />
+                <div className="flex items-center gap-1.5">
+                  {/* Position badge: t-chip line + py-0.5 + 1px border each side. */}
+                  <Skeleton className="w-9 h-[calc(0.825rem+0.25rem+2px)] rounded-sm" />
+                  {/* text-sm with leading-tight: 0.875rem × 1.25. */}
+                  <Skeleton className="h-[1.09375rem] w-16 rounded-sm" />
+                </div>
+                <Skeleton className="h-[1.09375rem] w-28 rounded-sm" />
               </div>
               <div className="ml-auto flex flex-col items-end leading-tight">
                 <Skeleton className="h-[1.09375rem] w-12 rounded-sm" />
                 <Skeleton className="h-[1.09375rem] w-14 rounded-sm" />
               </div>
-            </div>
-            <div className="mt-1 flex items-center justify-end min-w-0">
-              <Skeleton className="h-5 w-28 rounded-sm" />
             </div>
           </div>
         </li>

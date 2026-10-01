@@ -3,6 +3,7 @@
 import type { CSSProperties } from 'react';
 import type { Amount, MoneyContext } from '@/domain/money';
 import type { PlayerSeat } from '@/domain/hand';
+import type { HoleCards } from '@/domain/cards';
 import { formatUnit } from '@/lib/format';
 import { useDisplayStore } from '@/state/display-store';
 import { CardView } from './CardView';
@@ -44,10 +45,21 @@ interface Props {
   isActing: boolean;
   lastAction: string | null;
   side: SeatSide;
+  /**
+   * Where the bet sits, as an offset from the card's centre, measured by the
+   * table against the oval. Null until measured: the side's fixed slot is used.
+   */
+  betAt: { readonly x: number; readonly y: number } | null;
   /** Chips in front of the seat on the current street. */
   bet: number;
   animateBet: boolean;
   ghosts: readonly ChipGhost[];
+  /**
+   * The cards to draw, null for face down. Decided by the table rather than
+   * read off the seat: a villain's cards are only known from the showdown, and
+   * stay face down until that seat shows.
+   */
+  holeCards: HoleCards | null;
 }
 
 /**
@@ -55,12 +67,12 @@ interface Props {
  *
  * Its height is FIXED at text-sm's 1.25rem line box, not a minimum: the seat
  * card sets the felt's measured size, so a label that wrapped to a second
- * line grew the card, the felt, and the whole panel mid-replay. Long labels
- * truncate instead ("returned 209,497" at a narrow --seat-w), and the full
- * text stays available in the action log.
+ * line grew the card, the felt, and the whole panel mid-replay. A long label
+ * therefore never wraps or truncates: it stays on one line and overflows the
+ * card sideways, centred, rather than being cut short.
  */
 const ACTION_ROW =
-  'flex h-5 items-center justify-center overflow-hidden text-center text-sm font-semibold whitespace-nowrap';
+  'flex h-5 items-center justify-center text-center text-sm font-semibold whitespace-nowrap';
 
 /** Bet slot placement plus the direction chips slide in from (the seat). */
 const BET_SLOT: Record<SeatSide, string> = {
@@ -69,6 +81,21 @@ const BET_SLOT: Record<SeatSide, string> = {
   left: 'left-full top-1/2 -translate-y-1/2 ml-1 [--chip-from-x:-10px]',
   right: 'right-full top-1/2 -translate-y-1/2 mr-1 [--chip-from-x:10px]',
 };
+
+/**
+ * A measured bet spot: the stack is centred on it, and chip-in slides it out
+ * from the seat's direction, the same 10px the fixed slots use.
+ */
+function betSlotStyle({ x, y }: { readonly x: number; readonly y: number }): CSSProperties {
+  const len = Math.hypot(x, y) || 1;
+  return {
+    left: `calc(50% + ${x}px)`,
+    top: `calc(50% + ${y}px)`,
+    transform: 'translate(-50%, -50%)',
+    '--chip-from-x': `${(-x / len) * 10}px`,
+    '--chip-from-y': `${(-y / len) * 10}px`,
+  } as CSSProperties;
+}
 
 /**
  * Same footprint as a real Seat card — same rows, same padding — but with
@@ -106,18 +133,21 @@ export function EmptySeat() {
 }
 
 export function Seat({
-  seat, money, stack, committed, folded, isActing, lastAction, side, bet, animateBet, ghosts,
+  seat, money, stack, committed, folded, isActing, lastAction, side, betAt, bet, animateBet, ghosts, holeCards,
 }: Props) {
   const unit = useDisplayStore((s) => s.unit);
   // Beside a side seat the gap to the board is narrow, so stack tall instead.
   const columns = side === 'left' || side === 'right' ? 1 : 2;
 
   return (
-    <div data-seat className="relative min-w-0">
+    <div data-seat={seat.seat} className="relative min-w-0">
       {(bet > 0 || ghosts.length > 0) && (
         // One grid cell holds every stack, so outgoing and incoming chips
         // share the same spot.
-        <div className={`pointer-events-none absolute z-20 grid ${BET_SLOT[side]}`}>
+        <div
+          className={`pointer-events-none absolute z-20 grid ${betAt ? '' : BET_SLOT[side]}`}
+          style={betAt ? betSlotStyle(betAt) : undefined}
+        >
           {ghosts.map((g) => (
             <div
               key={g.kind}
@@ -136,7 +166,7 @@ export function Seat({
         </div>
       )}
       <div
-        className={`flex w-full min-w-0 flex-col gap-1.5 overflow-hidden rounded-lg border-2 px-2 py-2 text-sm transition ${
+        className={`flex w-full min-w-0 flex-col gap-1.5 rounded-lg border-2 px-2 py-2 text-sm transition ${
           isActing ? 'border-slate-300' : 'border-transparent'
         }`}
       >
@@ -169,8 +199,8 @@ export function Seat({
 
         <div className="flex items-center justify-center">
           <div className="flex gap-1">
-            {seat.holeCards ? (
-              seat.holeCards.map((c, i) => <CardView key={i} card={c} size="sm" dim={folded} />)
+            {holeCards ? (
+              holeCards.map((c, i) => <CardView key={i} card={c} size="sm" dim={folded} />)
             ) : (
               <>
                 <CardView card={null} size="sm" hidden dim={folded} />
@@ -181,13 +211,13 @@ export function Seat({
         </div>
 
         <div className="flex min-w-0 items-center justify-center">
-          <span className={`truncate text-sm font-medium ${folded ? 'text-slate-600' : 'text-slate-300'}`}>
+          <span className={`shrink-0 whitespace-nowrap text-sm font-medium ${folded ? 'text-slate-600' : 'text-slate-300'}`}>
             {seat.name}
           </span>
         </div>
 
         <div className={ACTION_ROW}>
-          <span className={`truncate tabular-nums ${folded ? 'text-slate-600' : 'text-slate-300'}`}>
+          <span className={`shrink-0 tabular-nums ${folded ? 'text-slate-600' : 'text-slate-300'}`}>
             {lastAction ?? ''}
             {committed > 0 && ` ${formatUnit(committed, money, unit)}`}
           </span>

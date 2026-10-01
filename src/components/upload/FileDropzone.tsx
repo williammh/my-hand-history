@@ -40,12 +40,6 @@ export function FileDropzone({ onFiles, busy }: Props) {
         setDragging(false);
         read(e.dataTransfer.files);
       }}
-      onClick={() => inputRef.current?.click()}
-      className={`rounded-sm border-2 border-dashed px-3 py-3 text-center cursor-pointer transition ${
-        dragging
-          ? 'border-emerald-400 bg-emerald-400/10'
-          : 'border-slate-700 bg-slate-900/40 hover:border-slate-500'
-      }`}
     >
       <input
         ref={inputRef}
@@ -59,15 +53,21 @@ export function FileDropzone({ onFiles, busy }: Props) {
           e.target.value = '';
         }}
       />
-      {/* Icon inline with the label rather than stacked above it — the tall
-          stacked form cost vertical space the filters below now want. */}
-      <div className="flex items-center justify-center gap-2">
-        <IconUpload size={16} stroke={1.5} className="text-slate-500 shrink-0" aria-hidden />
-        <span className="text-sm text-slate-200 font-medium">
-          {busy ? 'Parsing…' : 'Drop hand history .txt files'}
-        </span>
-      </div>
-      <p className="t-micro text-slate-500 mt-0.5">or click to choose — several at once is fine</p>
+      {/* A button first; dropping files onto it still works, so the old
+          dropzone's behaviour survives without its footprint. */}
+      <button
+        type="button"
+        onClick={() => inputRef.current?.click()}
+        disabled={busy}
+        className={`flex w-full items-center justify-center gap-2 px-2.5 py-1.5 rounded-sm border text-sm font-medium outline-none transition disabled:cursor-default disabled:opacity-60 ${
+          dragging
+            ? 'border-emerald-400 bg-emerald-400/10 text-emerald-200'
+            : 'border-emerald-500/50 bg-emerald-400/5 text-emerald-200 hover:bg-emerald-400/10'
+        }`}
+      >
+        <IconUpload size={14} aria-hidden />
+        {busy ? 'Parsing…' : 'Upload hand history file'}
+      </button>
     </div>
   );
 }

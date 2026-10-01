@@ -7,6 +7,7 @@ import type { DecisionVerdict } from '@/analysis/types';
 import { formatUnit, formatBBNumber } from '@/lib/format';
 import type { DisplayUnit } from '@/state/display-store';
 import { useDisplayStore } from '@/state/display-store';
+import { PositionBadge } from '@/components/replay/PositionBadge';
 
 /** How the player's actual action reads on screen: "call 4,000", "shove", "fold". */
 export function heroLine(action: Action, money: MoneyContext, unit: DisplayUnit): string {
@@ -34,13 +35,19 @@ export function VerdictDetail({ verdict, hand }: { verdict: DecisionVerdict; han
   const action = hand.actions[verdict.actionIndex]!;
   const correct = verdict.severity === 'ok';
   const seat = hand.seats.find((s) => s.seat === action.seat);
-  const label = seat?.isHero ? 'Hero' : (seat?.position ?? 'Player');
 
   return (
     <div>
       <dl className="space-y-0.5">
-        <div className="flex items-baseline gap-2">
-          <dt className="t-label text-slate-500 w-11 shrink-0">{label}</dt>
+        <div className="flex items-center gap-2">
+          <dt className="flex items-center gap-2 min-w-0">
+            <PositionBadge position={seat?.position} isHero={seat?.isHero ?? false} />
+            {seat && (
+              <span className={`text-sm font-medium truncate ${seat.isHero ? 'text-slate-200' : 'text-slate-400'}`}>
+                {seat.name}
+              </span>
+            )}
+          </dt>
           <dd
             className={`text-sm ${
               correct ? 'text-emerald-300' : 'text-rose-300 line-through decoration-rose-500/50'
@@ -52,7 +59,7 @@ export function VerdictDetail({ verdict, hand }: { verdict: DecisionVerdict; han
 
         {!correct && (
           <div className="flex items-baseline gap-2">
-            <dt className="t-label text-slate-500 w-11 shrink-0">GTO</dt>
+            <dt className="t-label text-slate-500 w-9 shrink-0 text-center">GTO</dt>
             <dd className="text-sm text-emerald-300">
               {gtoLine(verdict.recommended)}
               {verdict.evLossBB ? (

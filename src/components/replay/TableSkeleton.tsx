@@ -1,8 +1,9 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { EmptySeat } from './Seat';
 import { CommunityCards } from './CommunityCards';
+import { useFeltMaxWidth } from './felt';
 
 /**
  * Placeholder felt.
@@ -37,13 +38,18 @@ export function TableSkeleton() {
   // sits on the same line in both states instead of being derived from a
   // hand-computed constant that would drift with the seat's content.
   const [seatH, setSeatH] = useState(0);
+  const seatRef = useRef<HTMLDivElement | null>(null);
   const measureSeat = useCallback((node: HTMLDivElement | null) => {
+    seatRef.current = node;
     if (node) setSeatH(node.getBoundingClientRect().height);
   }, []);
+  // Same width rule as Table, so the ring doesn't change width on the swap.
+  const gridRef = useRef<HTMLDivElement | null>(null);
+  const feltMaxWidth = useFeltMaxWidth(gridRef, seatRef, seatH);
 
   return (
     <div className="w-full rounded-lg bg-black/40 p-1.5 sm:p-2" aria-hidden="true">
-      <div className="relative mx-auto grid w-fit max-w-full [--seat-w:clamp(5rem,7vw,8.5rem)] grid-cols-[var(--seat-w)_auto_var(--seat-w)] items-stretch justify-center gap-x-1.5 sm:gap-x-2 gap-y-1.5">
+      <div ref={gridRef} style={{ maxWidth: feltMaxWidth }} className="relative mx-auto grid w-full [--seat-w:clamp(5rem,7vw,8.5rem)] grid-cols-[var(--seat-w)_minmax(auto,1fr)_var(--seat-w)] items-stretch justify-center gap-x-1.5 sm:gap-x-2 gap-y-1.5">
         {/* The felt oval, so it doesn't vanish and reappear across the swap.
             Same inset rule as Table: half a seat card on the top and bottom,
             half the fixed track on the left and right. */}
@@ -77,7 +83,7 @@ export function TableSkeleton() {
 
         {/* Same padding as Table's board cell — it reserves the room the
             surrounding seats' bet stacks need. */}
-        <div className="relative z-10 col-start-2 row-start-2 flex items-center justify-center px-4 py-6">
+        <div className="relative z-10 col-start-2 row-start-2 flex items-center justify-center px-4 py-[clamp(1.5rem,6.2vh,5.5rem)]">
           <div className="flex min-w-0 flex-col items-center animate-pulse">
             {/* Matches the pot row: no gap on the column, mb-1 on the row. */}
             <div className="relative mb-1 flex items-baseline justify-center gap-1.5 text-center">

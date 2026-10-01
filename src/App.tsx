@@ -4,18 +4,17 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { useHandsStore } from '@/state/hands-store';
 import { useReplayStore } from '@/state/replay-store';
 import { useAnalysisStore } from '@/state/analysis-store';
-import { FileDropzone } from '@/components/upload/FileDropzone';
-import { ParseReport } from '@/components/upload/ParseReport';
 import { DisplaySettingsMenu } from '@/components/upload/DisplaySettingsMenu';
 import { HandList } from '@/components/hands/HandList';
 import { Table } from '@/components/replay/Table';
 import { ReplayControls } from '@/components/replay/ReplayControls';
 import { ActionLog } from '@/components/replay/ActionLog';
 import { AnalysisPanel } from '@/components/analysis/AnalysisPanel';
-import { FiltersPanel } from '@/components/filters/FiltersPanel';
+import { SourcePanel } from '@/components/filters/SourcePanel';
 import { PlayerStatsDialog } from '@/components/players/PlayerStatsDialog';
-import { replayTimeline } from '@/domain/stacks';
+import { replayTimeline, revealedSeats } from '@/domain/stacks';
 import type { Board } from '@/domain/cards';
+import type { Street } from '@/domain/position';
 import { useHandLoading } from '@/state/use-hand-loading';
 import { useFiltersStore } from '@/state/filters-store';
 import { deriveFacts } from '@/filters/facts';
@@ -27,9 +26,10 @@ import { playerKey } from '@/stats/types';
 
 /** Stable empty board, so Table's memo isn't defeated by a fresh [] each render. */
 const NO_BOARD: Board = [];
+const NO_SEATS: ReadonlySet<number> = new Set();
 
 export function App() {
-  const { hands, selectedId, importing, hydrating, report, importFiles, select, hydrate, clearAll } =
+  const { hands, selectedId, importing, hydrating, select, hydrate } =
     useHandsStore();
   const { stepIndex, playing, setIndex, reset, setPlaying } = useReplayStore();
   const { byHandId, pending, engineError, analyze } = useAnalysisStore();
@@ -130,11 +130,58 @@ export function App() {
     timeline.forEach((s, i) => { if (s.dealt === null && !s.award) map.set(s.actionIndex, i); });
     return map;
   }, [timeline]);
+  const showdownStep = current?.showdown ?? null;
+  const showing = hand && showdownStep !== null ? hand.showdown[showdownStep]?.seat ?? null : null;
+  const revealed = useMemo(
+    () => (hand ? revealedSeats(hand, timeline, stepIndex) : NO_SEATS),
+    [hand, timeline, stepIndex],
+  );
+  const dealtStreet = current?.dealt ?? null;
+  // A street with actions has no card-only step: its board appears with its
+  // first action, which is where selecting the board cards should land.
+  const selectDeal = useCallback(
+    (street: Street) => {
+      let step = timeline.findIndex((s) => s.dealt === street);
+      if (step < 0) {
+        const first = hand?.streets.find((st) => st.street === street)?.actions[0];
+        if (first) step = stepOfAction.get(first.index) ?? -1;
+      }
+      if (step >= 0) setIndex(step);
+    },
+    [timeline, hand, stepOfAction, setIndex],
+  );
+  const selectShowdown = useCallback(
+    (i: number) => {
+      const step = timeline.findIndex((s) => s.showdown === i);
+      if (step >= 0) setIndex(step);
+    },
+    [timeline, setIndex],
+  );
   // Stable identity so the memoised ActionLog isn't re-rendered by a new
   // callback on every App render.
   const selectAction = useCallback(
     (i: number) => setIndex(stepOfAction.get(i) ?? 0),
     [stepOfAction, setIndex],
+  );
+
+  // Same for the action strip, which Table renders above the felt.
+  const awarding = current?.award ?? false;
+  const actionStrip = useMemo(
+    () => (
+      <ActionLog
+        hand={hand}
+        actionIndex={actionIndex}
+        awarding={awarding}
+        showdownStep={showdownStep}
+        dealtStreet={dealtStreet}
+        analysis={analysis}
+        loading={replayLoading}
+        onSelect={selectAction}
+        onSelectShowdown={selectShowdown}
+        onSelectDeal={selectDeal}
+      />
+    ),
+    [hand, actionIndex, awarding, showdownStep, dealtStreet, analysis, replayLoading, selectAction, selectShowdown, selectDeal],
   );
 
   // Table takes the controls as children, and a fresh element there would make
@@ -182,34 +229,20 @@ export function App() {
           <p className="t-micro text-amber-400 shrink-0">{engineError}</p>
         )}
 
-        {/* Source, filters and hands share one left column: only the scoping
-            filters are inline (the rest are behind "All filters"), so the hands
-            list takes the height that used to belong to the full filter panel.
-            From xl the action log is a fixed 21rem and the replay takes all the
-            remaining width; the felt centres itself in its column and scrolls
-            horizontally rather than overflowing if the column is ever narrower
-            than it.
-            At lg the log sits above the replay in the second column, and below
-            lg everything is a single stack. */}
-        <div className="flex-1 lg:min-h-0 grid grid-cols-1 lg:grid-cols-[19rem_minmax(0,1fr)] lg:grid-rows-[18rem_minmax(0,1fr)] xl:grid-cols-[20rem_21rem_minmax(0,1fr)] xl:grid-rows-1 gap-4 md:gap-5">
-          <aside className="lg:min-h-0 lg:row-span-2 xl:row-span-1 flex flex-col gap-4 md:gap-5 lg:overflow-y-auto scroll-thin">
-            <div className="shrink-0 rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden">
-              <div className="px-3 py-2 border-b border-slate-800 t-panel-title">
-                Source
-              </div>
-              <div className="p-3 space-y-3.5">
-                <FileDropzone onFiles={(files) => void importFiles(files)} busy={importing} />
-                <ParseReport
-                  report={report}
-                  onClear={hands.length > 0 ? () => void clearAll() : undefined}
-                />
-              </div>
-            </div>
-
+        {/* The source panel (upload, report, scoping filters) and hands share one
+            left column. Only the scoping filters are inline — the rest are
+            behind "All filters" — so the hands list keeps the height.
+            The second column takes all the remaining width and stacks the
+            replay (with the action strip inside it) and the analysis;
+            the felt centres itself in it and scrolls horizontally rather than
+            overflowing if the column is ever narrower than it. Below lg
+            everything is a single stack. */}
+        <div className="flex-1 lg:min-h-0 grid grid-cols-1 lg:grid-cols-[19rem_minmax(0,1fr)] xl:grid-cols-[20rem_minmax(0,1fr)] gap-4 md:gap-5">
+          <aside className="lg:min-h-0 flex flex-col gap-4 md:gap-5 lg:overflow-y-auto scroll-thin">
             {/* Always visible, even with an empty library — its controls just
                 have nothing to act on yet. */}
             <div className="shrink-0">
-              <FiltersPanel />
+              <SourcePanel />
             </div>
 
             {/* Below lg the page is not a fixed-height grid, so the list needs
@@ -226,26 +259,27 @@ export function App() {
             </div>
           </aside>
 
-          <div className="min-h-0 max-h-[24rem] lg:max-h-72 xl:max-h-none flex flex-col lg:col-start-2 lg:row-start-1 xl:col-start-2">
-            <ActionLog
-              hand={hand}
-              actionIndex={actionIndex}
-              awarding={current?.award ?? false}
-              analysis={analysis}
-              pending={Boolean(hand && pending[hand.id])}
-              loading={replayLoading}
-              onSelect={selectAction}
-            />
-          </div>
-          <div className="w-full max-w-full min-h-0 lg:overflow-y-auto scroll-thin flex flex-col gap-4 md:gap-5 lg:col-start-2 lg:row-start-2 xl:col-start-3 xl:row-start-1">
+          <div className="w-full max-w-full min-w-0 min-h-0 lg:overflow-y-auto scroll-thin flex flex-col gap-4 md:gap-5">
             <div className="flex shrink-0 lg:min-h-0 overflow-hidden">
-              <Table hand={hand} actionIndex={actionIndex} board={current?.board ?? NO_BOARD} awarding={current?.award ?? false} antes={current?.antes ?? false} loading={replayLoading}>
+              <Table
+                hand={hand}
+                actionIndex={actionIndex}
+                board={current?.board ?? NO_BOARD}
+                awarding={current?.award ?? false}
+                antes={current?.antes ?? false}
+                revealed={revealed}
+                showing={showing}
+                loading={replayLoading}
+                top={actionStrip}
+                status={hand && !replayLoading && pending[hand.id] ? 'Analyzing…' : null}
+              >
                 {replayControls}
               </Table>
             </div>
-            {/* flex-1 lets it claim the vertical space the felt doesn't use,
-                matching ActionLog's height in the column beside it. */}
-            <div className="w-full flex-1 min-h-0">
+            {/* The felt gets first claim on the column's height; the analysis
+                fills whatever is left, and on a short window gives up space
+                (scrolling inside) before the column itself has to scroll. */}
+            <div className="w-full flex-1 min-h-[2.25rem] flex flex-col">
               <AnalysisPanel hand={hand} actionIndex={actionIndex} analysis={analysis} />
             </div>
           </div>

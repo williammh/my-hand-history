@@ -14,6 +14,7 @@ import { CommunityCards } from './CommunityCards';
 import { ChipStack } from './ChipStack';
 import { Seat, EmptySeat, type ChipGhost, type GhostKind, type SeatSide, type Vector } from './Seat';
 import { TableSkeleton } from './TableSkeleton';
+import { betSpot, useFeltMaxWidth, type Point } from './felt';
 import { ScrollArea } from '@/components/ui/ScrollArea';
 
 /** One seat's chips crossing the felt on this step. */
@@ -62,7 +63,18 @@ interface Props {
    * bindings and scrub position are not torn down between hands.
    */
   loading?: boolean;
-  /** Replay controls, rendered inside the panel below the board. */
+  /**
+   * Seats whose cards have been shown down by this step. When the hand has a
+   * showdown, villains' cards stay face down until their seat is in here.
+   */
+  revealed: ReadonlySet<number>;
+  /** The seat showing or mucking on this step, if it is a showdown step. */
+  showing: number | null;
+  /** The action strip, rendered inside the panel above the felt. */
+  top?: ReactNode;
+  /** Shown at the right of the panel title, e.g. "Analyzing…". */
+  status?: ReactNode;
+  /** Replay controls, rendered full width below the felt. */
   children?: ReactNode;
 }
 
@@ -111,7 +123,7 @@ function ringColumns(seats: readonly PlayerSeat[]): {
   return { bottom, top, left: left.reverse(), right };
 }
 
-function TableImpl({ hand, actionIndex, board, awarding, antes, loading = false, children }: Props) {
+function TableImpl({ hand, actionIndex, board, awarding, antes, revealed, showing, loading = false, top, status, children }: Props) {
   const unit = useDisplayStore((s) => s.unit);
   const snapshot = useMemo(
     () => (hand ? stacksAtAction(hand, actionIndex) : { stacks: new Map(), folded: new Set<number>() }),
@@ -144,6 +156,19 @@ function TableImpl({ hand, actionIndex, board, awarding, antes, loading = false,
     ? hand.actions[actionIndex]!
     : null;
   const actingSeat = actingAction?.seat ?? null;
+
+  // A villain's cards are known from the showdown section (and, for some
+  // rooms, from the seat itself), but the table has not seen them until that
+  // player shows — so in a hand that reaches showdown they stay face down until
+  // their seat is revealed. Hero's are always up.
+  const hasShowdown = hand?.showdown.some((sd) => sd.holeCards && !sd.mucked) ?? false;
+  const holeCardsOf = (seat: PlayerSeat) => {
+    if (seat.isHero) return seat.holeCards;
+    if (revealed.has(seat.seat)) {
+      return hand?.showdown.find((sd) => sd.seat === seat.seat)?.holeCards ?? seat.holeCards;
+    }
+    return hasShowdown ? null : seat.holeCards;
+  };
 
   // Street is read off the board rather than the action: an all-in run-out
   // deals streets with no actions, and the bets should still be swept then.
@@ -269,6 +294,37 @@ function TableImpl({ hand, actionIndex, board, awarding, antes, loading = false,
     ro.observe(node);
     return () => ro.disconnect();
   }, [ring.bottom, ring.top]);
+  const feltMaxWidth = useFeltMaxWidth(gridRef, seatProbe, seatH);
+
+  // Bet spots are placed from the rendered geometry — each seat card and the
+  // oval — so they stay on the felt at any width and any number of seats.
+  // Re-measured whenever the ring resizes; the chip animations measure their
+  // own paths from wherever the stacks end up.
+  const ovalRef = useRef<HTMLDivElement | null>(null);
+  const [betSpots, setBetSpots] = useState<ReadonlyMap<number, Point>>(() => new Map());
+  useLayoutEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+    const measure = () => {
+      const oval = ovalRef.current?.getBoundingClientRect();
+      const next = new Map<number, Point>();
+      if (oval) {
+        for (const el of grid.querySelectorAll<HTMLElement>('[data-seat]')) {
+          const spot = betSpot(el.getBoundingClientRect(), oval);
+          if (spot) next.set(Number(el.dataset.seat), { x: Math.round(spot.x), y: Math.round(spot.y) });
+        }
+      }
+      setBetSpots((prev) => {
+        if (prev.size === next.size && [...next].every(([k, v]) => prev.get(k)?.x === v.x && prev.get(k)?.y === v.y)) return prev;
+        return next;
+      });
+    };
+    measure();
+    if (typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(measure);
+    ro.observe(grid);
+    return () => ro.disconnect();
+  }, [ring, seatH, feltMaxWidth, loading]);
 
   // Only ever invoked with seats drawn from `ring`, which is empty when there
   // is no hand — so `hand` is always present here despite the nullable prop.
@@ -288,9 +344,11 @@ function TableImpl({ hand, actionIndex, board, awarding, antes, loading = false,
         folded={snapshot.folded.has(seat.seat)}
         // Antes are posted by everyone at once, so no one seat is "acting" —
         // highlighting the last one to post would single it out arbitrarily.
-        isActing={awarding ? won > 0 : !antes && actingSeat === seat.seat}
+        isActing={awarding ? won > 0 : showing !== null ? showing === seat.seat : !antes && actingSeat === seat.seat}
+        holeCards={holeCardsOf(seat)}
         lastAction={won > 0 ? 'win' : last ? shortActionLabel(last.kind) : null}
         side={side}
+        betAt={betSpots.get(seat.seat) ?? null}
         bet={bets.get(seat.seat) ?? 0}
         animateBet={betMoved && actingSeat === seat.seat}
         ghosts={ghosts}
@@ -303,9 +361,11 @@ function TableImpl({ hand, actionIndex, board, awarding, antes, loading = false,
     // felt's own ring is capped by --seat-w and centred, so it never stretches
     // edge to edge.
     <div className="w-full max-w-full rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden">
-      <div className="px-3 py-2 border-b border-slate-800 t-panel-title">
-        Replay
+      <div className="px-3 py-2 border-b border-slate-800 flex items-center gap-2">
+        <span className="t-panel-title">Replay</span>
+        {status ? <span className="ml-auto t-micro text-slate-500">{status}</span> : null}
       </div>
+      {top}
       <ScrollArea orientation="horizontal" className="px-2.5 pt-2.5 sm:px-3 sm:pt-3">
         {/* Seat columns are a single tracked width (--seat-w), not fluid 1fr
             tracks, so the top/bottom cells in the auto-sized center column stay
@@ -313,17 +373,17 @@ function TableImpl({ hand, actionIndex, board, awarding, antes, loading = false,
             clamped at both ends: never below 5rem (the seat card's text-sm
             content needs it), never above 8.5rem
             (very wide displays, where a larger ring stops being more readable).
-            The felt is capped and centered so it grows into the panel without
-            stretching edge to edge. */}
-        {/* Felt background fills the panel's full width; the ring grid inside
-            it stays w-fit/mx-auto so the seats centre within that background
-            instead of stretching apart with it. */}
+            The centre track is flexible, so the ring widens into the panel —
+            but only as far as useFeltMaxWidth allows, which ties the oval's
+            width to its height. A taller felt is a wider one, the oval keeps
+            its proportions, and chip paths are measured from the rendered
+            seats, so the animations follow the new distances. */}
         {/* Skeleton and felt render exclusively rather than one being hidden:
             the felt oval sizes itself from a measured seat height, and a
             display:none seat measures 0. */}
         {loading ? <TableSkeleton /> : (
         <div className="w-full rounded-lg bg-black/40 p-1.5 sm:p-2">
-          <div ref={gridRef} className="relative mx-auto grid w-fit max-w-full [--seat-w:clamp(5rem,7vw,8.5rem)] grid-cols-[var(--seat-w)_auto_var(--seat-w)] items-stretch justify-center gap-x-1.5 sm:gap-x-2 gap-y-1.5">
+          <div ref={gridRef} style={{ maxWidth: feltMaxWidth }} className="relative mx-auto grid w-full [--seat-w:clamp(5rem,7vw,8.5rem)] grid-cols-[var(--seat-w)_minmax(auto,1fr)_var(--seat-w)] items-stretch justify-center gap-x-1.5 sm:gap-x-2 gap-y-1.5">
             {/* Felt outline: a stadium shape (rectangle with fully-rounded short
                 ends) whose border passes through the CENTRE of every seat card,
                 not around their outer edges — the oval a real table forms
@@ -341,6 +401,7 @@ function TableImpl({ hand, actionIndex, board, awarding, antes, loading = false,
             >
               {seatH > 0 && (
                 <div
+                  ref={ovalRef}
                   className="absolute rounded-full border border-slate-700/60 bg-black/40"
                   style={{
                     left: 'calc(var(--seat-w) / 2)',
@@ -371,7 +432,7 @@ function TableImpl({ hand, actionIndex, board, awarding, antes, loading = false,
             </div>
 
             {/* Padding leaves room for the bet stacks of the seats around the board. */}
-            <div className="relative z-10 col-start-2 row-start-2 flex items-center justify-center px-4 py-6">
+            <div className="relative z-10 col-start-2 row-start-2 flex items-center justify-center px-4 py-[clamp(1.5rem,6.2vh,5.5rem)]">
               <div className="flex min-w-0 flex-col items-center">
                 <div className="relative mb-1 flex items-baseline justify-center gap-1.5 text-center">
                   {/* Fixed-size and absolutely placed so the label never shifts
@@ -436,8 +497,8 @@ function TableImpl({ hand, actionIndex, board, awarding, antes, loading = false,
 
 /**
  * Memoised: rebuilding the ring means a stack snapshot, a pot walk and a seat
- * card per player, and it re-measures the felt on top. `children` (the replay
- * controls) is a fresh element on every App render, so this only actually
- * skips work when App memoises that element too — see App.tsx.
+ * card per player, and it re-measures the felt on top. `top` (the action strip)
+ * and `children` (the replay controls) are fresh elements on every App render,
+ * so this only actually skips work when App memoises them too — see App.tsx.
  */
 export const Table = memo(TableImpl);
