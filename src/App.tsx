@@ -185,6 +185,24 @@ export function App() {
     [hand, actionIndex, awarding, showdownStep, dealtStreet, analysis, replayLoading, selectAction, selectShowdown, selectDeal],
   );
 
+  // The first / last replay buttons step through the filtered list once the
+  // replay is already at that end. A selection filtered out of the list has no
+  // neighbours there.
+  const selectedPos = useMemo(
+    () => visibleHands.findIndex((h) => h.id === selectedId),
+    [visibleHands, selectedId],
+  );
+  const prevHandId = selectedPos > 0 ? visibleHands[selectedPos - 1]?.id : undefined;
+  const nextHandId = selectedPos >= 0 ? visibleHands[selectedPos + 1]?.id : undefined;
+  const selectPrevHand = useMemo(
+    () => (prevHandId === undefined ? undefined : () => select(prevHandId)),
+    [prevHandId, select],
+  );
+  const selectNextHand = useMemo(
+    () => (nextHandId === undefined ? undefined : () => select(nextHandId)),
+    [nextHandId, select],
+  );
+
   // Table takes the controls as children, and a fresh element there would make
   // its memo a no-op — children is just another prop by identity.
   const replayControls = useMemo(
@@ -195,9 +213,11 @@ export function App() {
         playing={playing}
         onIndex={setIndex}
         onPlaying={setPlaying}
+        onPrevHand={selectPrevHand}
+        onNextHand={selectNextHand}
       />
     ),
-    [timeline, stepIndex, playing, setIndex, setPlaying],
+    [timeline, stepIndex, playing, setIndex, setPlaying, selectPrevHand, selectNextHand],
   );
 
   return (
