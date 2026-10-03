@@ -9,7 +9,7 @@ import { useFiltersStore } from '@/state/filters-store';
 import { activeCount } from '@/filters/match';
 import type { RelativePosition } from '@/filters/types';
 import {
-  CONNECTEDNESS, POT_TYPES, POSITIONS, PREFLOP_AGGRESSION, RELATIVE_POSITIONS, SEVERITIES,
+  CONNECTEDNESS, PLAYER_COUNTS, POT_TYPES, POSITIONS, PREFLOP_AGGRESSION, RELATIVE_POSITIONS, SEVERITIES,
   STACKS, STREETS, SUIT_TEXTURES, gameModeOptions, gameOptions, linesFor, playerOptions, siteOptions,
   sourceFileOptions, type SourceOption,
 } from '@/filters/options';
@@ -121,6 +121,35 @@ const SELECT_ITEM =
   'data-[state=checked]:text-emerald-200';
 
 /**
+ * Opens the "All filters" dialog. Rendered twice beside (below lg) or under (from lg)
+ * the upload button, one per breakpoint, because the dialog holds
+ * a different set of axes at each, and the count has to match what it holds.
+ */
+function AllFiltersButton({
+  count, onClick, className,
+}: {
+  count: number;
+  onClick: () => void;
+  className: string;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      aria-haspopup="dialog"
+      className={`items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-sm border border-slate-700 bg-slate-800/50 text-sm text-slate-300 outline-none transition hover:border-slate-500 hover:text-slate-100 ${className}`}
+    >
+      <IconAdjustmentsHorizontal size={14} className="shrink-0" />
+      All filters
+      {count > 0 && (
+        <span className="t-micro px-1.5 py-0.5 rounded-sm bg-emerald-400/10 text-emerald-300">
+          {count}
+        </span>
+      )}
+    </button>
+  );
+}
+
+/**
  * Where hands come from, and which of them the list shows: the upload button
  * and import report, then the filters that scope the loaded library.
  *
@@ -128,6 +157,10 @@ const SELECT_ITEM =
  * checkboxes; this column is 19rem wide, so each axis collapses into a
  * multi-select dropdown that reports its own selection on the trigger. The
  * filtering capability is the same.
+ *
+ * Below lg the panel sits above the replay in a single column, where even the
+ * scoping filters cost a screenful on a phone. They move into the dialog
+ * there, which leaves only the upload and "All filters" buttons, side by side.
  */
 export function SourcePanel() {
   const {
@@ -141,8 +174,9 @@ export function SourcePanel() {
   const clearLibrary = useHandsStore((s) => s.clearAll);
   const active = activeCount(criteria);
   const [allOpen, setAllOpen] = useState(false);
-  // The count on "All filters" covers only what the dialog holds — the axes
-  // above it already report themselves on their own triggers.
+  // The count on "All filters" covers only what the dialog holds — from lg the
+  // axes above it already report themselves on their own triggers. Below lg
+  // the dialog holds every axis, so that button counts them all.
   const advancedActive =
     active
     - [criteria.sourceFiles, criteria.sites, criteria.gameModes, criteria.games, criteria.players]
@@ -160,6 +194,73 @@ export function SourcePanel() {
   const games = useMemo(() => gameOptions(hands, siteNames), [hands, siteNames]);
   const modes = useMemo(() => gameModeOptions(hands), [hands]);
   const players = useMemo(() => playerOptions(hands, siteNames), [hands, siteNames]);
+
+  // Rendered inline in the panel from lg, and at the top of the dialog below it.
+  const sourceFilters = (
+    <>
+      {/* Only the axes that scope WHICH hands are loaded live in the panel;
+          the rest sit behind "All filters" so the hands list keeps the height.
+          Source axes first: they scope WHICH hands the axes below describe.
+          Room is a closed vocabulary — every supported room is always
+          offered, counts included, even before anything is loaded. Source
+          file's vocabulary comes from the library instead, so it sits
+          disabled until something is loaded. */}
+      <FilterMenu
+        label="File"
+        options={files}
+        selected={criteria.sourceFiles}
+        onToggle={(v) => toggle('sourceFiles', v)}
+        onClear={() => clearAxis('sourceFiles')}
+        counts={countsOf(files)}
+        totalCount={hands.length}
+        emptyLabel="No hands loaded"
+      />
+
+      <FilterMenu
+        label="Room"
+        options={sites}
+        selected={criteria.sites}
+        onToggle={(v) => toggle('sites', v)}
+        onClear={() => clearAxis('sites')}
+        counts={countsOf(sites)}
+        totalCount={hands.length}
+      />
+
+      <FilterMenu
+        label="Format"
+        options={modes}
+        selected={criteria.gameModes}
+        onToggle={(v) => toggle('gameModes', v)}
+        onClear={() => clearAxis('gameModes')}
+        counts={countsOf(modes)}
+        totalCount={hands.length}
+      />
+
+      <FilterMenu
+        label="Game"
+        options={games}
+        selected={criteria.games}
+        onToggle={(v) => toggle('games', v)}
+        onClear={() => clearAxis('games')}
+        counts={countsOf(games)}
+        totalCount={hands.length}
+        emptyLabel="No hands loaded"
+        searchable
+      />
+
+      <FilterMenu
+        label="Player"
+        options={players}
+        selected={criteria.players}
+        onToggle={(v) => toggle('players', v)}
+        onClear={() => clearAxis('players')}
+        counts={countsOf(players)}
+        totalCount={hands.length}
+        emptyLabel="No hands loaded"
+        searchable
+      />
+    </>
+  );
 
   return (
     <div className="rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden flex flex-col">
@@ -183,89 +284,22 @@ export function SourcePanel() {
         </button>
       </div>
 
-      <div className="p-3 space-y-2.5">
-        <FileDropzone onFiles={(files) => void importFiles(files)} busy={importing} />
+      {/* Gap rather than space-y: the filters below are the last child, and
+          space-y would still space the buttons off them where they are hidden. */}
+      <div className="p-3 flex flex-col gap-2.5">
+        <div className="flex gap-2.5 lg:flex-col">
+          <div className="min-w-0 flex-1 lg:flex-none">
+            <FileDropzone onFiles={(files) => void importFiles(files)} busy={importing} />
+          </div>
+          <AllFiltersButton count={active} onClick={() => setAllOpen(true)} className="flex shrink-0 lg:hidden" />
+          <AllFiltersButton count={advancedActive} onClick={() => setAllOpen(true)} className="hidden w-full lg:flex" />
+        </div>
         <ParseReport
           report={report}
           onClear={hands.length > 0 ? () => void clearLibrary() : undefined}
         />
 
-        {/* Only the axes that scope WHICH hands are loaded live here; the
-            rest sit behind "All filters" so the hands list keeps the height.
-            Source axes first: they scope WHICH hands the axes below describe.
-            Poker room is a closed vocabulary — every supported room is always
-            offered, counts included, even before anything is loaded. Source
-            file's vocabulary comes from the library instead, so it sits
-            disabled until something is loaded. */}
-        <FilterMenu
-          label="File"
-          options={files}
-          selected={criteria.sourceFiles}
-          onToggle={(v) => toggle('sourceFiles', v)}
-          onClear={() => clearAxis('sourceFiles')}
-          counts={countsOf(files)}
-          totalCount={hands.length}
-          emptyLabel="No hands loaded"
-        />
-
-        <div className="grid grid-cols-2 gap-2.5">
-        <FilterMenu
-          label="Poker room"
-          options={sites}
-          selected={criteria.sites}
-          onToggle={(v) => toggle('sites', v)}
-          onClear={() => clearAxis('sites')}
-          counts={countsOf(sites)}
-          totalCount={hands.length}
-        />
-
-        <FilterMenu
-          label="Format"
-          options={modes}
-          selected={criteria.gameModes}
-          onToggle={(v) => toggle('gameModes', v)}
-          onClear={() => clearAxis('gameModes')}
-          counts={countsOf(modes)}
-          totalCount={hands.length}
-        />
-        </div>
-
-        <FilterMenu
-          label="Game"
-          options={games}
-          selected={criteria.games}
-          onToggle={(v) => toggle('games', v)}
-          onClear={() => clearAxis('games')}
-          counts={countsOf(games)}
-          totalCount={hands.length}
-          emptyLabel="No hands loaded"
-          searchable
-        />
-
-        <FilterMenu
-          label="Player"
-          options={players}
-          selected={criteria.players}
-          onToggle={(v) => toggle('players', v)}
-          onClear={() => clearAxis('players')}
-          counts={countsOf(players)}
-          totalCount={hands.length}
-          emptyLabel="No hands loaded"
-          searchable
-        />
-
-        <button
-          onClick={() => setAllOpen(true)}
-          className="flex w-full items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-sm border border-slate-700 bg-slate-800/50 text-sm text-slate-300 outline-none transition hover:border-slate-500 hover:text-slate-100"
-        >
-          <IconAdjustmentsHorizontal size={14} />
-          All filters
-          {advancedActive > 0 && (
-            <span className="t-micro px-1.5 py-0.5 rounded-sm bg-emerald-400/10 text-emerald-300">
-              {advancedActive}
-            </span>
-          )}
-        </button>
+        <div className="hidden lg:block space-y-2.5">{sourceFilters}</div>
       </div>
 
       <Dialog
@@ -276,7 +310,18 @@ export function SourcePanel() {
         className="w-[min(96vw,36rem)]!"
       >
         <div className="space-y-4">
-        <div className="space-y-3">
+        <div className="space-y-3 lg:hidden">{sourceFilters}</div>
+
+        {/* Ruled off from the source axes above it, which only exist below lg. */}
+        <div className="space-y-3 max-lg:pt-1 max-lg:border-t max-lg:border-slate-800">
+        <FilterMenu
+          label="Player count"
+          options={PLAYER_COUNTS}
+          selected={criteria.playerCounts}
+          onToggle={(v) => toggle('playerCounts', v)}
+          onClear={() => clearAxis('playerCounts')}
+        />
+
         <FilterMenu
           label="Pot type"
           options={POT_TYPES}

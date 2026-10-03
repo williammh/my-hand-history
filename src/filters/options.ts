@@ -17,6 +17,12 @@ export interface Option<T> {
   readonly icon?: string;
 }
 
+/** Players dealt in; 10 covers the largest tables the supported rooms deal. */
+export const PLAYER_COUNTS: readonly Option<number>[] = [
+  { value: 2, label: '2', hint: 'Heads-up' },
+  ...[3, 4, 5, 6, 7, 8, 9, 10].map((n) => ({ value: n, label: String(n) })),
+];
+
 export const POT_TYPES: readonly Option<PotType>[] = [
   { value: 'preflop', label: 'Preflop', hint: 'Folded through — no voluntary money in' },
   { value: 'limp', label: 'Limp', hint: 'Never raised preflop' },

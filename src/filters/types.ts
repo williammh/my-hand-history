@@ -59,6 +59,8 @@ export interface HandFacts {
   readonly gameKey: string | null;
   /** Every seated player dealt into this hand, hero included. */
   readonly playerKeys: ReadonlySet<PlayerKey>;
+  /** How many players were dealt in — `playerKeys.size`, as a number to match on. */
+  readonly playerCount: number;
   readonly potType: PotType;
   readonly heroPosition: Position | null;
   /** Positions of every opponent who voluntarily put money in preflop. */
@@ -115,6 +117,8 @@ export interface FilterCriteria {
    * person in the hand" axis, not a "voluntarily played" one.
    */
   readonly players: ReadonlySet<PlayerKey>;
+  /** Players dealt into the hand (2 is heads-up). Empty means any table size. */
+  readonly playerCounts: ReadonlySet<number>;
   readonly potTypes: ReadonlySet<PotType>;
   readonly relativePositions: ReadonlySet<RelativePosition>;
   readonly heroPositions: ReadonlySet<Position>;
@@ -146,6 +150,7 @@ export const EMPTY_CRITERIA: FilterCriteria = {
   games: new Set(),
   gameModes: new Set(),
   players: new Set(),
+  playerCounts: new Set(),
   potTypes: new Set(),
   relativePositions: new Set(),
   heroPositions: new Set(),

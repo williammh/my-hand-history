@@ -21,12 +21,70 @@ const HAND_LIST_GAME_MODE_LABELS: Readonly<Record<GameMode, string>> = {
   tournament: 'MTT',
 };
 
-interface RowProps {
+interface SummaryProps {
   hand: Hand;
-  selected: boolean;
   unit: ReturnType<typeof useDisplayStore.getState>['unit'];
   timezone: ReturnType<typeof useDisplayStore.getState>['timezone'];
+}
+
+interface RowProps extends SummaryProps {
+  selected: boolean;
   onSelect: (id: string) => void;
+}
+
+/**
+ * What a row says about its hand: room, format and table, hero's cards,
+ * position and name, when it was played, the net result and the pot. Shared
+ * with the hand picker, which shows the selected hand on its own below lg.
+ */
+export function HandSummary({ hand: h, unit, timezone }: SummaryProps) {
+  const hero = h.seats.find((s) => s.isHero);
+  const net = heroNetResult(h);
+  return (
+    <>
+      <div className="flex items-center gap-1.5 min-w-0">
+        <span className="truncate text-sm text-slate-500">
+          {registry.get(h.meta.siteId)?.displayName ?? h.meta.siteId}
+        </span>
+        <span aria-hidden="true" className="text-slate-500">·</span>
+        <span className="truncate text-sm text-slate-500">{HAND_LIST_GAME_MODE_LABELS[h.meta.gameMode]}</span>
+        <span aria-hidden="true" className="text-slate-500">·</span>
+        <span className="truncate text-sm text-slate-500">
+          {h.meta.tournament?.name ?? h.meta.tableName ?? 'Unnamed game'}
+        </span>
+      </div>
+      <div className="flex items-center gap-2 mt-1">
+        <div className="flex gap-0.5">
+          <CardView card={hero?.holeCards?.[0] ?? null} size="sm" />
+          <CardView card={hero?.holeCards?.[1] ?? null} size="sm" />
+        </div>
+        <div className="flex flex-col items-start gap-0.5 leading-tight min-w-0">
+          <div className="flex items-center gap-1.5 min-w-0 max-w-full">
+            <span className="w-9 shrink-0 text-center t-chip border border-slate-600 rounded-sm bg-slate-700 px-1 py-0.5 text-slate-100">
+              {hero?.position}
+            </span>
+            <span className="text-sm font-medium text-slate-200 truncate">{hero?.name}</span>
+          </div>
+          <span className="text-sm text-slate-500 truncate max-w-full">
+            {formatDateTime(h.meta.playedAt, timezone)}
+          </span>
+        </div>
+        <div className="ml-auto flex flex-col items-end leading-tight">
+          <span
+            className={`text-sm font-semibold tabular-nums ${
+              net === null ? 'text-slate-600' : net > 0 ? 'text-emerald-400' : net < 0 ? 'text-rose-400' : 'text-slate-500'
+            }`}
+            title="Hero's net result"
+          >
+            {net === null ? '—' : formatSignedUnit(net, h.money, unit)}
+          </span>
+          <span className="text-sm tabular-nums text-slate-500" title="Total pot">
+            {formatUnit(h.pots.total, h.money, unit)}
+          </span>
+        </div>
+      </div>
+    </>
+  );
 }
 
 /**
@@ -44,72 +102,30 @@ interface RowProps {
  * comes from a memoised array, and `onSelect` is a stable store action, so the
  * only prop that moves for a given row is `selected`.
  */
-const HandRow = memo(function HandRow({ hand: h, selected, unit, timezone, onSelect }: RowProps) {
-  const hero = h.seats.find((s) => s.isHero);
-  const net = heroNetResult(h);
+const HandRow = memo(function HandRow({ hand, selected, unit, timezone, onSelect }: RowProps) {
   return (
     <li>
       <button
-        onClick={() => onSelect(h.id)}
+        onClick={() => onSelect(hand.id)}
+        aria-current={selected ? 'true' : undefined}
         className={`w-full text-left px-3 py-2 border-2 rounded-lg transition hover:bg-slate-800/50 ${
           selected ? 'border-slate-300' : 'border-transparent'
         }`}
       >
-        <div className="flex items-center gap-1.5 min-w-0">
-          <span className="truncate text-sm text-slate-500">
-            {registry.get(h.meta.siteId)?.displayName ?? h.meta.siteId}
-          </span>
-          <span aria-hidden="true" className="text-slate-500">·</span>
-          <span className="truncate text-sm text-slate-500">{HAND_LIST_GAME_MODE_LABELS[h.meta.gameMode]}</span>
-          <span aria-hidden="true" className="text-slate-500">·</span>
-          <span className="truncate text-sm text-slate-500">
-            {h.meta.tournament?.name ?? h.meta.tableName ?? 'Unnamed game'}
-          </span>
-        </div>
-        <div className="flex items-center gap-2 mt-1">
-          <div className="flex gap-0.5">
-            <CardView card={hero?.holeCards?.[0] ?? null} size="sm" />
-            <CardView card={hero?.holeCards?.[1] ?? null} size="sm" />
-          </div>
-          <div className="flex flex-col items-start gap-0.5 leading-tight min-w-0">
-            <div className="flex items-center gap-1.5 min-w-0 max-w-full">
-              <span className="w-9 shrink-0 text-center t-chip border border-slate-600 rounded-sm bg-slate-700 px-1 py-0.5 text-slate-100">
-                {hero?.position}
-              </span>
-              <span className="text-sm font-medium text-slate-200 truncate">{hero?.name}</span>
-            </div>
-            <span className="text-sm text-slate-500 truncate max-w-full">
-              {formatDateTime(h.meta.playedAt, timezone)}
-            </span>
-          </div>
-          <div className="ml-auto flex flex-col items-end leading-tight">
-            <span
-              className={`text-sm font-semibold tabular-nums ${
-                net === null ? 'text-slate-600' : net > 0 ? 'text-emerald-400' : net < 0 ? 'text-rose-400' : 'text-slate-500'
-              }`}
-              title="Hero's net result"
-            >
-              {net === null ? '—' : formatSignedUnit(net, h.money, unit)}
-            </span>
-            <span className="text-sm tabular-nums text-slate-500" title="Total pot">
-              {formatUnit(h.pots.total, h.money, unit)}
-            </span>
-          </div>
-        </div>
+        <HandSummary hand={hand} unit={unit} timezone={timezone} />
       </button>
     </li>
   );
 });
 
-interface Props {
+interface RowsProps {
   hands: readonly Hand[];
   selectedId: string | null;
-  /** Library is still being read or imported — show placeholder rows. */
-  loading?: boolean;
   onSelect: (id: string) => void;
 }
 
-export function HandList({ hands, selectedId, loading = false, onSelect }: Props) {
+/** The rows themselves, without the panel around them — the hand picker's dialog lists them too. */
+export function HandRows({ hands, selectedId, onSelect }: RowsProps) {
   const unit = useDisplayStore((s) => s.unit);
   const timezone = useDisplayStore((s) => s.timezone);
 
@@ -120,6 +136,28 @@ export function HandList({ hands, selectedId, loading = false, onSelect }: Props
   onSelectRef.current = onSelect;
   const select = useCallback((id: string) => onSelectRef.current(id), []);
 
+  return (
+    <ul className="divide-y divide-slate-800/70">
+      {hands.map((h) => (
+        <HandRow
+          key={h.id}
+          hand={h}
+          selected={h.id === selectedId}
+          unit={unit}
+          timezone={timezone}
+          onSelect={select}
+        />
+      ))}
+    </ul>
+  );
+}
+
+interface Props extends RowsProps {
+  /** Library is still being read or imported — show placeholder rows. */
+  loading?: boolean;
+}
+
+export function HandList({ hands, selectedId, loading = false, onSelect }: Props) {
   return (
     <div className="rounded-sm border border-slate-800 bg-slate-900/60 overflow-hidden h-full flex flex-col">
       <div className="px-3 py-2 border-b border-slate-800 t-panel-title shrink-0">
@@ -137,18 +175,7 @@ export function HandList({ hands, selectedId, loading = false, onSelect }: Props
         </div>
       ) : (
       <ScrollArea className="flex-1 min-h-0">
-        <ul className="divide-y divide-slate-800/70">
-        {hands.map((h) => (
-          <HandRow
-            key={h.id}
-            hand={h}
-            selected={h.id === selectedId}
-            unit={unit}
-            timezone={timezone}
-            onSelect={select}
-          />
-        ))}
-        </ul>
+        <HandRows hands={hands} selectedId={selectedId} onSelect={onSelect} />
       </ScrollArea>
       )}
     </div>

@@ -30,6 +30,8 @@ export function matches(facts: HandFacts, c: FilterCriteria): boolean {
     if (![...c.players].some((p) => facts.playerKeys.has(p))) return false;
   }
 
+  if (c.playerCounts.size > 0 && !c.playerCounts.has(facts.playerCount)) return false;
+
   if (c.potTypes.size > 0 && !c.potTypes.has(facts.potType)) return false;
 
   if (c.relativePositions.size > 0) {
@@ -106,6 +108,7 @@ export function isActive(c: FilterCriteria): boolean {
     c.games.size > 0 ||
     c.gameModes.size > 0 ||
     c.players.size > 0 ||
+    c.playerCounts.size > 0 ||
     c.potTypes.size > 0 ||
     c.relativePositions.size > 0 ||
     c.heroPositions.size > 0 ||
@@ -131,6 +134,7 @@ export function activeCount(c: FilterCriteria): number {
   if (c.games.size > 0) n++;
   if (c.gameModes.size > 0) n++;
   if (c.players.size > 0) n++;
+  if (c.playerCounts.size > 0) n++;
   if (c.potTypes.size > 0) n++;
   if (c.relativePositions.size > 0) n++;
   if (c.heroPositions.size > 0) n++;

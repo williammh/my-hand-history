@@ -73,6 +73,49 @@ describe('the player filter axis', () => {
   });
 });
 
+describe('the player count filter axis', () => {
+  const dealtIn = (h: Hand) => h.seats.filter((s) => !s.sittingOut).length;
+  const counts = () => [...new Set(hands.map(dealtIn))].sort((a, b) => a - b);
+
+  it('derives the count from seats that were dealt in', () => {
+    for (const h of hands) expect(deriveFacts(h).playerCount).toBe(dealtIn(h));
+  });
+
+  it('keeps only hands with the selected number of players', () => {
+    const n = counts()[0]!;
+    const result = filtered(crit({ playerCounts: new Set([n]) }));
+    expect(result).toEqual(hands.filter((h) => dealtIn(h) === n));
+    expect(result.length).toBeGreaterThan(0);
+  });
+
+  it('OR-combines multiple selected counts within the axis', () => {
+    const [a, b] = counts();
+    // Skip silently-vacuous coverage: the fixture must hold two table sizes.
+    expect(b).toBeDefined();
+    const result = filtered(crit({ playerCounts: new Set([a!, b!]) }));
+    expect(result).toEqual(hands.filter((h) => [a, b].includes(dealtIn(h))));
+  });
+
+  it('excludes every hand when no hand has the selected count', () => {
+    expect(filtered(crit({ playerCounts: new Set([99]) }))).toHaveLength(0);
+  });
+
+  it('counts toward isActive and activeCount', () => {
+    const c = crit({ playerCounts: new Set([6]) });
+    expect(isActive(c)).toBe(true);
+    expect(activeCount(c)).toBe(1);
+  });
+
+  it('toggles and clears through the store', () => {
+    const { toggle, clearAxis, clearAll } = useFiltersStore.getState();
+    clearAll();
+    toggle('playerCounts', 6);
+    expect([...useFiltersStore.getState().criteria.playerCounts]).toEqual([6]);
+    clearAxis('playerCounts');
+    expect(useFiltersStore.getState().criteria.playerCounts.size).toBe(0);
+  });
+});
+
 describe('playerOptions', () => {
   it('derives a per-room key, counts, and a room hint', () => {
     const options = playerOptions(hands, SITE_NAMES);

@@ -180,6 +180,9 @@ export function deriveFacts(hand: Hand, analysis?: HandAnalysis): HandFacts {
   }
 
   const effBB = heroEffectiveStackBB(hand, -1);
+  const playerKeys = new Set(
+    hand.seats.filter((s) => !s.sittingOut).map((s) => playerKey(hand.meta.siteId, s.playerId)),
+  );
 
   return {
     handId: hand.id,
@@ -187,9 +190,8 @@ export function deriveFacts(hand: Hand, analysis?: HandAnalysis): HandFacts {
     gameMode: hand.meta.gameMode,
     sourceFile: hand.meta.sourceFile,
     gameKey: gameKey(hand),
-    playerKeys: new Set(
-      hand.seats.filter((s) => !s.sittingOut).map((s) => playerKey(hand.meta.siteId, s.playerId)),
-    ),
+    playerKeys,
+    playerCount: playerKeys.size,
     potType: derivePotType(hand, heroSeat),
     heroPosition: heroPlayer?.position ?? null,
     opponentPositions,

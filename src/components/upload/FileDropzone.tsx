@@ -65,8 +65,8 @@ export function FileDropzone({ onFiles, busy }: Props) {
             : 'border-emerald-500/50 bg-emerald-400/5 text-emerald-200 hover:bg-emerald-400/10'
         }`}
       >
-        <IconUpload size={14} aria-hidden />
-        {busy ? 'Parsing…' : 'Upload hand history file'}
+        <IconUpload size={14} aria-hidden className="shrink-0" />
+        <span className="min-w-0 truncate">{busy ? 'Parsing…' : 'Import hand history'}</span>
       </button>
     </div>
   );

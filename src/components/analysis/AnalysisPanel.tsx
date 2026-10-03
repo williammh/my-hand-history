@@ -27,19 +27,26 @@ export function AnalysisPanel({ hand, actionIndex, analysis }: Props) {
       <div className="px-3 py-1.5 border-b border-slate-800 t-panel-title shrink-0">
         Analysis
       </div>
-      {/* The panel fills the height left under the felt and shrinks when the
-          felt needs the room, scrolling here instead. It is only ever as
-          short as the room left after the felt, so it is never given less
-          than a line or two to scroll through. */}
-      <div className="px-3 py-2 flex-1 min-h-0 overflow-y-auto scroll-thin">
+      {/* From lg the panel fills the height left under the felt and shrinks
+          when the felt needs the room, scrolling here instead. It is only
+          ever as short as the room left after the felt, so it is never given
+          less than a line or two to scroll through.
+          Below lg the page itself scrolls, and a second scroller nested in it
+          would only catch a phone user's swipes, so the body takes its full
+          height. Its floor fits a typical verdict: the panel is last on the
+          page, and if it shrank while stepping to a shorter one, the page
+          would shorten under the replay controls and jump. */}
+      <div className="px-3 py-2 min-h-32 lg:min-h-0 lg:flex-1 lg:overflow-y-auto scroll-thin">
         {!hand ? (
           <p className="text-sm text-slate-500">No hand selected.</p>
         ) : verdict ? (
           <VerdictDetail verdict={verdict} hand={hand} />
         ) : skipped ? (
-          <p className="text-sm text-slate-500 flex items-center gap-2 min-w-0">
+          // One line from lg, where the panel is short on height; below lg it
+          // has the height, and a phone's width would cut most of the reason.
+          <p className="text-sm text-slate-500 flex items-start lg:items-center gap-2 min-w-0">
             {seat && <PositionBadge position={seat.position} isHero={seat.isHero} />}
-            <span className="truncate">{seat ? `${seat.name} — ` : ''}not judged: {skipped.reason}</span>
+            <span className="min-w-0 lg:truncate">{seat ? `${seat.name} — ` : ''}not judged: {skipped.reason}</span>
           </p>
         ) : (
           <p className="text-sm text-slate-500">Select an action to see its analysis.</p>

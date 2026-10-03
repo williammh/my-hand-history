@@ -6,6 +6,7 @@ import { useReplayStore } from '@/state/replay-store';
 import { useAnalysisStore } from '@/state/analysis-store';
 import { DisplaySettingsMenu } from '@/components/upload/DisplaySettingsMenu';
 import { HandList } from '@/components/hands/HandList';
+import { HandPicker } from '@/components/hands/HandPicker';
 import { Table } from '@/components/replay/Table';
 import { ReplayControls } from '@/components/replay/ReplayControls';
 import { ActionLog } from '@/components/replay/ActionLog';
@@ -236,7 +237,9 @@ export function App() {
             replay (with the action strip inside it) and the analysis;
             the felt centres itself in it and scrolls horizontally rather than
             overflowing if the column is ever narrower than it. Below lg
-            everything is a single stack. */}
+            everything is a single stack, compacted for a phone: the scoping
+            filters move behind "All filters" too, and the hands panel shows
+            only the selected hand. */}
         <div className="flex-1 lg:min-h-0 grid grid-cols-1 lg:grid-cols-[19rem_minmax(0,1fr)] xl:grid-cols-[20rem_minmax(0,1fr)] gap-4 md:gap-5">
           <aside className="lg:min-h-0 flex flex-col gap-4 md:gap-5 lg:overflow-y-auto scroll-thin">
             {/* Always visible, even with an empty library — its controls just
@@ -245,11 +248,23 @@ export function App() {
               <SourcePanel />
             </div>
 
-            {/* Below lg the page is not a fixed-height grid, so the list needs
-                an explicit height; from lg it takes whatever the column has
-                left, with a floor so a short window scrolls the column instead
-                of squeezing the list to nothing. */}
-            <div className="h-[22rem] lg:h-auto lg:flex-1 lg:min-h-[14rem]">
+            {/* Below lg the hands panel sits between the source panel and the
+                replay, so a list there would push the felt a screen down. It
+                shows only the selected hand instead, and opens the full list
+                in a dialog. */}
+            <div className="lg:hidden">
+              <HandPicker
+                hands={visibleHands}
+                selected={selectedHand}
+                loading={libraryLoading}
+                onSelect={select}
+              />
+            </div>
+
+            {/* From lg the list takes whatever the column has left, with a
+                floor so a short window scrolls the column instead of squeezing
+                the list to nothing. */}
+            <div className="hidden lg:block lg:flex-1 lg:min-h-[14rem]">
               <HandList
                 hands={visibleHands}
                 selectedId={selectedId}
@@ -276,9 +291,11 @@ export function App() {
                 {replayControls}
               </Table>
             </div>
-            {/* The felt gets first claim on the column's height; the analysis
-                fills whatever is left, and on a short window gives up space
-                (scrolling inside) before the column itself has to scroll. */}
+            {/* From lg the felt gets first claim on the column's height; the
+                analysis fills whatever is left, and on a short window gives up
+                space (scrolling inside) before the column itself has to scroll.
+                Below lg the page scrolls instead, and the analysis simply
+                takes the height its content needs. */}
             <div className="w-full flex-1 min-h-[2.25rem] flex flex-col">
               <AnalysisPanel hand={hand} actionIndex={actionIndex} analysis={analysis} />
             </div>
